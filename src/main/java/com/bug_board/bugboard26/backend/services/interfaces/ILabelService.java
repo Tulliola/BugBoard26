@@ -1,4 +1,4 @@
-package com.bug_board.bugboard26.backend.services_interfaces;
+package com.bug_board.bugboard26.backend.services.interfaces;
 
 import com.bug_board.bugboard26.dto.LabelCreationDTO;
 import com.bug_board.bugboard26.dto.LabelSummaryDTO;

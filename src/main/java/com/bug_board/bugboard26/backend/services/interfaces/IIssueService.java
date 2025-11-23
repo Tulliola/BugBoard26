@@ -1,8 +1,7 @@
-package com.bug_board.bugboard26.backend.services_interfaces;
+package com.bug_board.bugboard26.backend.services.interfaces;
 
 import com.bug_board.bugboard26.dto.IssueCreationDTO;
 import com.bug_board.bugboard26.dto.IssueSummaryDTO;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
