@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ILabelRepository {
     public void deleteLabel(Integer idLabel);
-    public void updateLabel(Integer idLabel);
-    public void createLabel(LabelCreationDTO labelToCreate);
+    public void updateLabel(Label labelToUpdate);
+    public void createLabel(Label labelToCreate);
     public List<Label> retrieveAllUsersLabel(String username);
 }

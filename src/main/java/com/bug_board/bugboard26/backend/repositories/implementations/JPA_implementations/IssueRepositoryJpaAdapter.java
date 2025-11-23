@@ -5,19 +5,23 @@ import com.bug_board.bugboard26.backend.repositories.interfaces.IIssueRepository
 
 import java.util.List;
 
-public class IssueRepositoryJPA implements IIssueRepository {
+public class IssueRepositoryJpaAdapter implements IIssueRepository {
+    IIssueRepositoryJPA repositoryJPA;
+
     @Override
     public List<Issue> retrieveAllUsersIssues(String username) {
-        return List.of();
+        return repositoryJPA.findAll();
+        //TODO aggiungere nuovo query method
     }
 
     @Override
     public void publishANewIssueToProject(Integer idProject, Issue issueToPublish) {
-
+        repositoryJPA.save(issueToPublish);
     }
 
     @Override
     public List<Issue> retrieveAllProjectsIssues(Integer idProject) {
-        return List.of();
+        //TODO aggiunere query method
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package com.bug_board.bugboard26.backend.services.implementations.JPA_implementation;
 
+import com.bug_board.bugboard26.backend.repositories.implementations.JPA_implementations.IIssueRepositoryJPA;
 import com.bug_board.bugboard26.backend.services.interfaces.IIssueService;
 import com.bug_board.bugboard26.dto.IssueCreationDTO;
 import com.bug_board.bugboard26.dto.IssueSummaryDTO;
@@ -10,6 +11,7 @@ import java.util.List;
 @Service
 public class IssueServiceJPA implements IIssueService {
 
+    IIssueRepositoryJPA repositoryJPAI;
     @Override
     public void publishNewIssueToProject(Integer idProject, IssueCreationDTO issueToAdd) {
 
