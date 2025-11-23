@@ -1,4 +1,4 @@
-package com.bug_board.bugboard26.backend.dto;
+package com.bug_board.bugboard26.dto;
 
 public class RegularUserCreationDTO extends UserCreationDTO {
 }

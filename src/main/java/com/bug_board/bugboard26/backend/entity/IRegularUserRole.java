@@ -1,4 +1,4 @@
-package backend.entity;
+package com.bug_board.bugboard26.backend.entity;
 
 import com.bug_board.bugboard26.exception.MaximumLabelsException;
 

@@ -1,7 +1,7 @@
 package com.bug_board.bugboard26.backend.REST_controllers;
 
-import com.bug_board.bugboard26.backend.dto.IssueCreationDTO;
-import com.bug_board.bugboard26.backend.dto.IssueSummaryDTO;
+import com.bug_board.bugboard26.dto.IssueCreationDTO;
+import com.bug_board.bugboard26.dto.IssueSummaryDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

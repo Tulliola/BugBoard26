@@ -1,6 +1,6 @@
 package com.bug_board.bugboard26.backend.REST_controllers;
 
-import com.bug_board.bugboard26.backend.dto.UserCreationDTO;
+import com.bug_board.bugboard26.dto.UserCreationDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

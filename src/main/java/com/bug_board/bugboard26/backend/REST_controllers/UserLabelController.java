@@ -1,8 +1,8 @@
 package com.bug_board.bugboard26.backend.REST_controllers;
 
-import com.bug_board.bugboard26.backend.dto.LabelCreationDTO;
-import com.bug_board.bugboard26.backend.dto.LabelModifyingDTO;
-import com.bug_board.bugboard26.backend.dto.LabelSummaryDTO;
+import com.bug_board.bugboard26.dto.LabelCreationDTO;
+import com.bug_board.bugboard26.dto.LabelModifyingDTO;
+import com.bug_board.bugboard26.dto.LabelSummaryDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
