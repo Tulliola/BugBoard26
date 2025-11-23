@@ -6,3 +6,13 @@ app.issue-service.implementation=IMPLEMENTATION_TYPE
 app.project-service.implementation=IMPLEMENTATION_TYPE
 app.label-service.implementation=IMPLEMENTATION_TYPE
 app.authentication-service.implementation=IMPLEMENTATION_TYPE
+
+#   Connection to database properties
+spring.datasource.url=jdbc:postgresql://RDS_INSTANCE_ENDPOINT:PORT/DATABASE_NAME
+spring.datasource.username=USER
+spring.datasource.password=PASSWORD
+
+#   Hikari configuration
+spring.datasource.hikari.maximum-pool-size=MAX_POOL_SIZE
+spring.datasource.hikari.idle-timeout=IDLE_TIMEOUT
+spring.datasource.hikari.connection-timeout=CONNECTION_TIMEOUT

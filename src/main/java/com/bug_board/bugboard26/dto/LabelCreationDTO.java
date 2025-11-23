@@ -1,5 +1,6 @@
 package com.bug_board.bugboard26.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
