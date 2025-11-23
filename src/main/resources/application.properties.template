@@ -1,4 +1,6 @@
 spring.application.name=BugBoard26
+
+# Service implementations
 app.user-service.implementation=IMPLEMENTATION_TYPE
 app.issue-service.implementation=IMPLEMENTATION_TYPE
 app.project-service.implementation=IMPLEMENTATION_TYPE

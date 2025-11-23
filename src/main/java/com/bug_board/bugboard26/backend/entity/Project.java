@@ -29,7 +29,7 @@ public class Project {
     /* Relation Project - SuperAdmin */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "utente_creatore", nullable = false)
-    private User creator;
+    private SuperAdmin creator;
 
     /* Relation Project - Issue */
     @OneToMany
@@ -54,18 +54,46 @@ public class Project {
     )
     private List<RegularUser> partecipants = new ArrayList<RegularUser>();
 
+    public Project() {}
+
+    public Project(Admin admin, SuperAdmin superAdmin) {
+        if(admin == null)
+            throw new NullPointerException("You must define the first admin of the project.");
+
+        if(superAdmin == null)
+            throw new  NullPointerException("You must define the creator of the project.");
+
+        admins.add(admin);
+        admin.addProjectToOverviewedProjectList(this);
+
+        creator = superAdmin;
+        creator.addProjectToCreatedProjectList(this);
+    }
+
     public void addIssueToIssueList(Issue newIssue) {
-        if(newIssue != null && issues != null)
+        if(issues != null) {
+            if (newIssue == null)
+                throw new NullPointerException("You must define the issue of the project.");
+
             issues.add(newIssue);
+        }
     }
 
     public void addUserWorkingOnProject(RegularUser user) {
-        if(user != null && partecipants != null)
+        if(partecipants != null) {
+            if (user == null)
+                throw new NullPointerException("You must define who is working on the project.");
+
             partecipants.add(user);
+        }
     }
 
     public void addAdminOverviewingProject(Admin admin) {
-        if(admin != null && admins != null)
+        if(admins != null){
+            if(admin == null)
+                throw  new NullPointerException("You must define the admin of the project.");
+
             admins.add(admin);
+        }
     }
 }

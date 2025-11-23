@@ -21,7 +21,11 @@ public class Admin extends User implements IAdminRole {
 
     @Override
     public void addProjectToOverviewedProjectList(Project project) {
-        if(project != null && overviewedProjects != null)
+        if(overviewedProjects != null){
+            if(project == null)
+                throw  new NullPointerException("You must define the project to be added to.");
+
             overviewedProjects.add(project);
+        }
     }
 }

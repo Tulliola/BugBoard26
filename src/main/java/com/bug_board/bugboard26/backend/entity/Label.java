@@ -24,4 +24,5 @@ public class Label {
     @ColumnDefault("'#FFFFFF'")
     @Column(name = "colore", nullable = false, length = 7)
     private String colore;
+
 }

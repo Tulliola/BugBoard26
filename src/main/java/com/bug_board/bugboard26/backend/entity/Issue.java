@@ -3,7 +3,7 @@ package com.bug_board.bugboard26.backend.entity;
 import com.bug_board.bugboard26.enum_classes.IssueState;
 import com.bug_board.bugboard26.enum_classes.IssueTipology;
 
-import com.bug_board.bugboard26.exception.MaximumLabelsException;
+import com.bug_board.bugboard26.exception.entity.MaximumLabelsException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -67,13 +67,27 @@ public class Issue {
     @JoinColumn(name = "utente_creatore")
     private RegularUser creator;
 
+    public Issue(){
+
+    }
+
+    public Issue(RegularUser creator) {
+        if(creator == null)
+            throw new NullPointerException("You must define the creator of the issue.");
+
+        this.creator = creator;
+        creator.addIssueToIssueList(this);
+    }
+
     public void addLabelAttachedToIssue(Label newLabel) {
         if(this.attachedLabels != null) {
             if (this.maxAttachableLabels == this.attachedLabels.size())
                 throw new MaximumLabelsException("You have reached the limit of attachable labels.");
 
-            if (newLabel != null)
-                this.attachedLabels.add(newLabel);
+            if (newLabel == null)
+                throw new NullPointerException("You must define the label of the issue.");
+
+            this.attachedLabels.add(newLabel);
         }
     }
 

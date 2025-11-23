@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Slf4j
 public class ProjectServiceFactory {
-    @Value("${}app.project-service.implementation")
+    @Value("${app.project-service.implementation}")
     private String implementation;
 
     private ProjectServiceJPA projectServiceJPA;

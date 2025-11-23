@@ -22,7 +22,11 @@ public class SuperAdmin extends Admin implements ISuperAdminRole {
 
     @Override
     public void addProjectToCreatedProjectList(Project project) {
-        if(project != null && createdProjects != null)
+        if(createdProjects != null){
+            if(project == null)
+                throw  new NullPointerException("You must define the created project.");
+
             createdProjects.add(project);
+        }
     }
 }

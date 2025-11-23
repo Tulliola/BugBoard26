@@ -1,7 +1,7 @@
 package com.bug_board.bugboard26.backend.entity;
 
 import com.bug_board.bugboard26.backend.entity.interfaces.IRegularUserRole;
-import com.bug_board.bugboard26.exception.MaximumLabelsException;
+import com.bug_board.bugboard26.exception.entity.MaximumLabelsException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,19 +29,38 @@ public class RegularUser extends User implements IRegularUserRole {
 
     @Override
     public void addIssueToIssueList(Issue newIssue) {
-        if(newIssue != null && personalIssues != null)
+        if(personalIssues != null){
+            if(newIssue == null)
+                throw  new NullPointerException("You must define the issue to be added to.");
+
             personalIssues.add(newIssue);
+        }
     }
 
     @Override
     public void addLabelToPersonalLabelList(Label newLabel) throws MaximumLabelsException {
-        if(newLabel != null && personalLabels != null)
+        if(personalLabels != null){
+            if(newLabel == null)
+                throw  new NullPointerException("You must define the label to be added to.");
+
             personalLabels.add(newLabel);
+        }
     }
 
     @Override
     public void removeLabelFromPersonalLabelList(Label labelToRemove) {
         if(personalLabels != null && labelToRemove != null)
             personalLabels.remove(labelToRemove);
+    }
+
+    @Override
+    public void addProjectToPartecipatingProjectList(Project project) {
+        if(partecipatingProjects != null) {
+            if(project == null)
+                throw  new NullPointerException("You must define the project to be added to.");
+
+            partecipatingProjects.add(project);
+            project.addUserWorkingOnProject(this);
+        }
     }
 }
