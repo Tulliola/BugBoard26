@@ -23,7 +23,7 @@ public class UserServiceFactory {
 
     @Bean
     @Primary
-    public IUserService getUserServiceImplementation() {
+    public IUserService getUserService() {
         if(implementation.equalsIgnoreCase("jpa")) {
             log.info("UserService implementation: jpa");
             return userServiceJPA;

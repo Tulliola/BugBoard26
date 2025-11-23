@@ -2,13 +2,15 @@ package com.bug_board.bugboard26.backend.repositories.implementations.JPA_implem
 
 import com.bug_board.bugboard26.backend.entity.Label;
 import com.bug_board.bugboard26.backend.repositories.interfaces.ILabelRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class LabelRepositoryJpaAdapter implements ILabelRepository {
-    ILabelRepositoryJPA repository;
+    private final ILabelRepositoryJPA repository;
 
-    LabelRepositoryJpaAdapter(ILabelRepositoryJPA repository) {
+    public LabelRepositoryJpaAdapter(ILabelRepositoryJPA repository) {
         this.repository = repository;
     }
 

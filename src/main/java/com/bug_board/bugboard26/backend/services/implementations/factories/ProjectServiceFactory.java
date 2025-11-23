@@ -1,6 +1,7 @@
 package com.bug_board.bugboard26.backend.services.implementations.factories;
 
 import com.bug_board.bugboard26.backend.services.implementations.JPA_implementation.ProjectServiceJPA;
+import com.bug_board.bugboard26.backend.services.interfaces.IProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,7 @@ public class ProjectServiceFactory {
 
     @Bean
     @Primary
-    public ProjectServiceJPA projectServiceJPA() {
+    public IProjectService getProjectService() {
         if(implementation.equalsIgnoreCase("jpa")) {
             log.info("JPA implementation");
             return projectServiceJPA;

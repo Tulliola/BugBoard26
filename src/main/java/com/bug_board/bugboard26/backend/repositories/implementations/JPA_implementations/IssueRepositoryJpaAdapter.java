@@ -2,11 +2,17 @@ package com.bug_board.bugboard26.backend.repositories.implementations.JPA_implem
 
 import com.bug_board.bugboard26.backend.entity.Issue;
 import com.bug_board.bugboard26.backend.repositories.interfaces.IIssueRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class IssueRepositoryJpaAdapter implements IIssueRepository {
-    IIssueRepositoryJPA repositoryJPA;
+    private final IIssueRepositoryJPA repositoryJPA;
+
+    public IssueRepositoryJpaAdapter(IIssueRepositoryJPA repositoryJPA) {
+        this.repositoryJPA = repositoryJPA;
+    }
 
     @Override
     public List<Issue> retrieveAllUsersIssues(String username) {

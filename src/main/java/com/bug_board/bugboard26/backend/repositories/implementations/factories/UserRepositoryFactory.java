@@ -1,7 +1,9 @@
 package com.bug_board.bugboard26.backend.repositories.implementations.factories;
 
 import com.bug_board.bugboard26.backend.repositories.implementations.JPA_implementations.IssueRepositoryJpaAdapter;
+import com.bug_board.bugboard26.backend.repositories.implementations.JPA_implementations.UserRepositoryJpaAdapter;
 import com.bug_board.bugboard26.backend.repositories.interfaces.IIssueRepository;
+import com.bug_board.bugboard26.backend.repositories.interfaces.IUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,22 +12,22 @@ import org.springframework.context.annotation.Primary;
 
 @Configuration
 @Slf4j
-public class IssueRepositoryFactory {
-    @Value("${app.issue-repository.implementation}")
+public class UserRepositoryFactory {
+    @Value("${app.user-repository.implementation}")
     private String implementation;
 
-    private final IssueRepositoryJpaAdapter issueRepositoryJPA;
+    private final UserRepositoryJpaAdapter userRepositoryJPA;
 
-    public IssueRepositoryFactory(IssueRepositoryJpaAdapter issueRepositoryJPA) {
-        this.issueRepositoryJPA = issueRepositoryJPA;
+    public UserRepositoryFactory(UserRepositoryJpaAdapter userRepositoryJPA) {
+        this.userRepositoryJPA = userRepositoryJPA;
     }
 
     @Bean
     @Primary
-    public IIssueRepository getIssueRepository() {
+    public IUserRepository getUserRepository() {
         if(implementation.equalsIgnoreCase("jpa")){
             log.info("JPA implementation");
-            return this.issueRepositoryJPA;
+            return this.userRepositoryJPA;
         }
         else{
             log.warn("Unsupported implementation: "+ implementation);
