@@ -1,9 +1,15 @@
 package com.bug_board.bugboard26.backend.entity;
 
+import com.bug_board.bugboard26.enum_classes.IssueState;
+import com.bug_board.bugboard26.enum_classes.IssueTipology;
+
+import com.bug_board.bugboard26.exception.MaximumLabelsException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,40 +18,63 @@ import java.util.List;
 @Setter
 @Table(name = "issue")
 public class Issue {
+    /* Issue specific attributes */
+    private static int maxAttachableLabels = 3;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idissue", nullable = false)
-    private Integer id;
+    private Integer idIssue;
 
     @Column(name = "titolo", nullable = false, length = 40)
-    private String titolo;
+    private String title;
 
     @Column(name = "descrizione", nullable = false, length = Integer.MAX_VALUE)
-    private String descrizione;
+    private String description;
 
+    @ColumnDefault("'To-do'")
+    @Column(name = "stato", columnDefinition = "statoissueenum not null")
+    private IssueState state;
+
+    @Column(name = "tipologia", columnDefinition = "issueenum not null")
+    private IssueTipology tipology;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "immagine",
+            joinColumns = @JoinColumn(name = "idissue")
+    )
+    @Column(name = "file_immagine", columnDefinition = "bytea")
+    private List<byte[]> images = new ArrayList<byte[]>();
+
+    @Column(name = "data_creazione", nullable = false)
+    private Date creationDate;
+
+    @Column(name = "data_risoluzione")
+    private Date resolutionDate;
+
+    /* Relation Issue - Label */
     @ManyToMany
     @JoinTable(
             name= "etichetta_associata",
             joinColumns = @JoinColumn(name = "idissue"),
             inverseJoinColumns = @JoinColumn(name = "idlabel")
     )
-    private List<Label> etichetteAssociate = new ArrayList<Label>();
+    private List<Label> attachedLabels = new ArrayList<Label>();
 
+    /* Relation Issue - RegularUser */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "utente_creatore")
-    private User utenteCreatore;
+    private RegularUser creator;
 
-/*
- TODO [Reverse Engineering] create field to map the 'stato' column
- Available actions: Define target Java type | Uncomment as is | Remove column mapping
-    @ColumnDefault("'To-do'")
-    @Column(name = "stato", columnDefinition = "statoissueenum not null")
-    private Object stato;
-*/
-/*
- TODO [Reverse Engineering] create field to map the 'tipologia' column
- Available actions: Define target Java type | Uncomment as is | Remove column mapping
-    @Column(name = "tipologia", columnDefinition = "issueenum not null")
-    private Object tipologia;
-*/
+    public void addLabelAttachedToIssue(Label newLabel) {
+        if(this.attachedLabels != null) {
+            if (this.maxAttachableLabels == this.attachedLabels.size())
+                throw new MaximumLabelsException("You have reached the limit of attachable labels.");
+
+            if (newLabel != null)
+                this.attachedLabels.add(newLabel);
+        }
+    }
+
 }

@@ -1,0 +1,27 @@
+package com.bug_board.bugboard26.backend.entity;
+
+import com.bug_board.bugboard26.backend.entity.interfaces.IAdminRole;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+@DiscriminatorValue("ROLE_ADMIN")
+public class Admin extends User implements IAdminRole {
+    /* Relation Admin - Project */
+    @ManyToMany(mappedBy = "admins")
+    private List<Project> overviewedProjects = new ArrayList<Project>();
+
+    @Override
+    public void addProjectToOverviewedProjectList(Project project) {
+        if(project != null && overviewedProjects != null)
+            overviewedProjects.add(project);
+    }
+}

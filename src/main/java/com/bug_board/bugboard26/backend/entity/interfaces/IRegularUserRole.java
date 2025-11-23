@@ -1,5 +1,7 @@
-package com.bug_board.bugboard26.backend.entity;
+package com.bug_board.bugboard26.backend.entity.interfaces;
 
+import com.bug_board.bugboard26.backend.entity.Issue;
+import com.bug_board.bugboard26.backend.entity.Label;
 import com.bug_board.bugboard26.exception.MaximumLabelsException;
 
 public interface IRegularUserRole {
