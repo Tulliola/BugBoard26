@@ -1,6 +1,6 @@
 package com.bug_board.bugboard26.enum_classes;
 
-public enum ProjectTipology {
+public enum IssueTipology {
     Bug("Bug"),
     NewFeature("NewFeature"),
     Question("Question"),
@@ -8,7 +8,7 @@ public enum ProjectTipology {
 
     private final String tipology;
 
-    ProjectTipology(String tipology){
+    IssueTipology(String tipology){
         this.tipology = tipology;
     }
 
