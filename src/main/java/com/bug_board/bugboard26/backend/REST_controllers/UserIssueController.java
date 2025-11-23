@@ -1,9 +1,8 @@
-package backend.REST_controllers;
+package com.bug_board.bugboard26.backend.REST_controllers;
 
-import backend.dto.IssueSummaryDTO;
+import com.bug_board.bugboard26.backend.dto.IssueSummaryDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;

@@ -1,4 +1,4 @@
-package backend.dto;
+package com.bug_board.bugboard26.backend.dto;
 
 import lombok.Getter;
 import lombok.Setter;

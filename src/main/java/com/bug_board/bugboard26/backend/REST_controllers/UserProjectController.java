@@ -1,6 +1,6 @@
-package backend.REST_controllers;
+package com.bug_board.bugboard26.backend.REST_controllers;
 
-import backend.dto.ProjectSummaryDTO;
+import com.bug_board.bugboard26.backend.dto.ProjectSummaryDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
