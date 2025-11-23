@@ -12,8 +12,9 @@ public class IssueCreationDTO {
     private String title;
     private String description;
     private IssueTipology tipology;
-    private List<Byte[]> images;
-    private Integer idProject;
+    private List<byte[]> images;
+
+    private List<Integer> idProject;
 
     private Integer idLabel;
 

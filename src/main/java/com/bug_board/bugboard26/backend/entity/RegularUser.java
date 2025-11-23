@@ -1,6 +1,7 @@
 package com.bug_board.bugboard26.backend.entity;
 
 import com.bug_board.bugboard26.backend.entity.interfaces.IRegularUserRole;
+import com.bug_board.bugboard26.enum_classes.UserRole;
 import com.bug_board.bugboard26.exception.entity.MaximumLabelsException;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import java.util.List;
 @Setter
 @DiscriminatorValue("ROLE_USER")
 public class RegularUser extends User implements IRegularUserRole {
+
     /*Relation RegularUser - Label */
     @OneToMany
     @JoinColumn(name = "utente_creatore")
@@ -26,6 +28,10 @@ public class RegularUser extends User implements IRegularUserRole {
     /* Relazione RegularUser - Issue */
     @OneToMany(mappedBy = "creator")
     private List<Issue> personalIssues = new ArrayList<Issue>();
+
+    public RegularUser() {
+        super(UserRole.ROLE_USER);
+    }
 
     @Override
     public void addIssueToIssueList(Issue newIssue) {

@@ -10,5 +10,5 @@ import java.awt.*;
 public class LabelCreationDTO {
     private String name;
     private String description;
-    private Color color;
+    private String color;
 }

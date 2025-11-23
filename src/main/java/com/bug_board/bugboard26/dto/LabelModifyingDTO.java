@@ -11,5 +11,5 @@ public class LabelModifyingDTO {
     private Integer idLabel;
     private String name;
     private String description;
-    private Color color;
+    private String color;
 }

@@ -9,7 +9,7 @@ public class ProjectSummaryDTO {
     private Integer idProject;
     private String title;
     private String description;
-    private Byte[] image;
+    private byte[] image;
 
     private String projectCreator;
 }

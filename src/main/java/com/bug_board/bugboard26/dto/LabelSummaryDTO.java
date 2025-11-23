@@ -9,5 +9,5 @@ import java.awt.*;
 @Setter
 public class LabelSummaryDTO {
     private String name;
-    private Color color;
+    private String color;
 }

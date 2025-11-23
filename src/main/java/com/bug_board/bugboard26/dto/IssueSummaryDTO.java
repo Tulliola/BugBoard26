@@ -16,7 +16,7 @@ public class IssueSummaryDTO {
     private String description;
     private IssueState state;
     private IssueTipology tipology;
-    private List<Byte[]> images;
+    private List<byte[]> images;
     private Date creationDate;
     private Date resolutionDate;
 }

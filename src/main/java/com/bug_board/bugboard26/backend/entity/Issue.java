@@ -34,9 +34,11 @@ public class Issue {
 
     @ColumnDefault("'To-do'")
     @Column(name = "stato", columnDefinition = "statoissueenum not null")
+    @Enumerated(EnumType.STRING)
     private IssueState state;
 
     @Column(name = "tipologia", columnDefinition = "issueenum not null")
+    @Enumerated(EnumType.STRING)
     private IssueTipology tipology;
 
     @ElementCollection(fetch = FetchType.LAZY)

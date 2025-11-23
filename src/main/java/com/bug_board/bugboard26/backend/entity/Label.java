@@ -13,16 +13,16 @@ public class Label {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idlabel", nullable = false)
-    private Integer id;
+    private Integer idLabel;
 
     @Column(name = "nome", nullable = false, length = 20)
-    private String nome;
+    private String name;
 
     @Column(name = "descrizione", length = 200)
-    private String descrizione;
+    private String description;
 
     @ColumnDefault("'#FFFFFF'")
     @Column(name = "colore", nullable = false, length = 7)
-    private String colore;
+    private String color;
 
 }

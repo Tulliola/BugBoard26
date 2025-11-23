@@ -6,8 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class UserCreationDTO {
+public class UserCreationDTO {
     private String  email;
+    private String  password;
     private String username;
     private UserRole role;
+    private byte[] bioPic;
 }
