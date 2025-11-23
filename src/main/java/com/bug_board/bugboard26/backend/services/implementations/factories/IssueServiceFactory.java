@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 @Slf4j
@@ -13,13 +14,14 @@ public class IssueServiceFactory {
     @Value("${app.issue-service.implementation}")
     private String implementation;
 
-    private IssueServiceJPA issueServiceJPA;
+    private final IssueServiceJPA issueServiceJPA;
 
     public IssueServiceFactory(IssueServiceJPA issueServiceJPA) {
         this.issueServiceJPA = issueServiceJPA;
     }
 
     @Bean
+    @Primary
     public IIssueService getIssueService() {
         if (implementation.equalsIgnoreCase("jpa")) {
             log.info("JPA implementation");

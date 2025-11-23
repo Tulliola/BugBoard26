@@ -1,5 +1,7 @@
-package com.bug_board.bugboard26.backend.services.implementations.factories;
+package com.bug_board.bugboard26.backend.repositories.implementations.factories;
 
+import com.bug_board.bugboard26.backend.repositories.implementations.JPA_implementations.IssueRepositoryJPA;
+import com.bug_board.bugboard26.backend.repositories.interfaces.IIssueRepository;
 import com.bug_board.bugboard26.backend.services.implementations.JPA_implementation.AuthenticationServiceJPA;
 import com.bug_board.bugboard26.backend.services.interfaces.IAuthenticationService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,22 +12,22 @@ import org.springframework.context.annotation.Primary;
 
 @Configuration
 @Slf4j
-public class AuthenticationServiceFactory {
-    @Value("${app.authentication-service.implementation}")
+public class IssueRepositoryFactory {
+    @Value("${app.issue-repository.implementation}")
     private String implementation;
 
-    private final AuthenticationServiceJPA authenticationServiceJPA;
+    private final IssueRepositoryJPA issueRepositoryJPA;
 
-    public AuthenticationServiceFactory(AuthenticationServiceJPA authenticationServiceJPA) {
-        this.authenticationServiceJPA = authenticationServiceJPA;
+    public IssueRepositoryFactory(IssueRepositoryJPA issueRepositoryJPA) {
+        this.issueRepositoryJPA = issueRepositoryJPA;
     }
 
     @Bean
     @Primary
-    public IAuthenticationService getAuthenticationService() {
+    public IIssueRepository getIssueRepository() {
         if(implementation.equalsIgnoreCase("jpa")){
             log.info("JPA implementation");
-            return this.authenticationServiceJPA;
+            return this.issueRepositoryJPA;
         }
         else{
             log.warn("Unsupported implementation: "+ implementation);
