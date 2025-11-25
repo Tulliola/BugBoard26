@@ -2,6 +2,7 @@ package com.bug_board.bugboard26.backend.REST_controllers;
 
 import com.bug_board.bugboard26.backend.services.interfaces.IUserService;
 import com.bug_board.bugboard26.dto.UserCreationDTO;
+import com.bug_board.bugboard26.dto.UserSummaryDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,11 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    @Autowired
-    IUserService userService;
+    private final IUserService userService;
+
+    public UserController(IUserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping()
-    public ResponseEntity<Void> createUser(@RequestBody UserCreationDTO userCreationDTO){
+    public ResponseEntity<UserSummaryDTO> registerNewUser(@RequestBody UserCreationDTO userCreationDTO){
         //TODO ritornerà la chiamata al service
         return null;
     }

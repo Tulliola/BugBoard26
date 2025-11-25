@@ -8,6 +8,7 @@ import java.util.List;
 public interface IProjectRepository {
     public List<Project> getOverviewedProjectsByUser(String username);
     public List<Project> getWorkingOnProjectsByUser(String username);
-    public void assignCollaboratorToProject(Integer idProject, String collaboratorUsername);
+    public User assignCollaboratorToProject(Integer idProject, String collaboratorUsername);
     public List<User> getAddableUsersToProject(Integer idProject);
+    public Project getProjectByID(Integer idProject);
 }

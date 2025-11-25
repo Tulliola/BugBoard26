@@ -8,26 +8,26 @@ import java.util.List;
 
 @Repository
 public class IssueRepositoryJpaAdapter implements IIssueRepository {
-    private final IIssueRepositoryJPA repositoryJPA;
+    private final IIssueRepositoryJPA issueRepositoryJPA;
 
-    public IssueRepositoryJpaAdapter(IIssueRepositoryJPA repositoryJPA) {
-        this.repositoryJPA = repositoryJPA;
+    public IssueRepositoryJpaAdapter(IIssueRepositoryJPA issueRepositoryJPA) {
+        this.issueRepositoryJPA = issueRepositoryJPA;
     }
 
     @Override
     public List<Issue> retrieveAllUsersIssues(String username) {
-        return repositoryJPA.findAll();
-        //TODO aggiungere nuovo query method
+        return issueRepositoryJPA.findAll();
+        //TODO aggiungere nuovo query method per la join
     }
 
     @Override
-    public void publishANewIssueToProject(Integer idProject, Issue issueToPublish) {
-        repositoryJPA.save(issueToPublish);
+    public Issue createANewIssueToProject(Integer idProject, Issue issueToPublish) {
+        return issueRepositoryJPA.save(issueToPublish);
     }
 
     @Override
     public List<Issue> retrieveAllProjectsIssues(Integer idProject) {
-        //TODO aggiunere query method
+        //TODO aggiunere query method per la join
         return null;
     }
 }

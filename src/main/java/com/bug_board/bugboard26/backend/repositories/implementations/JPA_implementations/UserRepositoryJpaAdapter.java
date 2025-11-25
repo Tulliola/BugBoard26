@@ -6,13 +6,17 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepositoryJpaAdapter implements IUserRepository {
-    private final IUserRepositoryJPA repositoryJPA;
+    private final IUserRepositoryJPA userRepositoryJPA;
 
-    public UserRepositoryJpaAdapter(IUserRepositoryJPA repositoryJPA) {
-        this.repositoryJPA = repositoryJPA;
+
+
+    public UserRepositoryJpaAdapter(IUserRepositoryJPA userRepositoryJPA) {
+        this.userRepositoryJPA = userRepositoryJPA;
     }
-    @Override
-    public void registerNewUser(User userToRegister) {
 
+
+    @Override
+    public User registerNewUser(User userToRegister) {
+        return null;
     }
 }

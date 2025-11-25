@@ -32,8 +32,7 @@ public class Project {
     private SuperAdmin creator;
 
     /* Relation Project - Issue */
-    @OneToMany
-    @JoinColumn(name = "utente_creatore", nullable = false)
+    @OneToMany(mappedBy = "project")
     private List<Issue> issues = new ArrayList<Issue>();
 
     /* Relation Project - Admin */

@@ -6,8 +6,8 @@ import com.bug_board.bugboard26.dto.LabelSummaryDTO;
 import java.util.List;
 
 public interface ILabelService {
-    public void createPersonalLabel(LabelCreationDTO labelToCreate);
+    public LabelSummaryDTO createPersonalLabel(LabelCreationDTO labelToCreate);
     public void deletePersonalLabel(Integer idLabel);
-    public void modifyPersonalLabel(LabelCreationDTO labelToModify);
+    public LabelSummaryDTO modifyPersonalLabel(LabelCreationDTO labelToModify);
     public List<LabelSummaryDTO> getPersonalLabels(String username);
 }

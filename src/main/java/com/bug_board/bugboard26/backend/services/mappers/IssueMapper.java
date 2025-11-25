@@ -3,7 +3,9 @@ package com.bug_board.bugboard26.backend.services.mappers;
 import com.bug_board.bugboard26.backend.entity.Issue;
 import com.bug_board.bugboard26.dto.IssueCreationDTO;
 import com.bug_board.bugboard26.dto.IssueSummaryDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class IssueMapper {
     public static IssueSummaryDTO toIssueSummaryDTO(Issue issueToMap) {
         IssueSummaryDTO mappedIssue = new IssueSummaryDTO();

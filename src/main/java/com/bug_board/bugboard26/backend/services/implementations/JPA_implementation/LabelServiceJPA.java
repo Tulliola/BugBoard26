@@ -1,5 +1,6 @@
 package com.bug_board.bugboard26.backend.services.implementations.JPA_implementation;
 
+import com.bug_board.bugboard26.backend.repositories.interfaces.ILabelRepository;
 import com.bug_board.bugboard26.backend.services.interfaces.ILabelService;
 import com.bug_board.bugboard26.dto.LabelCreationDTO;
 import com.bug_board.bugboard26.dto.LabelSummaryDTO;
@@ -9,9 +10,16 @@ import java.util.List;
 
 @Service
 public class LabelServiceJPA implements ILabelService {
-    @Override
-    public void createPersonalLabel(LabelCreationDTO labelToCreate) {
 
+    private final ILabelRepository labelRepository;
+
+    public LabelServiceJPA(ILabelRepository labelRepository) {
+        this.labelRepository = labelRepository;
+    }
+
+    @Override
+    public LabelSummaryDTO createPersonalLabel(LabelCreationDTO labelToCreate) {
+        return null;
     }
 
     @Override
@@ -20,8 +28,8 @@ public class LabelServiceJPA implements ILabelService {
     }
 
     @Override
-    public void modifyPersonalLabel(LabelCreationDTO labelToModify) {
-
+    public LabelSummaryDTO modifyPersonalLabel(LabelCreationDTO labelToModify) {
+        return null;
     }
 
     @Override

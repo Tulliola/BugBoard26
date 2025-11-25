@@ -9,10 +9,10 @@ import java.util.List;
 
 @Repository
 public class ProjectRepositoryJpaAdapter implements IProjectRepository {
-    private final IProjectRepositoryJPA repositoryJPA;
+    private final IProjectRepositoryJPA projectRepositoryJPA;
 
-    public ProjectRepositoryJpaAdapter(IProjectRepositoryJPA repositoryJPA) {
-        this.repositoryJPA = repositoryJPA;
+    public ProjectRepositoryJpaAdapter(IProjectRepositoryJPA projectRepositoryJPA) {
+        this.projectRepositoryJPA = projectRepositoryJPA;
     }
     @Override
     public List<Project> getOverviewedProjectsByUser(String username) {
@@ -25,12 +25,18 @@ public class ProjectRepositoryJpaAdapter implements IProjectRepository {
     }
 
     @Override
-    public void assignCollaboratorToProject(Integer idProject, String collaboratorUsername) {
-
+    public User assignCollaboratorToProject(Integer idProject, String collaboratorUsername) {
+        return null;
     }
 
     @Override
     public List<User> getAddableUsersToProject(Integer idProject) {
         return List.of();
+    }
+
+    @Override
+    public Project getProjectByID(Integer idProject) {
+        //TODO capire come gestire l'eccezione
+        return this.projectRepositoryJPA.findById(idProject).orElseThrow();
     }
 }

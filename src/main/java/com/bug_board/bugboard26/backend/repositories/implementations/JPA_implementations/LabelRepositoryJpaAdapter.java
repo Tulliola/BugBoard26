@@ -8,30 +8,29 @@ import java.util.List;
 
 @Repository
 public class LabelRepositoryJpaAdapter implements ILabelRepository {
-    private final ILabelRepositoryJPA repository;
+    private final ILabelRepositoryJPA labelRepositoryJPA;
 
-    public LabelRepositoryJpaAdapter(ILabelRepositoryJPA repository) {
-        this.repository = repository;
+    public LabelRepositoryJpaAdapter(ILabelRepositoryJPA labelRepositoryJPA) {
+        this.labelRepositoryJPA = labelRepositoryJPA;
     }
 
     @Override
     public void deleteLabel(Integer idLabel) {
-        repository.deleteById(idLabel);
+        labelRepositoryJPA.deleteById(idLabel);
     }
 
     @Override
-    public void updateLabel(Label label) {
-        //TODO DISCUTERE CON FULVIO SU TIPI DI RITORNO E PARAMETRI
-        repository.save(label);
+    public Label updateLabel(Label label) {
+       return labelRepositoryJPA.save(label);
     }
 
     @Override
-    public void createLabel(Label labelToCreate) {
-        repository.save(labelToCreate);
+    public Label createLabel(Label labelToCreate) {
+        return labelRepositoryJPA.save(labelToCreate);
     }
 
     @Override
     public List<Label> retrieveAllUsersLabel(String username) {
-       return repository.findAllByUsername(username);
+       return labelRepositoryJPA.findAllByUsername(username);
     }
 }

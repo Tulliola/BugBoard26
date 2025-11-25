@@ -1,5 +1,6 @@
 package com.bug_board.bugboard26.backend.REST_controllers;
 
+import com.bug_board.bugboard26.backend.services.interfaces.IProjectService;
 import com.bug_board.bugboard26.dto.ProjectSummaryDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +14,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/me/projects")
 public class UserProjectController {
+
+    private IProjectService projectService;
+
+    public UserProjectController(IProjectService projectService) {
+        this.projectService = projectService;
+    }
+
     @GetMapping("/overviewed")
-    public ResponseEntity<List<ProjectSummaryDTO>> getOverviewedProjects(@RequestParam(required = false) String projectName, Principal principal){
+    public ResponseEntity<List<ProjectSummaryDTO>> getOverviewedProjects(@RequestParam(required = false) String projectName, UserPrincipal principal){
         //TODO chiamata al service
         return null;
     }
 
     @GetMapping("/working-on")
-    public ResponseEntity<List<ProjectSummaryDTO>> getWorkingOnProjects(@RequestParam(required = false) String projectName, Principal principal){
+    public ResponseEntity<List<ProjectSummaryDTO>> getWorkingOnProjects(@RequestParam(required = false) String projectName, UserPrincipal principal){
         //TODO chiamata al service
         return null;
     }

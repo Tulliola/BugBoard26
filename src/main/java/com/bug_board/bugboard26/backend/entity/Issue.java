@@ -69,6 +69,11 @@ public class Issue {
     @JoinColumn(name = "utente_creatore")
     private RegularUser creator;
 
+    /* Relation Issue - Project */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idprogetto")
+    private Project project;
+
     public Issue(){
 
     }

@@ -6,7 +6,7 @@ import com.bug_board.bugboard26.dto.IssueSummaryDTO;
 import java.util.List;
 
 public interface IIssueService {
-    public void publishNewIssueToProject(Integer idProject, IssueCreationDTO issueToAdd);
+    public IssueSummaryDTO publishNewIssueToProject(IssueCreationDTO issueToAdd);
     public List<IssueSummaryDTO> getIssueOfAUser(String username);
     public List<IssueSummaryDTO> getIssueOfAProject(Integer idProject);
 }
