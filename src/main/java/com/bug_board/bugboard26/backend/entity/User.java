@@ -28,11 +28,11 @@ public abstract class User {
     @Column(name = "pwd", nullable = false)
     protected String password;
 
-    @Column(name = "ruolo", columnDefinition = "ruoloenum not null")
+    @Column(name = "ruolo", columnDefinition = "ruoloenum not null", insertable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     protected UserRole role;
 
-    @Column(name = "bioPic")
+    @Column(name = "biopic")
     protected byte[] bioPic;
 
     protected User(){

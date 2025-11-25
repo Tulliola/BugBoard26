@@ -1,5 +1,6 @@
 package com.bug_board.bugboard26.backend.REST_controllers;
 
+import com.bug_board.bugboard26.backend.security.UserPrincipal;
 import com.bug_board.bugboard26.backend.services.interfaces.IIssueService;
 import com.bug_board.bugboard26.dto.IssueSummaryDTO;
 import org.springframework.http.ResponseEntity;

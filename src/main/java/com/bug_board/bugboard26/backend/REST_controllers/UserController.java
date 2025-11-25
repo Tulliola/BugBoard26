@@ -6,6 +6,7 @@ import com.bug_board.bugboard26.dto.UserSummaryDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,9 +22,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping()
+    @PostMapping("/register")
     public ResponseEntity<UserSummaryDTO> registerNewUser(@RequestBody UserCreationDTO userCreationDTO){
-        //TODO ritornerà la chiamata al service
-        return null;
+        return new ResponseEntity<>(userService.registerNewUser(userCreationDTO), HttpStatus.OK);
     }
 }

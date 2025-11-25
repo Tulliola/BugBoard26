@@ -18,6 +18,8 @@ app.label-repository.implementation=IMPLEMENTATION_TYPE
 spring.datasource.url=jdbc:postgresql://RDS_INSTANCE_ENDPOINT:PORT/DATABASE_NAME
 spring.datasource.username=USER
 spring.datasource.password=PASSWORD
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
 
 #   Hikari configuration
 spring.datasource.hikari.maximum-pool-size=MAX_POOL_SIZE

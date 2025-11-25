@@ -1,5 +1,6 @@
 package com.bug_board.bugboard26.backend.REST_controllers;
 
+import com.bug_board.bugboard26.backend.security.UserPrincipal;
 import com.bug_board.bugboard26.backend.services.interfaces.IProjectService;
 import com.bug_board.bugboard26.dto.ProjectSummaryDTO;
 import org.springframework.http.ResponseEntity;

@@ -3,6 +3,7 @@ package com.bug_board.bugboard26.backend.services.implementations.JPA_implementa
 import com.bug_board.bugboard26.backend.entity.User;
 import com.bug_board.bugboard26.backend.repositories.interfaces.IUserRepository;
 import com.bug_board.bugboard26.backend.services.interfaces.IUserService;
+import com.bug_board.bugboard26.dto.UserAuthenticationDTO;
 import com.bug_board.bugboard26.dto.UserCreationDTO;
 import com.bug_board.bugboard26.dto.UserSummaryDTO;
 import org.springframework.stereotype.Service;

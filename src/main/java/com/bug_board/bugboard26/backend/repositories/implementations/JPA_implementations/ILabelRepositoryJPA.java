@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ILabelRepositoryJPA extends JpaRepository<Label, Integer> {
-    public List<Label> findAllByUsername(String username);
+    //TODO crea errore
+//    public List<Label> findAllByUsername(String username);
 }

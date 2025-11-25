@@ -1,5 +1,6 @@
 package com.bug_board.bugboard26.backend.REST_controllers;
 
+import com.bug_board.bugboard26.backend.security.UserPrincipal;
 import com.bug_board.bugboard26.backend.services.interfaces.ILabelService;
 import com.bug_board.bugboard26.dto.LabelCreationDTO;
 import com.bug_board.bugboard26.dto.LabelModifyingDTO;
@@ -26,21 +27,21 @@ public class UserLabelController {
         return null;
     }
 
-    @DeleteMapping("/{idLabel")
+    @DeleteMapping("/{idLabel}")
     public ResponseEntity<Void> deleteLabel(@PathVariable("idLabel") Integer idLabel) {
         //TODO chiamata al service
         //TODO discutere sul codice di ritorno 204 e best practice
         return null;
     }
 
-    @PutMapping("/{idLabel")
+    @PutMapping("/{idLabel}")
     public ResponseEntity<LabelSummaryDTO>  updateLabel(@PathVariable("idLabel") Integer idLabel, @RequestBody LabelModifyingDTO labelToUpdate) {
         //TODO chiamata al service
         return null;
     }
 
-    @GetMapping
-    public ResponseEntity<List<LabelSummaryDTO>> getLabels(Principal principal) {
+    @GetMapping()
+    public ResponseEntity<List<LabelSummaryDTO>> getLabels(UserPrincipal principal) {
         //TODO chiamata al service
         return null;
     }
