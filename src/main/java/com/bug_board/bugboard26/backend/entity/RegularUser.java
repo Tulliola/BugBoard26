@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,11 @@ public class RegularUser extends User implements IRegularUserRole {
 
     public RegularUser() {
         super(UserRole.ROLE_USER);
+    }
+
+    @Override
+    public Collection<String> getRoleNames() {
+        return List.of("USER");
     }
 
     @Override

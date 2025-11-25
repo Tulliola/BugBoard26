@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,11 @@ public class Admin extends User implements IAdminRole {
 
     protected Admin(UserRole role) {
         super(role);
+    }
+
+    @Override
+    public Collection<String> getRoleNames() {
+        return List.of("ADMIN");
     }
 
     @Override

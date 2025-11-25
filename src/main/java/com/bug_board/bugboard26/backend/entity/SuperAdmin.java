@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -35,5 +36,10 @@ public class SuperAdmin extends Admin implements ISuperAdminRole {
 
             createdProjects.add(project);
         }
+    }
+
+    @Override
+    public Collection<String> getRoleNames() {
+        return List.of("ADMIN, SUPERADMIN");
     }
 }

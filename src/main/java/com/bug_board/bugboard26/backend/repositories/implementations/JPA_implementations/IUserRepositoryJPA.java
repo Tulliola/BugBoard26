@@ -4,4 +4,5 @@ import com.bug_board.bugboard26.backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IUserRepositoryJPA extends JpaRepository<User, String> {
+    public User findByUsername(String username);
 }

@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
-    //TODO da analizzare
+    public void authenticate()
 }
