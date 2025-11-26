@@ -2,6 +2,7 @@ package com.bug_board.bugboard26.backend.REST_controllers;
 
 import com.bug_board.bugboard26.backend.services.interfaces.IProjectService;
 import com.bug_board.bugboard26.backend.services.interfaces.IUserService;
+import com.bug_board.bugboard26.dto.CollaboratorAssociationDTO;
 import com.bug_board.bugboard26.dto.UserSummaryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,8 +25,8 @@ public class ProjectController {
     }
 
     @PostMapping("/{projectId}/users/collaborators")
-    public ResponseEntity<UserSummaryDTO> assignCollaboratorToProject(@PathVariable("projectId") Integer projectId, String collaboratorUsername) {
-        UserSummaryDTO collaborator = projectService.assignCollaboratorToProject(projectId, collaboratorUsername);
+    public ResponseEntity<UserSummaryDTO> assignCollaboratorToProject(@PathVariable("projectId") Integer projectId, @RequestBody CollaboratorAssociationDTO collaboratorUsername) {
+        UserSummaryDTO collaborator = projectService.assignCollaboratorToProject(projectId, collaboratorUsername.getCollaboratorUsername());
         return new ResponseEntity<>(collaborator, HttpStatus.OK);
     }
 

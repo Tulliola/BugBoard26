@@ -11,6 +11,5 @@ public interface IProjectService {
     public List<ProjectSummaryDTO> getOverviewedProjects(String username, String projectNameToFilter);
     public List<ProjectSummaryDTO> getWorkingOnProjects(String username, String projectNameToFilter);
     public UserSummaryDTO assignCollaboratorToProject(Integer idProject, String collaboratorUsername);
-    public List<User> getProjectMembers(Integer idProject);
     public Project getProject(Integer idProject);
 }

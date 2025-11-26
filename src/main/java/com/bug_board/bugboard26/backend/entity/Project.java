@@ -39,7 +39,7 @@ public class Project {
     @ManyToMany
     @JoinTable(
             name = "supervisiona_progetto",
-            joinColumns = @JoinColumn(name = "idProgetto"),
+            joinColumns = @JoinColumn(name = "idprogetto"),
             inverseJoinColumns = @JoinColumn(name = "amministratore")
     )
     private List<Admin> admins = new ArrayList<Admin>();
@@ -48,7 +48,7 @@ public class Project {
     @ManyToMany
     @JoinTable(
             name = "partecipa_a_progetto",
-            joinColumns = @JoinColumn(name = "idProgetto"),
+            joinColumns = @JoinColumn(name = "idprogetto"),
             inverseJoinColumns = @JoinColumn(name = "utente_partecipante")
     )
     private List<RegularUser> partecipants = new ArrayList<RegularUser>();

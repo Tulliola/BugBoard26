@@ -21,7 +21,7 @@ public class UserIssueController {
         this.issueService = issueService;
     }
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<IssueSummaryDTO>> getPersonalIssues(UserPrincipal principal) {
         //TODO chiamata al service
         return null;

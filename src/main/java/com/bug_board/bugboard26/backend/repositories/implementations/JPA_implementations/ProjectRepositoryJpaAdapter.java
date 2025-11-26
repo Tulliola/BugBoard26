@@ -39,4 +39,9 @@ public class ProjectRepositoryJpaAdapter implements IProjectRepository {
     public Project getProjectByID(Integer idProject) {
         return this.projectRepositoryJPA.findById(idProject).orElse(null);
     }
+
+    @Override
+    public List<User> getProjectMembers(Integer idProject) {
+        return List.of();
+    }
 }

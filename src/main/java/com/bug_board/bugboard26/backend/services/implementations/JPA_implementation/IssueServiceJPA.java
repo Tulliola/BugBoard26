@@ -14,10 +14,7 @@ import com.bug_board.bugboard26.exception.backend.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-
-import java.beans.Transient;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class IssueServiceJPA implements IIssueService {
@@ -40,7 +37,7 @@ public class IssueServiceJPA implements IIssueService {
     @Override
     @PreAuthorize("hasRole('ROLE_USER')")
     public IssueSummaryDTO publishNewIssueToProject(Integer idProject, IssueCreationDTO issueToAdd) {
-        if(idProject != issueToAdd.getIdProject())
+        if(!idProject.equals(issueToAdd.getIdProject()))
             throw new BadRequestException("idProject in the URL and idProject in the issue you want to create don't match.");
 
         Issue mappedIssue = IssueMapper.toIssue(issueToAdd);
@@ -76,9 +73,6 @@ public class IssueServiceJPA implements IIssueService {
         if(project.getIssues() == null || project.getIssues().isEmpty())
             throw new ResourceNotFoundException("This project doesn't have any issues.");
 
-        return project.getIssues()
-                .stream()
-                .map(IssueMapper::toIssueSummaryDTO)
-                .collect(Collectors.toList());
+        return IssueMapper.toIssueSummaryDTOS(project.getIssues());
     }
 }

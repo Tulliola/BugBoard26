@@ -2,6 +2,7 @@ package com.bug_board.bugboard26.backend.services.implementations.JPA_implementa
 
 import com.bug_board.bugboard26.backend.entity.User;
 import com.bug_board.bugboard26.backend.entity.factories.UserFactory;
+import com.bug_board.bugboard26.backend.repositories.interfaces.IProjectRepository;
 import com.bug_board.bugboard26.backend.repositories.interfaces.IUserRepository;
 import com.bug_board.bugboard26.backend.services.interfaces.IProjectService;
 import com.bug_board.bugboard26.backend.services.interfaces.IUserService;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceJPA implements IUserService {
-    private final IProjectService projectService;
+    private final IProjectRepository projectRepository;
     private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserFactory userFactory;
@@ -28,8 +29,8 @@ public class UserServiceJPA implements IUserService {
     public UserServiceJPA(IUserRepository userRepository,
                           PasswordEncoder passwordEncoder,
                           UserFactory userFactory,
-                          IProjectService projectService) {
-        this.projectService = projectService;
+                          IProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
         this.userFactory = userFactory;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
@@ -63,7 +64,7 @@ public class UserServiceJPA implements IUserService {
     @Override
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
     public List<UserSummaryDTO> getAddableUsersToProject(Integer idProject) {
-        List<User> currentCollaborators = projectService.getProjectMembers(idProject);
+        List<User> currentCollaborators = projectRepository.getProjectMembers(idProject);
 
         Set<String> currentCollaboratorsUsernames = currentCollaborators
                 .stream()
@@ -80,7 +81,7 @@ public class UserServiceJPA implements IUserService {
 
     @Override
     public User findUserByUsername(String collaboratorUsername) {
-        return null;
+        return userRepository.findUserByUsername(collaboratorUsername);
     }
 
     private String assignUsernameAutomatically(String emailToParse, String role){

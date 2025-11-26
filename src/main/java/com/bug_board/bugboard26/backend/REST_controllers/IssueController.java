@@ -22,13 +22,13 @@ public class IssueController {
     }
 
 
-    @GetMapping()
+    @GetMapping("")
     public ResponseEntity<List<IssueSummaryDTO>> getAllProjectsIssues(@PathVariable ("project-id") Integer projectId){
         List<IssueSummaryDTO> issueSummaryDTOS = issueService.getIssuesOfAProject(projectId);
         return new ResponseEntity<>(issueSummaryDTOS, HttpStatus.OK);
     }
 
-    @PostMapping()
+    @PostMapping("")
     public ResponseEntity<IssueSummaryDTO> createNewIssue(@PathVariable("project-id") Integer projectId, @RequestBody IssueCreationDTO issue){
         IssueSummaryDTO issueCreated = issueService.publishNewIssueToProject(projectId, issue);
         return new ResponseEntity<>(issueCreated, HttpStatus.CREATED);

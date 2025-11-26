@@ -5,6 +5,9 @@ import com.bug_board.bugboard26.dto.IssueCreationDTO;
 import com.bug_board.bugboard26.dto.IssueSummaryDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class IssueMapper {
     public static IssueSummaryDTO toIssueSummaryDTO(Issue issueToMap) {
@@ -31,5 +34,11 @@ public class IssueMapper {
         mappedIssue.setImages(issueDTOToMap.getImages());
 
         return mappedIssue;
+    }
+
+    public static List<IssueSummaryDTO> toIssueSummaryDTOS(List<Issue> issues){
+        return issues.stream()
+                .map(IssueMapper::toIssueSummaryDTO)
+                .collect(Collectors.toList());
     }
 }
