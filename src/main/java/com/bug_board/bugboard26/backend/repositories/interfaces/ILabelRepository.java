@@ -10,4 +10,5 @@ public interface ILabelRepository {
     public Label updateLabel(Label labelToUpdate);
     public Label createLabel(Label labelToCreate);
     public List<Label> retrieveAllUsersLabel(String username);
+    public Label getLabelById(Integer idLabel);
 }

@@ -3,6 +3,7 @@ package com.bug_board.bugboard26.backend.repositories.implementations.JPA_implem
 import com.bug_board.bugboard26.backend.entity.Project;
 import com.bug_board.bugboard26.backend.entity.User;
 import com.bug_board.bugboard26.backend.repositories.interfaces.IProjectRepository;
+import com.bug_board.bugboard26.exception.backend.ResourceNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,8 +26,8 @@ public class ProjectRepositoryJpaAdapter implements IProjectRepository {
     }
 
     @Override
-    public User assignCollaboratorToProject(Integer idProject, String collaboratorUsername) {
-        return null;
+    public Project save(Project project) {
+        return this.projectRepositoryJPA.save(project);
     }
 
     @Override
@@ -36,7 +37,6 @@ public class ProjectRepositoryJpaAdapter implements IProjectRepository {
 
     @Override
     public Project getProjectByID(Integer idProject) {
-        //TODO capire come gestire l'eccezione
-        return this.projectRepositoryJPA.findById(idProject).orElseThrow();
+        return this.projectRepositoryJPA.findById(idProject).orElse(null);
     }
 }

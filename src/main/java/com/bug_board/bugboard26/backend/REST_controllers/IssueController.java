@@ -1,5 +1,6 @@
 package com.bug_board.bugboard26.backend.REST_controllers;
 
+import com.bug_board.bugboard26.backend.entity.Issue;
 import com.bug_board.bugboard26.backend.services.interfaces.IIssueService;
 import com.bug_board.bugboard26.dto.IssueCreationDTO;
 import com.bug_board.bugboard26.dto.IssueSummaryDTO;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,23 +24,13 @@ public class IssueController {
 
     @GetMapping()
     public ResponseEntity<List<IssueSummaryDTO>> getAllProjectsIssues(@PathVariable ("project-id") Integer projectId){
-        try {
-            return new ResponseEntity<>(issueService.getIssueOfAProject(projectId), HttpStatus.OK);
-        }
-        catch (Exception e) {
-            //TODO cambiare una volta definite le eccezioni nel service
-            return new ResponseEntity<>(HttpStatus.TOO_EARLY);
-        }
+        List<IssueSummaryDTO> issueSummaryDTOS = issueService.getIssuesOfAProject(projectId);
+        return new ResponseEntity<>(issueSummaryDTOS, HttpStatus.OK);
     }
 
     @PostMapping()
-    public ResponseEntity<IssueSummaryDTO> createNewIssue(@PathVariable("project-id") Integer projectId, @RequestBody IssueCreationDTO issueCreationDTO){
-        try {
-            return new ResponseEntity<>(issueService.publishNewIssueToProject(issueCreationDTO), HttpStatus.CREATED);
-        }
-        catch (Exception e){
-            //TODO cambiare una volta definite le eccezioni nel service
-            return new ResponseEntity<>(HttpStatus.TOO_EARLY);
-        }
+    public ResponseEntity<IssueSummaryDTO> createNewIssue(@PathVariable("project-id") Integer projectId, @RequestBody IssueCreationDTO issue){
+        IssueSummaryDTO issueCreated = issueService.publishNewIssueToProject(projectId, issue);
+        return new ResponseEntity<>(issueCreated, HttpStatus.CREATED);
     }
 }

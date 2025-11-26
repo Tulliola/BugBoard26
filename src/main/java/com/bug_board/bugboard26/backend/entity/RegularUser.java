@@ -40,6 +40,11 @@ public class RegularUser extends User implements IRegularUserRole {
     }
 
     @Override
+    public void addToProject(Project project) {
+        project.addUserWorkingOnProject(this);
+    }
+
+    @Override
     public void addIssueToIssueList(Issue newIssue) {
         if(personalIssues != null){
             if(newIssue == null)

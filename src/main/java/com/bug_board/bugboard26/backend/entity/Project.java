@@ -95,4 +95,9 @@ public class Project {
             admins.add(admin);
         }
     }
+
+    public boolean hasCollaborators(){
+        return (admins != null && !admins.isEmpty()) &&
+                (partecipants != null && !partecipants.isEmpty());
+    }
 }

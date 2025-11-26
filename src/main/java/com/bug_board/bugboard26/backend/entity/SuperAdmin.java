@@ -42,4 +42,9 @@ public class SuperAdmin extends Admin implements ISuperAdminRole {
     public Collection<String> getRoleNames() {
         return List.of("ROLE_ADMIN", "ROLE_SUPERADMIN");
     }
+
+    @Override
+    public void addToProject(Project project) {
+        project.addAdminOverviewingProject(this);
+    }
 }

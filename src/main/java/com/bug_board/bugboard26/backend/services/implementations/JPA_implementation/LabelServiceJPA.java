@@ -1,9 +1,11 @@
 package com.bug_board.bugboard26.backend.services.implementations.JPA_implementation;
 
+import com.bug_board.bugboard26.backend.entity.Label;
 import com.bug_board.bugboard26.backend.repositories.interfaces.ILabelRepository;
 import com.bug_board.bugboard26.backend.services.interfaces.ILabelService;
 import com.bug_board.bugboard26.dto.LabelCreationDTO;
 import com.bug_board.bugboard26.dto.LabelSummaryDTO;
+import com.bug_board.bugboard26.exception.backend.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,5 +37,13 @@ public class LabelServiceJPA implements ILabelService {
     @Override
     public List<LabelSummaryDTO> getPersonalLabels(String username) {
         return List.of();
+    }
+
+    @Override
+    public Label getLabel(Integer idLabel) {
+        if(labelRepository.getLabelById(idLabel) == null)
+            throw new ResourceNotFoundException("Label Not Found");
+
+        return labelRepository.getLabelById(idLabel);
     }
 }

@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserFactory {
     public User createUser(UserRole role) {
-        if(role.getRole().equals("ROLE_ADMIN"))
+        if(role.getRoleName().equals("ROLE_ADMIN"))
             return new Admin();
-        else if(role.getRole().equals("ROLE_USER"))
+        else if(role.getRoleName().equals("ROLE_USER"))
             return new RegularUser();
         else
             return new SuperAdmin();

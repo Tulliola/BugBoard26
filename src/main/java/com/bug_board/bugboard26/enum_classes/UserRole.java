@@ -11,7 +11,7 @@ public enum UserRole {
         this.role = roleTipology;
     }
 
-    public String getRole() {
+    public String getRoleName() {
         return role;
     }
 }

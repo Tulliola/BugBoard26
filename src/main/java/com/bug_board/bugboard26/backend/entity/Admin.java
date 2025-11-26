@@ -38,6 +38,11 @@ public class Admin extends User implements IAdminRole {
     }
 
     @Override
+    public void addToProject(Project project) {
+        project.addAdminOverviewingProject(this);
+    }
+
+    @Override
     public void addProjectToOverviewedProjectList(Project project) {
         if(overviewedProjects != null){
             if(project == null)

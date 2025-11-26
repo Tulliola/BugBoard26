@@ -21,7 +21,7 @@ public class IssueRepositoryJpaAdapter implements IIssueRepository {
     }
 
     @Override
-    public Issue createANewIssueToProject(Integer idProject, Issue issueToPublish) {
+    public Issue createANewIssueToProject(Issue issueToPublish) {
         return issueRepositoryJPA.save(issueToPublish);
     }
 

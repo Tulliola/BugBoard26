@@ -5,6 +5,7 @@ import com.bug_board.bugboard26.backend.repositories.interfaces.ILabelRepository
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class LabelRepositoryJpaAdapter implements ILabelRepository {
@@ -33,5 +34,10 @@ public class LabelRepositoryJpaAdapter implements ILabelRepository {
     public List<Label> retrieveAllUsersLabel(String username) {
 //       return labelRepositoryJPA.findAllByUsername(username);
         return null;
+    }
+
+    @Override
+    public Label getLabelById(Integer idLabel) {
+        return labelRepositoryJPA.findById(idLabel).orElse(null);
     }
 }

@@ -17,7 +17,7 @@ public class IssueCreationDTO {
 
     private Integer idProject;
 
-    private List<Integer> idLabel;
+    private List<Integer> idLabels;
 
     private String username;
 }

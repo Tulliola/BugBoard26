@@ -1,18 +1,23 @@
 package com.bug_board.bugboard26.backend.services.implementations.JPA_implementation;
 
-import com.bug_board.bugboard26.backend.entity.Issue;
-import com.bug_board.bugboard26.backend.entity.Project;
+import com.bug_board.bugboard26.backend.entity.*;
 import com.bug_board.bugboard26.backend.repositories.interfaces.IIssueRepository;
 import com.bug_board.bugboard26.backend.services.interfaces.IIssueService;
+import com.bug_board.bugboard26.backend.services.interfaces.ILabelService;
 import com.bug_board.bugboard26.backend.services.interfaces.IProjectService;
+import com.bug_board.bugboard26.backend.services.interfaces.IUserService;
 import com.bug_board.bugboard26.backend.services.mappers.IssueMapper;
 import com.bug_board.bugboard26.dto.IssueCreationDTO;
 import com.bug_board.bugboard26.dto.IssueSummaryDTO;
-import com.bug_board.bugboard26.dto.ProjectSummaryDTO;
+import com.bug_board.bugboard26.exception.backend.BadRequestException;
+import com.bug_board.bugboard26.exception.backend.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class IssueServiceJPA implements IIssueService {
@@ -21,32 +26,59 @@ public class IssueServiceJPA implements IIssueService {
 
     private final IProjectService projectService;
 
-    public IssueServiceJPA(IIssueRepository issueRepository, IProjectService projectService) {
+    private final ILabelService labelService;
+
+    private final IUserService userService;
+
+    public IssueServiceJPA(IIssueRepository issueRepository, IProjectService projectService, ILabelService labelService, IUserService userService) {
+        this.labelService = labelService;
         this.issueRepository = issueRepository;
         this.projectService = projectService;
+        this.userService = userService;
     }
 
-    @Transactional
     @Override
-    public IssueSummaryDTO publishNewIssueToProject(IssueCreationDTO issueToAdd) {
-        //TODO completare questo metodo
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public IssueSummaryDTO publishNewIssueToProject(Integer idProject, IssueCreationDTO issueToAdd) {
+        if(idProject != issueToAdd.getIdProject())
+            throw new BadRequestException("idProject in the URL and idProject in the issue you want to create don't match.");
 
         Issue mappedIssue = IssueMapper.toIssue(issueToAdd);
 
-        Project issuesProject = projectService.getProjectById(issueToAdd.getIdProject());
-        mappedIssue.setProject(issuesProject);
+        Project projectOfIssue = projectService.getProject(issueToAdd.getIdProject());
+        mappedIssue.setProject(projectOfIssue);
 
-        Issue publishedIssue = issueRepository.createANewIssueToProject(issueToAdd.getIdProject(), mappedIssue);
+        for (Integer idLabel : issueToAdd.getIdLabels()){
+            Label retrievedLabel = labelService.getLabel(idLabel);
+            mappedIssue.addLabelAttachedToIssue(retrievedLabel);
+        }
+
+        User creator = userService.getUser(issueToAdd.getUsername());
+        mappedIssue.setCreator((RegularUser) creator);
+
+        Issue publishedIssue = issueRepository.createANewIssueToProject(mappedIssue);
+
         return IssueMapper.toIssueSummaryDTO(publishedIssue);
     }
 
     @Override
-    public List<IssueSummaryDTO> getIssueOfAUser(String username) {
+    public List<IssueSummaryDTO> getIssuesOfAUser(String username) {
+
         return List.of();
     }
 
+    @Transactional
     @Override
-    public List<IssueSummaryDTO> getIssueOfAProject(Integer idProject) {
-        return List.of();
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPERADMIN')")
+    public List<IssueSummaryDTO> getIssuesOfAProject(Integer idProject) {
+        Project project = projectService.getProject(idProject);
+
+        if(project.getIssues() == null || project.getIssues().isEmpty())
+            throw new ResourceNotFoundException("This project doesn't have any issues.");
+
+        return project.getIssues()
+                .stream()
+                .map(IssueMapper::toIssueSummaryDTO)
+                .collect(Collectors.toList());
     }
 }

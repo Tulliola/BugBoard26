@@ -19,7 +19,7 @@ import java.util.Collection;
 public abstract class User {
     /* User specific attributes */
     @Id
-    @Column(name = "username", nullable = false, length = 25)
+    @Column(name = "username", nullable = false, length = 50)
     protected String username;
 
     @Column(name = "email", nullable = false, length = 40)
@@ -45,4 +45,5 @@ public abstract class User {
 
     public abstract Collection<String> getRoleNames();
 
+    public abstract void addToProject(Project project);
 }

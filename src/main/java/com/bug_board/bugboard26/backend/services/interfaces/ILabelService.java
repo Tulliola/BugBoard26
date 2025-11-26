@@ -1,5 +1,6 @@
 package com.bug_board.bugboard26.backend.services.interfaces;
 
+import com.bug_board.bugboard26.backend.entity.Label;
 import com.bug_board.bugboard26.dto.LabelCreationDTO;
 import com.bug_board.bugboard26.dto.LabelSummaryDTO;
 
@@ -10,4 +11,5 @@ public interface ILabelService {
     public void deletePersonalLabel(Integer idLabel);
     public LabelSummaryDTO modifyPersonalLabel(LabelCreationDTO labelToModify);
     public List<LabelSummaryDTO> getPersonalLabels(String username);
+    public Label getLabel(Integer idLabel);
 }
