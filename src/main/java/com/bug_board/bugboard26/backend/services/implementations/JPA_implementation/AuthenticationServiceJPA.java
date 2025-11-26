@@ -2,7 +2,6 @@ package com.bug_board.bugboard26.backend.services.implementations.JPA_implementa
 
 import com.bug_board.bugboard26.backend.security.JWTService;
 import com.bug_board.bugboard26.backend.services.interfaces.IAuthenticationService;
-import com.bug_board.bugboard26.backend.services.interfaces.IUserService;
 import com.bug_board.bugboard26.dto.UserAuthenticationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,14 +11,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationServiceJPA implements IAuthenticationService {
-    private final IUserService userService;
+
     private final JWTService jwtService;
 
     @Autowired
     AuthenticationManager authenticationManager;
 
-    public AuthenticationServiceJPA(IUserService userService, JWTService jwtService) {
-        this.userService = userService;
+    public AuthenticationServiceJPA(JWTService jwtService) {
         this.jwtService = jwtService;
     }
 
@@ -31,9 +29,6 @@ public class AuthenticationServiceJPA implements IAuthenticationService {
                         userAuthenticationDTO.getPassword())
                 );
 
-        if(authentication.isAuthenticated())
-            return jwtService.generateToken(userAuthenticationDTO.getUsername());
-
-        return "Failed";
+        return jwtService.generateToken(userAuthenticationDTO.getUsername());
     }
 }

@@ -40,6 +40,6 @@ public class SuperAdmin extends Admin implements ISuperAdminRole {
 
     @Override
     public Collection<String> getRoleNames() {
-        return List.of("ADMIN, SUPERADMIN");
+        return List.of("ROLE_ADMIN", "ROLE_SUPERADMIN");
     }
 }

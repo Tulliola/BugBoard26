@@ -25,12 +25,9 @@ public class SecurityConfig {
 
     private final JWTFilter jwtFilter;
 
-    private final JwtAuthEntryPoint jwtAuthEntryPoint;
-
-    public SecurityConfig(UserDetailsService userDetailsService, JWTFilter jwtFilter, JwtAuthEntryPoint jwtAuthEntryPoint) {
+    public SecurityConfig(UserDetailsService userDetailsService, JWTFilter jwtFilter) {
         this.userDetailsService = userDetailsService;
         this.jwtFilter = jwtFilter;
-        this.jwtAuthEntryPoint = jwtAuthEntryPoint;
     }
 
     @Bean
@@ -43,10 +40,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-               .exceptionHandling(exceptionHandling -> exceptionHandling
-                       // Quando l'autenticazione fallisce
-                       .authenticationEntryPoint(jwtAuthEntryPoint)
-               )
                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                .build();
     }

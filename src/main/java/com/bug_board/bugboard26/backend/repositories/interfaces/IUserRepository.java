@@ -4,7 +4,6 @@ import com.bug_board.bugboard26.backend.entity.User;
 
 public interface IUserRepository {
     public User registerNewUser(User userToRegister);
-
     public User findUserByUsername(String username);
-    // public String authenticateUser(AuthenticationRequest authenticationRequest);
+    public boolean existsByUsername(String username);
 }

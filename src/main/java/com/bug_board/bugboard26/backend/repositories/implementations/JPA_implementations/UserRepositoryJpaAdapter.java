@@ -10,19 +10,21 @@ import org.springframework.stereotype.Repository;
 public class UserRepositoryJpaAdapter implements IUserRepository {
     private final IUserRepositoryJPA repositoryJPA;
 
-    private PasswordEncoder passwordEncoder;
-
     public UserRepositoryJpaAdapter(IUserRepositoryJPA repositoryJPA) {
         this.repositoryJPA = repositoryJPA;
     }
     @Override
     public User registerNewUser(User userToRegister) {
-        userToRegister.setPassword(passwordEncoder.encode(userToRegister.getPassword()));
         return repositoryJPA.save(userToRegister);
     }
 
     @Override
     public User findUserByUsername(String username) {
         return repositoryJPA.findByUsername(username);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return repositoryJPA.existsByUsername(username);
     }
 }

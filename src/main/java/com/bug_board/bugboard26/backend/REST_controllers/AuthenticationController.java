@@ -17,9 +17,10 @@ public class AuthenticationController {
     public AuthenticationController(IAuthenticationService authService) {
         this.authService = authService;
     }
+
     @PostMapping("")
     public ResponseEntity<String> authenticate(@RequestBody UserAuthenticationDTO userAuthentication) {
-
-        return new ResponseEntity<>(authService.verify(userAuthentication), HttpStatus.OK);
+        String jwtToken = authService.verify(userAuthentication);
+        return new ResponseEntity<>(jwtToken, HttpStatus.OK);
     }
 }

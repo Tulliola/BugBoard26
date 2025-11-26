@@ -36,7 +36,7 @@ public class RegularUser extends User implements IRegularUserRole {
 
     @Override
     public Collection<String> getRoleNames() {
-        return List.of("USER");
+        return List.of("ROLE_USER");
     }
 
     @Override

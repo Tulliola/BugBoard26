@@ -34,7 +34,7 @@ public class Admin extends User implements IAdminRole {
 
     @Override
     public Collection<String> getRoleNames() {
-        return List.of("ADMIN");
+        return List.of("ROLE_ADMIN");
     }
 
     @Override
