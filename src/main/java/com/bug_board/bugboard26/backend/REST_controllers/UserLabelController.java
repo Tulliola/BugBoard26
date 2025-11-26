@@ -1,10 +1,13 @@
 package com.bug_board.bugboard26.backend.REST_controllers;
 
+import com.bug_board.bugboard26.backend.entity.Issue;
 import com.bug_board.bugboard26.backend.security.UserPrincipal;
 import com.bug_board.bugboard26.backend.services.interfaces.ILabelService;
+import com.bug_board.bugboard26.dto.IssueSummaryDTO;
 import com.bug_board.bugboard26.dto.LabelCreationDTO;
 import com.bug_board.bugboard26.dto.LabelModifyingDTO;
 import com.bug_board.bugboard26.dto.LabelSummaryDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,27 +25,26 @@ public class UserLabelController {
     }
 
     @PostMapping
-    public ResponseEntity<LabelSummaryDTO> createNewLabel(LabelCreationDTO labelToCreate) {
-        //TODO chiamata al service
-        return null;
+    public ResponseEntity<LabelSummaryDTO> createNewLabel(@RequestBody LabelCreationDTO labelToCreate) {
+        LabelSummaryDTO labelCreated = labelService.createPersonalLabel(labelToCreate);
+        return new ResponseEntity<>(labelCreated, HttpStatus.OK);
     }
 
     @DeleteMapping("/{idLabel}")
     public ResponseEntity<Void> deleteLabel(@PathVariable("idLabel") Integer idLabel) {
-        //TODO chiamata al service
-        //TODO discutere sul codice di ritorno 204 e best practice
-        return null;
+        labelService.deletePersonalLabel(idLabel);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{idLabel}")
     public ResponseEntity<LabelSummaryDTO>  updateLabel(@PathVariable("idLabel") Integer idLabel, @RequestBody LabelModifyingDTO labelToUpdate) {
-        //TODO chiamata al service
-        return null;
+        LabelSummaryDTO labelUpdated = labelService.modifyPersonalLabel(idLabel, labelToUpdate);
+        return new ResponseEntity<>(labelUpdated, HttpStatus.OK);
     }
 
     @GetMapping()
     public ResponseEntity<List<LabelSummaryDTO>> getLabels(UserPrincipal principal) {
-        //TODO chiamata al service
-        return null;
+        List<LabelSummaryDTO> usersLabels = labelService.getPersonalLabels(principal.getUsername());
+        return new ResponseEntity<>(usersLabels, HttpStatus.OK);
     }
 }

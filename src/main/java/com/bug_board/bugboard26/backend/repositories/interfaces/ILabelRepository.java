@@ -11,4 +11,5 @@ public interface ILabelRepository {
     public Label createLabel(Label labelToCreate);
     public List<Label> retrieveAllUsersLabel(String username);
     public Label getLabelById(Integer idLabel);
+    public boolean existsLabel(Integer idLabel);
 }

@@ -5,6 +5,7 @@ import com.bug_board.bugboard26.backend.entity.User;
 import com.bug_board.bugboard26.backend.repositories.interfaces.IProjectRepository;
 import com.bug_board.bugboard26.backend.services.interfaces.IProjectService;
 import com.bug_board.bugboard26.backend.services.interfaces.IUserService;
+import com.bug_board.bugboard26.backend.services.mappers.ProjectMapper;
 import com.bug_board.bugboard26.backend.services.mappers.UserMapper;
 import com.bug_board.bugboard26.dto.ProjectSummaryDTO;
 import com.bug_board.bugboard26.dto.UserSummaryDTO;
@@ -31,12 +32,26 @@ public class ProjectServiceJPA implements IProjectService {
 
     @Override
     public List<ProjectSummaryDTO> getOverviewedProjects(String username, String projectNameToFilter) {
-        return List.of();
+        if(projectNameToFilter == null || projectNameToFilter.equals("")) {
+            List<Project> overviewedProjects = projectRepository.getWorkingOnProjectsByUser(username);
+            return overviewedProjects.stream().map(ProjectMapper::toProjectSummaryDTO).toList();
+        }
+        else{
+            List<Project> overviewedProjects = projectRepository.getWorkingOnProjectsByUserWithName(username, projectNameToFilter);
+            return overviewedProjects.stream().map(ProjectMapper::toProjectSummaryDTO).toList();
+        }
     }
 
     @Override
     public List<ProjectSummaryDTO> getWorkingOnProjects(String username, String projectNameToFilter) {
-        return List.of();
+        if(projectNameToFilter == null || projectNameToFilter.equals("")) {
+            List<Project> workingOnProjects = projectRepository.getOverviewedProjectsByUser(username);
+            return workingOnProjects.stream().map(ProjectMapper::toProjectSummaryDTO).toList();
+        }
+        else{
+            List<Project> workingOnProjects = projectRepository.getOverviewedProjectsByUserWithName(username, projectNameToFilter);
+            return workingOnProjects.stream().map(ProjectMapper::toProjectSummaryDTO).toList();
+        }
     }
 
     @Transactional

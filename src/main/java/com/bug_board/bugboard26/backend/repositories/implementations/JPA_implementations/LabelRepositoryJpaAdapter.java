@@ -32,12 +32,16 @@ public class LabelRepositoryJpaAdapter implements ILabelRepository {
 
     @Override
     public List<Label> retrieveAllUsersLabel(String username) {
-//       return labelRepositoryJPA.findAllByUsername(username);
-        return null;
+        return labelRepositoryJPA.findAllByUsername(username);
     }
 
     @Override
     public Label getLabelById(Integer idLabel) {
         return labelRepositoryJPA.findById(idLabel).orElse(null);
+    }
+
+    @Override
+    public boolean existsLabel(Integer idLabel) {
+        return labelRepositoryJPA.existsById(idLabel);
     }
 }

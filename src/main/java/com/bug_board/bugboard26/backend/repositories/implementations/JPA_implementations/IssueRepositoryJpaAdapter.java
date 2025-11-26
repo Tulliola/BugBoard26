@@ -16,8 +16,7 @@ public class IssueRepositoryJpaAdapter implements IIssueRepository {
 
     @Override
     public List<Issue> retrieveAllUsersIssues(String username) {
-        return issueRepositoryJPA.findAll();
-        //TODO aggiungere nuovo query method per la join
+        return issueRepositoryJPA.findAllByCreator_Username((username));
     }
 
     @Override

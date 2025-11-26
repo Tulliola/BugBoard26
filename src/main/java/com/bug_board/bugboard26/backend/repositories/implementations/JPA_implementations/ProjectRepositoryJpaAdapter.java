@@ -41,7 +41,12 @@ public class ProjectRepositoryJpaAdapter implements IProjectRepository {
     }
 
     @Override
-    public List<User> getProjectMembers(Integer idProject) {
+    public List<Project> getOverviewedProjectsByUserWithName(String username, String projectNameToFilter) {
+        return List.of();
+    }
+
+    @Override
+    public List<Project> getWorkingOnProjectsByUserWithName(String username, String projectNameToFilter) {
         return List.of();
     }
 }

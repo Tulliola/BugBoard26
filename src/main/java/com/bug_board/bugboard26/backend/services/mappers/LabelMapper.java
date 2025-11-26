@@ -1,6 +1,8 @@
 package com.bug_board.bugboard26.backend.services.mappers;
 
 import com.bug_board.bugboard26.backend.entity.Label;
+import com.bug_board.bugboard26.dto.LabelCreationDTO;
+import com.bug_board.bugboard26.dto.LabelModifyingDTO;
 import com.bug_board.bugboard26.dto.LabelSummaryDTO;
 
 public class LabelMapper {
@@ -13,7 +15,7 @@ public class LabelMapper {
         return mappedLabel;
     }
 
-    public static Label labelModifyingDTOtoLabel(Label labelToModify) {
+    public static Label labelModifyingDTOtoLabel(LabelModifyingDTO labelToModify) {
         Label mappedLabel = new Label();
 
         mappedLabel.setName(labelToModify.getName());
@@ -24,7 +26,7 @@ public class LabelMapper {
         return mappedLabel;
     }
 
-    public static Label labelCreationDTOtoLabel(Label labelToMap) {
+    public static Label labelCreationDTOtoLabel(LabelCreationDTO labelToMap) {
         Label mappedLabel = new Label();
 
         mappedLabel.setName(labelToMap.getName());

@@ -60,8 +60,8 @@ public class IssueServiceJPA implements IIssueService {
 
     @Override
     public List<IssueSummaryDTO> getIssuesOfAUser(String username) {
-
-        return List.of();
+        List<Issue> issuesRetrieved = issueRepository.retrieveAllUsersIssues(username);
+        return issuesRetrieved.stream().map(IssueMapper::toIssueSummaryDTO).collect(Collectors.toList());
     }
 
     @Transactional

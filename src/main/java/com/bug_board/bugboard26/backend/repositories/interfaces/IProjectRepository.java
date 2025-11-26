@@ -11,5 +11,6 @@ public interface IProjectRepository {
     public Project save(Project project);
     public List<User> getAddableUsersToProject(Integer idProject);
     public Project getProjectByID(Integer idProject);
-    public List<User> getProjectMembers(Integer idProject);
+    public List<Project> getOverviewedProjectsByUserWithName(String username, String projectNameToFilter);
+    public List<Project> getWorkingOnProjectsByUserWithName(String username, String projectNameToFilter);
 }
