@@ -17,12 +17,12 @@ public class ProjectRepositoryJpaAdapter implements IProjectRepository {
     }
     @Override
     public List<Project> getOverviewedProjectsByUser(String username) {
-        return List.of();
+        return projectRepositoryJPA.findAllByAdmins_Username(username);
     }
 
     @Override
     public List<Project> getWorkingOnProjectsByUser(String username) {
-        return List.of();
+        return projectRepositoryJPA.findAllByPartecipants_Username(username);
     }
 
     @Override
@@ -47,11 +47,11 @@ public class ProjectRepositoryJpaAdapter implements IProjectRepository {
 
     @Override
     public List<Project> getOverviewedProjectsByUserWithName(String username, String projectNameToFilter) {
-        return List.of();
+        return projectRepositoryJPA.findAllByTitleAndAdmins_Username(username, projectNameToFilter);
     }
 
     @Override
     public List<Project> getWorkingOnProjectsByUserWithName(String username, String projectNameToFilter) {
-        return List.of();
+        return projectRepositoryJPA.findAllByTitleAndPartecipants_Username(username, projectNameToFilter);
     }
 }

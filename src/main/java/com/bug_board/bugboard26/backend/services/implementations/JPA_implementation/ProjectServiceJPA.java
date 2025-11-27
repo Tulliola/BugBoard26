@@ -31,13 +31,14 @@ public class ProjectServiceJPA implements IProjectService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<ProjectSummaryDTO> getOverviewedProjects(String username, String projectNameToFilter) {
         if(projectNameToFilter == null || projectNameToFilter.equals("")) {
-            List<Project> overviewedProjects = projectRepository.getWorkingOnProjectsByUser(username);
+            List<Project> overviewedProjects = projectRepository.getOverviewedProjectsByUser(username);
             return ProjectMapper.toProjectSummaryDTOS(overviewedProjects);
         }
         else{
-            List<Project> overviewedProjects = projectRepository.getWorkingOnProjectsByUserWithName(username, projectNameToFilter);
+            List<Project> overviewedProjects = projectRepository.getOverviewedProjectsByUserWithName(username, projectNameToFilter);
             return ProjectMapper.toProjectSummaryDTOS(overviewedProjects);
         }
     }
@@ -45,11 +46,11 @@ public class ProjectServiceJPA implements IProjectService {
     @Override
     public List<ProjectSummaryDTO> getWorkingOnProjects(String username, String projectNameToFilter) {
         if(projectNameToFilter == null || projectNameToFilter.equals("")) {
-            List<Project> workingOnProjects = projectRepository.getOverviewedProjectsByUser(username);
+            List<Project> workingOnProjects = projectRepository.getWorkingOnProjectsByUser(username);
             return ProjectMapper.toProjectSummaryDTOS(workingOnProjects);
         }
         else{
-            List<Project> workingOnProjects = projectRepository.getOverviewedProjectsByUserWithName(username, projectNameToFilter);
+            List<Project> workingOnProjects = projectRepository.getWorkingOnProjectsByUserWithName(username, projectNameToFilter);
             return ProjectMapper.toProjectSummaryDTOS(workingOnProjects);
         }
     }
