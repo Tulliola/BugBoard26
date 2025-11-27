@@ -29,7 +29,6 @@ public abstract class User {
     protected String password;
 
     @Column(name = "ruolo", columnDefinition = "ruoloenum not null", insertable = false, updatable = false)
-    @Enumerated(EnumType.STRING)
     protected UserRole role;
 
     @Column(name = "biopic")

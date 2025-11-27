@@ -1,4 +1,4 @@
-package com.bug_board.bugboard26.backend.services.mappers;
+package com.bug_board.bugboard26.backend.mappers;
 
 import com.bug_board.bugboard26.backend.entity.Label;
 import com.bug_board.bugboard26.dto.LabelCreationDTO;
@@ -11,8 +11,9 @@ public class LabelMapper {
     public static LabelSummaryDTO toDTO(Label labelToMap) {
         LabelSummaryDTO mappedLabel = new LabelSummaryDTO();
 
-        mappedLabel.setName(mappedLabel.getName());
-        mappedLabel.setColor(mappedLabel.getColor());
+        mappedLabel.setName(labelToMap.getName());
+        mappedLabel.setColor(labelToMap.getColor());
+        mappedLabel.setCreator(labelToMap.getCreatorUsername());
 
         return mappedLabel;
     }
@@ -20,7 +21,7 @@ public class LabelMapper {
     public static Label labelModifyingDTOtoLabel(LabelModifyingDTO labelToModify) {
         Label mappedLabel = new Label();
 
-        mappedLabel.setName(labelToModify.getName());
+        mappedLabel.setIdLabel(labelToModify.getIdLabel());
         mappedLabel.setName(labelToModify.getName());
         mappedLabel.setColor(labelToModify.getColor());
         mappedLabel.setDescription(labelToModify.getDescription());

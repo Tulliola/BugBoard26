@@ -1,5 +1,6 @@
 package com.bug_board.bugboard26.dto;
 
+import com.bug_board.bugboard26.enum_classes.IssueState;
 import com.bug_board.bugboard26.enum_classes.IssueTipology;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,11 +14,10 @@ public class IssueCreationDTO {
     private String title;
     private String description;
     private IssueTipology tipology;
+    private IssueState state = IssueState.Todo;
     private List<byte[]> images;
 
     private Integer idProject;
 
     private List<Integer> idLabels;
-
-    private String username;
 }

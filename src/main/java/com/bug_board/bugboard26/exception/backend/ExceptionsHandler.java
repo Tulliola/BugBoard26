@@ -1,7 +1,7 @@
 package com.bug_board.bugboard26.exception.backend;
 
 import com.bug_board.bugboard26.dto.ErrorResponseDTO;
-import org.apache.coyote.BadRequestException;
+import com.bug_board.bugboard26.exception.backend.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -45,7 +45,7 @@ public class ExceptionsHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleLabelNotFoundException(ResourceNotFoundException exc) {
+    public ResponseEntity<ErrorResponseDTO> handleResourceNotFoundException(ResourceNotFoundException exc) {
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),

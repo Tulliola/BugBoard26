@@ -5,8 +5,8 @@ import com.bug_board.bugboard26.backend.entity.User;
 import com.bug_board.bugboard26.backend.repositories.interfaces.IProjectRepository;
 import com.bug_board.bugboard26.backend.services.interfaces.IProjectService;
 import com.bug_board.bugboard26.backend.services.interfaces.IUserService;
-import com.bug_board.bugboard26.backend.services.mappers.ProjectMapper;
-import com.bug_board.bugboard26.backend.services.mappers.UserMapper;
+import com.bug_board.bugboard26.backend.mappers.ProjectMapper;
+import com.bug_board.bugboard26.backend.mappers.UserMapper;
 import com.bug_board.bugboard26.dto.ProjectSummaryDTO;
 import com.bug_board.bugboard26.dto.UserSummaryDTO;
 import com.bug_board.bugboard26.exception.backend.ResourceAlreadyExistsException;
@@ -15,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,9 +30,9 @@ public class ProjectServiceJPA implements IProjectService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
     public List<ProjectSummaryDTO> getOverviewedProjects(String username, String projectNameToFilter) {
-        if(projectNameToFilter == null || projectNameToFilter.equals("")) {
+        if(projectNameToFilter == null || projectNameToFilter.isEmpty()) {
             List<Project> overviewedProjects = projectRepository.getOverviewedProjectsByUser(username);
             return ProjectMapper.toProjectSummaryDTOS(overviewedProjects);
         }
@@ -44,8 +43,9 @@ public class ProjectServiceJPA implements IProjectService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<ProjectSummaryDTO> getWorkingOnProjects(String username, String projectNameToFilter) {
-        if(projectNameToFilter == null || projectNameToFilter.equals("")) {
+        if(projectNameToFilter == null || projectNameToFilter.isEmpty()) {
             List<Project> workingOnProjects = projectRepository.getWorkingOnProjectsByUser(username);
             return ProjectMapper.toProjectSummaryDTOS(workingOnProjects);
         }

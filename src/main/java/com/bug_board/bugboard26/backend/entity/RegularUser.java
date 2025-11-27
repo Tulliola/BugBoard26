@@ -18,8 +18,7 @@ import java.util.List;
 public class RegularUser extends User implements IRegularUserRole {
 
     /*Relation RegularUser - Label */
-    @OneToMany
-    @JoinColumn(name = "utente_creatore")
+    @OneToMany(mappedBy = "creator")
     private List<Label> personalLabels = new ArrayList<Label>();
 
     /* Relation RegularUser - Project */

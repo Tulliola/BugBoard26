@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IProjectRepositoryJPA extends JpaRepository<Project, Integer> {
 
-    @Query(value = "SELECT * FROM ( " +
+    @Query(value = "SELECT email, pwd, username, ruolo, biopic FROM ( " +
                         "SELECT amministratore as username FROM Supervisiona_progetto WHERE idProgetto = ?1" +
                         " UNION " +
                         "SELECT utente_partecipante as username FROM Partecipa_a_progetto WHERE idProgetto = ?1" +
@@ -26,7 +26,7 @@ public interface IProjectRepositoryJPA extends JpaRepository<Project, Integer> {
 
     @Query(value = "SELECT titolo, descrizione, immagine, idProgetto, utente_creatore " +
             "FROM progetto NATURAL JOIN partecipa_a_progetto " +
-            "WHERE utente_partecipante = ?1 AND title = ?2",
+            "WHERE utente_partecipante = ?1 AND titolo = ?2",
         nativeQuery = true)
     public List<Project> findAllByTitleAndPartecipants_Username(String username, String titleToFilter);
 
@@ -38,7 +38,7 @@ public interface IProjectRepositoryJPA extends JpaRepository<Project, Integer> {
 
     @Query(value = "SELECT titolo, descrizione, immagine, idProgetto, utente_creatore " +
             "FROM progetto NATURAL JOIN supervisiona_progetto " +
-            "WHERE amministratore = ?1 AND title = ?2",
+            "WHERE amministratore = ?1 AND titolo = ?2",
             nativeQuery = true)
     public List<Project> findAllByTitleAndAdmins_Username(String username, String titleToFilter);
 }

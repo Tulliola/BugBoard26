@@ -15,4 +15,9 @@ public enum IssueTipology {
     public String getProjectType() {
         return tipology;
     }
+
+    @Override
+    public String toString() {
+        return this.tipology;
+    }
 }

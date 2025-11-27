@@ -1,4 +1,4 @@
-package com.bug_board.bugboard26.backend.services.mappers;
+package com.bug_board.bugboard26.backend.mappers;
 
 import com.bug_board.bugboard26.backend.entity.Project;
 import com.bug_board.bugboard26.dto.ProjectSummaryDTO;
@@ -13,7 +13,7 @@ public class ProjectMapper {
         projectSummaryDTO.setTitle(projectToMap.getTitle());
         projectSummaryDTO.setDescription(projectToMap.getDescription());
         projectSummaryDTO.setImage(projectToMap.getImage());
-        projectSummaryDTO.setProjectCreator(projectSummaryDTO.getProjectCreator());
+        projectSummaryDTO.setProjectCreator(projectToMap.getCreator().getUsername());
 
         return projectSummaryDTO;
     }

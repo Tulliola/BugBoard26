@@ -1,4 +1,4 @@
-package com.bug_board.bugboard26.backend.services.mappers;
+package com.bug_board.bugboard26.backend.mappers;
 
 import com.bug_board.bugboard26.backend.entity.Issue;
 import com.bug_board.bugboard26.dto.IssueCreationDTO;
@@ -32,6 +32,7 @@ public class IssueMapper {
         mappedIssue.setDescription(issueDTOToMap.getDescription());
         mappedIssue.setTipology(issueDTOToMap.getTipology());
         mappedIssue.setImages(issueDTOToMap.getImages());
+        mappedIssue.setState(issueDTOToMap.getState());
 
         return mappedIssue;
     }

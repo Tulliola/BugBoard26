@@ -1,15 +1,20 @@
 package com.bug_board.bugboard26.backend.services.implementations.JPA_implementation;
 
 import com.bug_board.bugboard26.backend.entity.Label;
+import com.bug_board.bugboard26.backend.entity.User;
 import com.bug_board.bugboard26.backend.repositories.interfaces.ILabelRepository;
+import com.bug_board.bugboard26.backend.repositories.interfaces.IUserRepository;
+import com.bug_board.bugboard26.backend.security.UserPrincipal;
 import com.bug_board.bugboard26.backend.services.interfaces.ILabelService;
-import com.bug_board.bugboard26.backend.services.mappers.LabelMapper;
-import com.bug_board.bugboard26.dto.IssueSummaryDTO;
+import com.bug_board.bugboard26.backend.mappers.LabelMapper;
+import com.bug_board.bugboard26.backend.services.interfaces.IUserService;
 import com.bug_board.bugboard26.dto.LabelCreationDTO;
 import com.bug_board.bugboard26.dto.LabelModifyingDTO;
 import com.bug_board.bugboard26.dto.LabelSummaryDTO;
 import com.bug_board.bugboard26.exception.backend.BadRequestException;
 import com.bug_board.bugboard26.exception.backend.ResourceNotFoundException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,31 +24,74 @@ public class LabelServiceJPA implements ILabelService {
 
     private final ILabelRepository labelRepository;
 
-    public LabelServiceJPA(ILabelRepository labelRepository) {
+    private final IUserService userService;
+
+    public LabelServiceJPA(ILabelRepository labelRepository, IUserService userService) {
+        this.userService = userService;
         this.labelRepository = labelRepository;
     }
 
     @Override
-    public LabelSummaryDTO createPersonalLabel(LabelCreationDTO labelToCreate) {
-        Label labelCreated = labelRepository.createLabel(LabelMapper.labelCreationDTOtoLabel(labelToCreate));
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public LabelSummaryDTO createPersonalLabel(String usernamePrincipal, LabelCreationDTO labelToCreate) {
+        if(labelToCreate.getColor() == null)
+            labelToCreate.setColor("#FFFFFF");
+
+        User creator = userService.findUserByUsername(usernamePrincipal);
+
+        if(creator == null)
+            throw new ResourceNotFoundException("User not found");
+
+        Label mappedLabel = LabelMapper.labelCreationDTOtoLabel(labelToCreate);
+        mappedLabel.setCreator(creator);
+
+        Label labelCreated = labelRepository.createLabel(mappedLabel);
+
         return LabelMapper.toDTO(labelCreated);
     }
 
     @Override
-    public void deletePersonalLabel(Integer idLabel) {
-        if(labelRepository.existsLabel(idLabel))
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public void deletePersonalLabel(String usernamePrincipal ,Integer idLabel) {
+        if(labelRepository.existsLabel(idLabel)) {
+
+            Label baseLabel =  labelRepository.getLabelById(idLabel);
+
+            if(baseLabel == null)
+                throw new ResourceNotFoundException("Label not found");
+
+            if(!usernamePrincipal.equals(baseLabel.getCreatorUsername()))
+                throw new AccessDeniedException("The label you want to delete is not yours.");
+
             labelRepository.deleteLabel(idLabel);
+        }
         else
             throw new ResourceNotFoundException("Label with specified id not found");
     }
 
     @Override
-    public LabelSummaryDTO modifyPersonalLabel(Integer idLabel, LabelModifyingDTO labelToModify) {
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public LabelSummaryDTO modifyPersonalLabel(String usernamePrincipal, Integer idLabel, LabelModifyingDTO labelToModify) {
         if(labelRepository.existsLabel(labelToModify.getIdLabel())) {
-            if(!(idLabel.equals(labelToModify.getIdLabel()))) {
+            if(!(idLabel.equals(labelToModify.getIdLabel())))
                 throw new BadRequestException("Id Label in URL and Id Label in label specified do not match");
-            }
-            Label labelModified = labelRepository.updateLabel(LabelMapper.labelModifyingDTOtoLabel(labelToModify));
+
+            if(labelToModify.getColor() == null)
+                labelToModify.setColor("#FFFFFF");
+
+            Label baseLabel = labelRepository.getLabelById(labelToModify.getIdLabel());
+
+            if(baseLabel == null)
+                throw new ResourceNotFoundException("Label not found");
+
+            if(!usernamePrincipal.equals(baseLabel.getCreatorUsername()))
+                throw new AccessDeniedException("The label you want to modify it's not yours.");
+
+            Label mappedLabel =  LabelMapper.labelModifyingDTOtoLabel(labelToModify);
+            mappedLabel.setCreator(userService.findUserByUsername(usernamePrincipal));
+
+            Label labelModified = labelRepository.updateLabel(mappedLabel);
+
             return LabelMapper.toDTO(labelModified);
         }
         else
@@ -51,6 +99,7 @@ public class LabelServiceJPA implements ILabelService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<LabelSummaryDTO> getPersonalLabels(String username) {
         List<Label> personalLabels = labelRepository.retrieveAllUsersLabel(username);
         return LabelMapper.toLabelSummaryDTOS(personalLabels);

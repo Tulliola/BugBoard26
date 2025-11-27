@@ -15,7 +15,7 @@ public class Label {
     @Column(name = "idlabel", nullable = false)
     private Integer idLabel;
 
-    @Column(name = "nome", nullable = false, length = 20)
+    @Column(name = "nome", nullable = false, length = 50)
     private String name;
 
     @Column(name = "descrizione", length = 200)
@@ -25,4 +25,11 @@ public class Label {
     @Column(name = "colore", nullable = false, length = 7)
     private String color;
 
+    @ManyToOne
+    @JoinColumn(name = "utente_creatore")
+    private User creator;
+
+    public String getCreatorUsername(){
+        return creator == null ?  null : creator.getUsername();
+    }
 }

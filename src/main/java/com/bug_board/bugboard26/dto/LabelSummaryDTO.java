@@ -10,4 +10,5 @@ import java.awt.*;
 public class LabelSummaryDTO {
     private String name;
     private String color;
+    private String creator;
 }

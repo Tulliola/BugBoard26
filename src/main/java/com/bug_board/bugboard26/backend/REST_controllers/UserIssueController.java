@@ -5,11 +5,10 @@ import com.bug_board.bugboard26.backend.services.interfaces.IIssueService;
 import com.bug_board.bugboard26.dto.IssueSummaryDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -23,7 +22,7 @@ public class UserIssueController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<IssueSummaryDTO>> getPersonalIssues(UserPrincipal principal) {
+    public ResponseEntity<List<IssueSummaryDTO>> getPersonalIssues(@AuthenticationPrincipal UserPrincipal principal) {
         List<IssueSummaryDTO> usersIssues = issueService.getIssuesOfAUser(principal.getUsername());
         return new ResponseEntity<>(usersIssues, HttpStatus.OK);
     }

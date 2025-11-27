@@ -5,6 +5,7 @@ import com.bug_board.bugboard26.backend.services.interfaces.IProjectService;
 import com.bug_board.bugboard26.dto.ProjectSummaryDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,14 +25,16 @@ public class UserProjectController {
     }
 
     @GetMapping("/overviewed")
-    public ResponseEntity<List<ProjectSummaryDTO>> getOverviewedProjects(@RequestParam(required = false) String projectName, UserPrincipal principal){
-        List<ProjectSummaryDTO> projectsOverviewed = projectService.getOverviewedProjects(projectName, principal.getUsername());
+    public ResponseEntity<List<ProjectSummaryDTO>> getOverviewedProjects(@RequestParam(required = false) String projectName,
+                                                                         @AuthenticationPrincipal UserPrincipal principal){
+        List<ProjectSummaryDTO> projectsOverviewed = projectService.getOverviewedProjects(principal.getUsername(), projectName);
         return new ResponseEntity<>(projectsOverviewed, HttpStatus.OK);
     }
 
     @GetMapping("/working-on")
-    public ResponseEntity<List<ProjectSummaryDTO>> getWorkingOnProjects(@RequestParam(required = false) String projectName, UserPrincipal principal){
-        List<ProjectSummaryDTO> projectWorkingOn = projectService.getWorkingOnProjects(projectName, principal.getUsername());
+    public ResponseEntity<List<ProjectSummaryDTO>> getWorkingOnProjects(@RequestParam(required = false) String projectName,
+                                                                        @AuthenticationPrincipal UserPrincipal principal){
+        List<ProjectSummaryDTO> projectWorkingOn = projectService.getWorkingOnProjects(principal.getUsername(), projectName);
         return new ResponseEntity<>(projectWorkingOn, HttpStatus.OK);
     }
 }

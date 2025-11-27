@@ -1,4 +1,4 @@
-package com.bug_board.bugboard26.backend.services.mappers;
+package com.bug_board.bugboard26.backend.mappers;
 
 import com.bug_board.bugboard26.backend.entity.User;
 import com.bug_board.bugboard26.dto.UserCreationDTO;

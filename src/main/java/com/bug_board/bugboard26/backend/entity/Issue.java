@@ -7,9 +7,8 @@ import com.bug_board.bugboard26.exception.entity.MaximumLabelsException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,13 +31,11 @@ public class Issue {
     @Column(name = "descrizione", nullable = false, length = Integer.MAX_VALUE)
     private String description;
 
-    @ColumnDefault("'To-do'")
-    @Column(name = "stato", columnDefinition = "statoissueenum not null")
-    @Enumerated(EnumType.STRING)
+    @Column(name = "stato",
+            columnDefinition = "statoissueenum NOT NULL DEFAULT 'To-do'")
     private IssueState state;
 
     @Column(name = "tipologia", columnDefinition = "issueenum not null")
-    @Enumerated(EnumType.STRING)
     private IssueTipology tipology;
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -49,8 +46,11 @@ public class Issue {
     @Column(name = "file_immagine", columnDefinition = "bytea")
     private List<byte[]> images = new ArrayList<byte[]>();
 
-    @Column(name = "data_creazione", nullable = false)
-    private Date creationDate;
+    @Column(name = "data_creazione",
+            nullable = false,
+            columnDefinition = "DATE DEFAULT CURRENT_DATE"
+    )
+    private Date creationDate = new Date(System.currentTimeMillis());
 
     @Column(name = "data_risoluzione")
     private Date resolutionDate;

@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ILabelRepositoryJPA extends JpaRepository<Label, Integer> {
-    @Query(value = "SELECT * FROM Etichetta WHERE utente_creatore = ?1 OR utente_creatore = null", nativeQuery = true)
+    @Query(value = "SELECT * FROM Etichetta WHERE utente_creatore = ?1 OR utente_creatore IS null", nativeQuery = true)
     public List<Label> findAllByUsername(String username);
 }

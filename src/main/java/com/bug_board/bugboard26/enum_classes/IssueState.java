@@ -14,4 +14,9 @@ public enum IssueState {
     public String getState(){
         return state;
     }
+
+    @Override
+    public String toString(){
+        return this.state;
+    }
 }

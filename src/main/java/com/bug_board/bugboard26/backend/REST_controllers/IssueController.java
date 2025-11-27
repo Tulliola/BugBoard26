@@ -1,11 +1,13 @@
 package com.bug_board.bugboard26.backend.REST_controllers;
 
 import com.bug_board.bugboard26.backend.entity.Issue;
+import com.bug_board.bugboard26.backend.security.UserPrincipal;
 import com.bug_board.bugboard26.backend.services.interfaces.IIssueService;
 import com.bug_board.bugboard26.dto.IssueCreationDTO;
 import com.bug_board.bugboard26.dto.IssueSummaryDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -29,8 +31,10 @@ public class IssueController {
     }
 
     @PostMapping("")
-    public ResponseEntity<IssueSummaryDTO> createNewIssue(@PathVariable("project-id") Integer projectId, @RequestBody IssueCreationDTO issue){
-        IssueSummaryDTO issueCreated = issueService.publishNewIssueToProject(projectId, issue);
+    public ResponseEntity<IssueSummaryDTO> createNewIssue(@AuthenticationPrincipal UserPrincipal principal,
+                                                          @PathVariable("project-id") Integer projectId,
+                                                          @RequestBody IssueCreationDTO issue){
+        IssueSummaryDTO issueCreated = issueService.publishNewIssueToProject(principal.getUsername(), projectId, issue);
         return new ResponseEntity<>(issueCreated, HttpStatus.CREATED);
     }
 }

@@ -9,6 +9,7 @@ import java.awt.*;
 @Getter
 @Setter
 public class LabelCreationDTO {
+    private String creator;
     private String name;
     private String description;
     private String color;
