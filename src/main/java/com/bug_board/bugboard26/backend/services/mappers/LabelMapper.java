@@ -5,6 +5,8 @@ import com.bug_board.bugboard26.dto.LabelCreationDTO;
 import com.bug_board.bugboard26.dto.LabelModifyingDTO;
 import com.bug_board.bugboard26.dto.LabelSummaryDTO;
 
+import java.util.List;
+
 public class LabelMapper {
     public static LabelSummaryDTO toDTO(Label labelToMap) {
         LabelSummaryDTO mappedLabel = new LabelSummaryDTO();
@@ -34,5 +36,12 @@ public class LabelMapper {
         mappedLabel.setDescription(labelToMap.getDescription());
 
         return mappedLabel;
+    }
+
+    public static List<LabelSummaryDTO> toLabelSummaryDTOS(List<Label> labelList) {
+        return labelList
+                .stream()
+                .map(LabelMapper::toDTO)
+                .toList();
     }
 }

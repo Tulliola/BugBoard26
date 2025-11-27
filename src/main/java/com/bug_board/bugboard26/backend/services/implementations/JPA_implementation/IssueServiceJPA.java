@@ -61,7 +61,7 @@ public class IssueServiceJPA implements IIssueService {
     @Override
     public List<IssueSummaryDTO> getIssuesOfAUser(String username) {
         List<Issue> issuesRetrieved = issueRepository.retrieveAllUsersIssues(username);
-        return issuesRetrieved.stream().map(IssueMapper::toIssueSummaryDTO).collect(Collectors.toList());
+        return IssueMapper.toIssueSummaryDTOS(issuesRetrieved);
     }
 
     @Transactional

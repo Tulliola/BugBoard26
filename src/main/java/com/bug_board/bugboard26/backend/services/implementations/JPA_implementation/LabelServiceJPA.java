@@ -53,7 +53,7 @@ public class LabelServiceJPA implements ILabelService {
     @Override
     public List<LabelSummaryDTO> getPersonalLabels(String username) {
         List<Label> personalLabels = labelRepository.retrieveAllUsersLabel(username);
-        return personalLabels.stream().map(LabelMapper::toDTO).toList();
+        return LabelMapper.toLabelSummaryDTOS(personalLabels);
     }
 
     @Override

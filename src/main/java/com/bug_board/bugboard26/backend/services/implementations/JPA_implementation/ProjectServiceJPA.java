@@ -34,11 +34,11 @@ public class ProjectServiceJPA implements IProjectService {
     public List<ProjectSummaryDTO> getOverviewedProjects(String username, String projectNameToFilter) {
         if(projectNameToFilter == null || projectNameToFilter.equals("")) {
             List<Project> overviewedProjects = projectRepository.getWorkingOnProjectsByUser(username);
-            return overviewedProjects.stream().map(ProjectMapper::toProjectSummaryDTO).toList();
+            return ProjectMapper.toProjectSummaryDTOS(overviewedProjects);
         }
         else{
             List<Project> overviewedProjects = projectRepository.getWorkingOnProjectsByUserWithName(username, projectNameToFilter);
-            return overviewedProjects.stream().map(ProjectMapper::toProjectSummaryDTO).toList();
+            return ProjectMapper.toProjectSummaryDTOS(overviewedProjects);
         }
     }
 
@@ -46,11 +46,11 @@ public class ProjectServiceJPA implements IProjectService {
     public List<ProjectSummaryDTO> getWorkingOnProjects(String username, String projectNameToFilter) {
         if(projectNameToFilter == null || projectNameToFilter.equals("")) {
             List<Project> workingOnProjects = projectRepository.getOverviewedProjectsByUser(username);
-            return workingOnProjects.stream().map(ProjectMapper::toProjectSummaryDTO).toList();
+            return ProjectMapper.toProjectSummaryDTOS(workingOnProjects);
         }
         else{
             List<Project> workingOnProjects = projectRepository.getOverviewedProjectsByUserWithName(username, projectNameToFilter);
-            return workingOnProjects.stream().map(ProjectMapper::toProjectSummaryDTO).toList();
+            return ProjectMapper.toProjectSummaryDTOS(workingOnProjects);
         }
     }
 
