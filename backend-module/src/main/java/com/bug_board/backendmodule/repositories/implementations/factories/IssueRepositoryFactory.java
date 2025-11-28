@@ -1,0 +1,35 @@
+package com.bug_board.backendmodule.repositories.implementations.factories;
+
+import com.bug_board.backendmodule.repositories.implementations.JPA_implementations.IssueRepositoryJpaAdapter;
+import com.bug_board.backendmodule.repositories.interfaces.IIssueRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+
+@Configuration
+@Slf4j
+public class IssueRepositoryFactory {
+    @Value("${app.issue-repository.implementation}")
+    private String implementation;
+
+    private final IssueRepositoryJpaAdapter issueRepositoryJPA;
+
+    public IssueRepositoryFactory(IssueRepositoryJpaAdapter issueRepositoryJPA) {
+        this.issueRepositoryJPA = issueRepositoryJPA;
+    }
+
+    @Bean
+    @Primary
+    public IIssueRepository getIssueRepository() {
+        if(implementation.equalsIgnoreCase("jpa")){
+            log.info("JPA implementation");
+            return this.issueRepositoryJPA;
+        }
+        else{
+            log.warn("Unsupported implementation: "+ implementation);
+            throw new IllegalArgumentException("Unsupported implementation: "+implementation);
+        }
+    }
+}
