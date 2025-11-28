@@ -1,15 +1,18 @@
 package com.bug_board.backendmodule.entity;
 
 import com.bug_board.enum_classes.UserRole;
+import com.bug_board.enum_classes.converters.UserRoleConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Collection;
 
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "utente")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(
@@ -29,6 +32,7 @@ public abstract class User {
     protected String password;
 
     @Column(name = "ruolo", columnDefinition = "ruoloenum not null", insertable = false, updatable = false)
+    @Convert(converter = UserRoleConverter.class)
     protected UserRole role;
 
     @Column(name = "biopic")
@@ -45,4 +49,6 @@ public abstract class User {
     public abstract Collection<String> getRoleNames();
 
     public abstract void addToProject(Project project);
+
+
 }

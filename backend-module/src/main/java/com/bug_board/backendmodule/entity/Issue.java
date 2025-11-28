@@ -5,6 +5,8 @@ package com.bug_board.backendmodule.entity;
 import com.bug_board.backendmodule.exception.entity.MaximumLabelsException;
 import com.bug_board.enum_classes.IssueState;
 import com.bug_board.enum_classes.IssueTipology;
+import com.bug_board.enum_classes.converters.IssueStateConverter;
+import com.bug_board.enum_classes.converters.IssueTipologyConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,9 +36,11 @@ public class Issue {
 
     @Column(name = "stato",
             columnDefinition = "statoissueenum NOT NULL DEFAULT 'To-do'")
+    @Convert(converter = IssueStateConverter.class)
     private IssueState state;
 
     @Column(name = "tipologia", columnDefinition = "issueenum not null")
+    @Convert(converter = IssueTipologyConverter.class)
     private IssueTipology tipology;
 
     @ElementCollection(fetch = FetchType.LAZY)
