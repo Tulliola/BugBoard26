@@ -1,4 +1,4 @@
-package com.bug_board.frontendmodule;
+package com.bug_board;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
