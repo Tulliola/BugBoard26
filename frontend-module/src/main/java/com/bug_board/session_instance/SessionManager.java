@@ -1,4 +1,4 @@
-package com.bug_board.backendmodule.security;
+package com.bug_board.session_instance;
 
 import lombok.Getter;
 import lombok.Setter;

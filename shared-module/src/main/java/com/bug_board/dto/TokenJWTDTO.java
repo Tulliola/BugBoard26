@@ -9,9 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LabelModifyingDTO {
-    private Integer idLabel;
-    private String name;
-    private String description;
-    private String color;
+public class TokenJWTDTO {
+    private String token;
 }
