@@ -1,4 +1,4 @@
-package com.bug_board.session_instance;
+package com.bug_board.session_manager;
 
 public final class SessionManager {
 

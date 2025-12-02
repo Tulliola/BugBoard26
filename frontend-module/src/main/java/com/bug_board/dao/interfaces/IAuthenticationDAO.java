@@ -7,8 +7,6 @@ import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 
-import java.io.IOException;
-
 public interface IAuthenticationDAO {
-    public abstract TokenJWTDTO authenticate(UserAuthenticationDTO dto) throws IOException, InterruptedException, BadConversionToJSONException, BadConversionToDTOException, HTTPSendException, BackendErrorException;
+    public abstract TokenJWTDTO authenticate(UserAuthenticationDTO dto) throws BadConversionToJSONException, BadConversionToDTOException, HTTPSendException, BackendErrorException;
 }

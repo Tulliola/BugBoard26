@@ -7,8 +7,8 @@ module com.bug_board.frontendmodule {
     requires static lombok;
     requires java.logging;
     requires jackson.core;
-    requires com.bug_board.frontendmodule;
-
+    requires javafx.graphics;
+    requires java.desktop;
 
     opens com.bug_board.frontendmodule to javafx.fxml;
     exports com.bug_board;
