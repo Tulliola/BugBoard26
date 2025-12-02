@@ -18,7 +18,7 @@ import java.net.http.HttpRequest;
 import java.util.List;
 
 public class ProjectDAO_REST implements IProjectDAO {
-    private final String baseUrl = "http://localhost:8080/api/";
+    private final String baseUrl = "http://localhost:8080/api/projects/";
     private final MyHTTPClient httpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -33,8 +33,9 @@ public class ProjectDAO_REST implements IProjectDAO {
 
         try{
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "projects/" + idProject + "/users/collaborators"))
+                    .uri(URI.create(baseUrl + idProject + "/users/collaborators"))
                     .header("Authorization", "Bearer "+ SessionManager.getInstance().getJwtToken())
+                    .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(
                             objectMapper.writeValueAsString(collaborator)))
                     .build();
@@ -50,7 +51,8 @@ public class ProjectDAO_REST implements IProjectDAO {
             throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
         HttpRequest request;
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "projects/" + idProject +"/addable-users"))
+                .uri(URI.create(baseUrl + idProject +"/addable-users"))
+                .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer "+SessionManager.getInstance().getJwtToken())
                 .GET()
                 .build();
