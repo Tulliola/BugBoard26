@@ -55,6 +55,9 @@ public class MyHTTPClient {
 
         HttpResponse<String> response = this.executeSend(request);
 
+        if(responseType == Void.class)
+            return (T) response;
+
         try {
             return mapper.readValue(response.body(), responseType);
         }

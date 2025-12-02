@@ -6,12 +6,10 @@ import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.exceptions.dao.BackendErrorException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.HTTPSendException;
-import com.bug_board.session_instance.SessionManager;
+import com.bug_board.session_manager.SessionManager;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.URI;
-import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.util.List;
 

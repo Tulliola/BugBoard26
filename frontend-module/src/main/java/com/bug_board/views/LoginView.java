@@ -10,15 +10,17 @@ import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.presentation_controllers.LoginPC;
+import com.bug_board.utilities.MyStage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class LoginView extends Stage {
+public class LoginView extends MyStage {
     private final LoginPC loginPC;
 
     private TextField usernameField;
@@ -31,23 +33,34 @@ public class LoginView extends Stage {
     }
 
     public void initialize(Stage stage) {
+        Pane titleBar = this.createNewTitleBar();
+
         VBox root = new VBox();
         Scene scene = new Scene(root, Color.WHITE);
 
-        stage.setTitle("Login page!");
-        stage.setWidth(420);
+        try {
+            scene.getStylesheets()
+                    .add(getClass()
+                    .getResource("/css/components_style.css")
+                    .toExternalForm());
+        }
+        catch(NullPointerException npe) {
+            System.out.println(npe.getMessage());
+        }
+
+        stage.setWidth(700);
         stage.setHeight(420);
         stage.setResizable(false);
 
         usernameField = new TextField();
         passwordField = new PasswordField();
 
-        Button button = new Button("Test HTTP request");
-        button.setOnAction(event -> {
+        Button button = new Button("Test HTTP Request");
+        button.setOnAction((event -> {
             this.clickLoginButton();
-        });
+        }));
 
-        root.getChildren().addAll(usernameField,  passwordField, button);
+        root.getChildren().addAll(titleBar, usernameField, passwordField, button);
 
         stage.setScene(scene);
     }
