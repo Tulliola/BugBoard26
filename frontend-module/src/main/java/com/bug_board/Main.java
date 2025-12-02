@@ -16,7 +16,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        stage.close();
 
         AuthenticationController authenticationController = new AuthenticationController(new AuthenticationDAO_REST(new MyHTTPClient()));
         LoginPC loginPC = new LoginPC(authenticationController, new NavigationManager_JavaFX());
