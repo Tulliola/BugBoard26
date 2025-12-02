@@ -1,15 +1,10 @@
 package com.bug_board.session_instance;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public final class SessionManager {
 
     private static SessionManager instance;
 
-    private volatile String jwtToken;
+    private static volatile String jwtToken;
 
     private SessionManager() {
     }
@@ -25,8 +20,15 @@ public final class SessionManager {
         return instance;
     }
 
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
     public void createSession(String token) {
-        this.jwtToken = token;
+        if(token == null)
+            throw new NullPointerException("token is null");
+
+        jwtToken = token;
     }
 
     public void clearSession() {

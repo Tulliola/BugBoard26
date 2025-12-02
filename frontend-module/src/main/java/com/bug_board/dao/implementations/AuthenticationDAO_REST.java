@@ -8,6 +8,7 @@ import com.bug_board.exceptions.dao.BackendErrorException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.HTTPSendException;
+import com.bug_board.session_instance.SessionManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
