@@ -8,6 +8,7 @@ module com.bug_board.frontendmodule {
     requires jackson.core;
     requires javafx.graphics;
     requires java.desktop;
+    requires java.sql;
 
     exports com.bug_board;
 }

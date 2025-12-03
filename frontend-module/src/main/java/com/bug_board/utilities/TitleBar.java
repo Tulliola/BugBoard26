@@ -1,5 +1,6 @@
 package com.bug_board.utilities;
 
+import com.bug_board.session_manager.SessionManager;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -54,6 +55,7 @@ public class TitleBar {
 
         closeButton.setPrefSize(35, 35);
         closeButton.setOnAction(e -> {
+            SessionManager.getInstance().clearSession();
             Stage stage =  (Stage) closeButton.getScene().getWindow();
             stage.close();
         });
