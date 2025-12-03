@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -33,7 +34,7 @@ public class LoginView extends MyStage {
     }
 
     public void initialize(Stage stage) {
-        Pane titleBar = this.createNewTitleBar();
+        Pane titleBar = this.createTitleBar();
 
         VBox root = new VBox();
         Scene scene = new Scene(root, Color.WHITE);
@@ -60,7 +61,7 @@ public class LoginView extends MyStage {
             this.clickLoginButton();
         }));
 
-        root.getChildren().addAll(titleBar, usernameField, passwordField, button);
+        root.getChildren().addAll(titleBar);//, new Region(), usernameField, passwordField, button);
 
         stage.setScene(scene);
     }
