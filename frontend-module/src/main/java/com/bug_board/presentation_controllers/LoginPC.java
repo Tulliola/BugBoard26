@@ -1,7 +1,7 @@
 package com.bug_board.presentation_controllers;
 
 import com.bug_board.architectural_controllers.AuthenticationController;
-import com.bug_board.dto.TokenJWTDTO;
+import com.bug_board.dto.LoginResponseDTO;
 import com.bug_board.exceptions.architectural_controllers.InvalidCredentialsException;
 import com.bug_board.exceptions.dao.BackendErrorException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
@@ -21,9 +21,9 @@ public class LoginPC {
 
     public void onLoginButtonClicked(String username, String password)
             throws InvalidCredentialsException, HTTPSendException, BadConversionToDTOException, BackendErrorException, BadConversionToJSONException {
-        TokenJWTDTO jwtToken = authenticationController.authenticate(username, password);
+        LoginResponseDTO loginResponse = authenticationController.authenticate(username, password);
 
-        SessionManager.getInstance().createSession(jwtToken.getToken());
+        SessionManager.getInstance().createSession(loginResponse.getToken(), loginResponse.getUsername(), loginResponse.getRole());
 
         navigationManager.navigateToHomePageFromLogin();
     }

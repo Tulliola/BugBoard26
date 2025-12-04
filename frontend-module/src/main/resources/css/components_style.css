@@ -132,7 +132,7 @@
     -fx-border-width: 1px;
     -fx-border-radius: 30px;
     -fx-background-radius: 30px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 5, 5);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0 , 5, 5);
     -fx-alignment: center;
 }
 
@@ -156,4 +156,14 @@
             #2AC4AC,
             #FFFFFF
     );
+}
+
+.bugboard-label {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0 , 5, 5);
+    -fx-fill: red;
+}
+
+.project-card {
+    -fx-border-radius: 30px;
+    -fx-background-radius: 30px;
 }

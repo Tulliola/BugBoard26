@@ -6,9 +6,7 @@ import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.presentation_controllers.LoginPC;
-import com.bug_board.utilities.MyButton;
-import com.bug_board.utilities.MySpacer;
-import com.bug_board.utilities.MyStage;
+import com.bug_board.utilities.*;
 import com.bug_board.utilities.animations.TextTypingEffect;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,6 +34,7 @@ public class LoginView extends MyStage {
 
     private TextField usernameField = new TextField();
     private TextField passwordField = new PasswordField();
+    private Label errorLabel = new Label();
 
     public LoginView(LoginPC loginPC) {
         this.loginPC = loginPC;
@@ -54,7 +53,7 @@ public class LoginView extends MyStage {
         this.initializeStyleSheet("/css/components_style.css", scene);
 
         stage.setWidth(700);
-        stage.setHeight(800);
+        stage.setHeight(900);
         stage.setResizable(false);
 
         root.getChildren().addAll(
@@ -72,6 +71,8 @@ public class LoginView extends MyStage {
         loginForm.setId("login-form");
         loginForm.setAlignment(Pos.TOP_CENTER);
 
+        errorLabel.setManaged(false);
+
         loginForm.getChildren().addAll(
                 MySpacer.createVSpacer(),
                 this.createLogo(),
@@ -84,6 +85,8 @@ public class LoginView extends MyStage {
                 MySpacer.createVSpacer(),
                 this.createLoginButton(),
                 MySpacer.createVSpacer(),
+                errorLabel,
+                MySpacer.createVSpacer(),
                 this.createRegisterSuggestionPane(),
                 MySpacer.createVSpacer()
         );
@@ -92,12 +95,14 @@ public class LoginView extends MyStage {
     }
 
     private TextFlow createAnimatedText() {
-        Text staticText = new Text("It's not a bug, it's a ");
+        Text preamble = new Text("It's not a " );
+        Text bugText = new Text("bug, ");
+        bugText.setId("animated-text");
 
         Text animatedText = new Text();
         animatedText.setId("animated-text");
 
-        TextFlow textWrapper = new TextFlow(staticText, animatedText);
+        TextFlow textWrapper = new TextFlow(preamble, bugText, new Text("it's a "), animatedText);
         textWrapper.setTextAlignment(TextAlignment.CENTER);
         textWrapper.getStyleClass().add("motto-text");
 
@@ -198,10 +203,18 @@ public class LoginView extends MyStage {
 
     private void clickLoginButton() {
         try {
+            errorLabel.setManaged(false);
             loginPC.onLoginButtonClicked(usernameField.getText(), passwordField.getText());
         }
-        catch (InvalidCredentialsException | HTTPSendException | BadConversionToDTOException | BackendErrorException | BadConversionToJSONException exc) {
-            System.out.println(exc.getMessage());
+        catch (InvalidCredentialsException exc) {
+            errorLabel.setText(exc.getMessage());
+            errorLabel.setTextFill(Color.RED);
+            errorLabel.setManaged(true);
+        }
+        catch(HTTPSendException | BadConversionToDTOException | BackendErrorException | BadConversionToJSONException throwables) {
+            errorLabel.setText("Server is currently not responding.");
+            errorLabel.setTextFill(Color.RED);
+            errorLabel.setManaged(true);
         }
     }
 }
