@@ -81,6 +81,13 @@ public class TitleBar extends HBox {
         });
 
         redimensionButton.setOnAction(e -> {
+            Stage stage = (Stage) redimensionButton.getScene().getWindow();
+
+            if(stage.isResizable())
+                if(stage.isMaximized())
+                    stage.setMaximized(false);
+                else
+                    stage.setMaximized(true);
         });
     }
 

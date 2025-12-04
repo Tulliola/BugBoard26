@@ -1,7 +1,9 @@
 package com.bug_board.navigation_manager.interfaces;
 
-public interface INavigationManager {
+import com.bug_board.dto.ProjectSummaryDTO;
+import java.util.List;
 
+public interface INavigationManager {
     void navigateToHomePageFromLogin();
 
     void closeWindow(Object windowToClose);

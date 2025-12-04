@@ -9,8 +9,8 @@ import com.bug_board.exceptions.dao.HTTPSendException;
 import java.util.List;
 
 public interface IUserProjectDAO {
-    public List<ProjectSummaryDTO> getOverviewedProjectsByUser(String projectNameFilter)
+    public List<ProjectSummaryDTO> getOverviewedProjectsByUser()
             throws HTTPSendException, BadConversionToDTOException, BackendErrorException;
-    public List<ProjectSummaryDTO> getWorkingOnProjectsByUser(String projectNameFilter)
+    public List<ProjectSummaryDTO> getWorkingOnProjectsByUser()
             throws HTTPSendException, BadConversionToDTOException, BackendErrorException;
 }

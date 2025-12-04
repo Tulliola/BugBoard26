@@ -22,7 +22,8 @@ public class UserProjectDAO implements IUserProjectDAO {
     }
 
     @Override
-    public List<ProjectSummaryDTO> getOverviewedProjectsByUser(String projectNameFilter) throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
+    public List<ProjectSummaryDTO> getOverviewedProjectsByUser()
+            throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
         HttpRequest request;
         request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "overviewed"))
@@ -37,7 +38,7 @@ public class UserProjectDAO implements IUserProjectDAO {
     }
 
     @Override
-    public List<ProjectSummaryDTO> getWorkingOnProjectsByUser(String projectNameFilter)
+    public List<ProjectSummaryDTO> getWorkingOnProjectsByUser()
             throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
         HttpRequest request;
         request = HttpRequest.newBuilder()

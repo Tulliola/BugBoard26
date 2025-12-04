@@ -72,6 +72,7 @@ public class LoginView extends MyStage {
         loginForm.setAlignment(Pos.TOP_CENTER);
 
         errorLabel.setManaged(false);
+        usernameField.requestFocus();
 
         loginForm.getChildren().addAll(
                 MySpacer.createVSpacer(),
@@ -204,7 +205,7 @@ public class LoginView extends MyStage {
     private void clickLoginButton() {
         try {
             errorLabel.setManaged(false);
-            loginPC.onLoginButtonClicked(usernameField.getText(), passwordField.getText());
+            loginPC.onLoginButtonClicked(usernameField.getText(), passwordField.getText(), this);
         }
         catch (InvalidCredentialsException exc) {
             errorLabel.setText(exc.getMessage());

@@ -19,12 +19,13 @@ public class LoginPC {
         this.navigationManager = navigationManager;
     }
 
-    public void onLoginButtonClicked(String username, String password)
+    public void onLoginButtonClicked(String username, String password, Object viewToHandle)
             throws InvalidCredentialsException, HTTPSendException, BadConversionToDTOException, BackendErrorException, BadConversionToJSONException {
         LoginResponseDTO loginResponse = authenticationController.authenticate(username, password);
 
         SessionManager.getInstance().createSession(loginResponse.getToken(), loginResponse.getUsername(), loginResponse.getRole());
 
+        navigationManager.closeWindow(viewToHandle);
         navigationManager.navigateToHomePageFromLogin();
     }
 }

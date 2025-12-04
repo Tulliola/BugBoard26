@@ -166,4 +166,9 @@
 .project-card {
     -fx-border-radius: 30px;
     -fx-background-radius: 30px;
+    -fx-pref-width: 300px;
+    -fx-max-width: 300px;
+    -fx-pref-height: 400px;
+    -fx-max-height: 400px;
+    -fx-background-color: white;
 }
