@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 public class MyStage extends Stage {
 
     protected Pane createTitleBar() {
-        return TitleBar.createNewTitleBar(this);
+        return new TitleBar(this, 50);
     }
 
     protected void initializeStyleSheet(String cssFileURL, Scene scene) {
