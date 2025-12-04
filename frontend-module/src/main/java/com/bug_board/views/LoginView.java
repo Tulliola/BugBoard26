@@ -6,31 +6,36 @@ import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.presentation_controllers.LoginPC;
+import com.bug_board.utilities.MyButton;
 import com.bug_board.utilities.MySpacer;
 import com.bug_board.utilities.MyStage;
 import com.bug_board.utilities.animations.TextTypingEffect;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
+import java.io.InputStream;
+
 public class LoginView extends MyStage {
     private final LoginPC loginPC;
 
-    private TextField usernameField;
-    private PasswordField passwordField;
+    private TextField usernameField = new TextField();
+    private TextField passwordField = new PasswordField();
 
     public LoginView(LoginPC loginPC) {
         this.loginPC = loginPC;
@@ -38,12 +43,13 @@ public class LoginView extends MyStage {
         this.initialize(this);
     }
 
-    public void initialize(Stage stage) {
+    private void initialize(Stage stage) {
         Pane titleBar = this.createTitleBar();
 
         VBox root = new VBox();
         root.setAlignment(Pos.TOP_CENTER);
-        Scene scene = new Scene(root, Color.WHITE);
+        root.setId("background-gradient");
+        Scene scene = new Scene(root, Color.TRANSPARENT);
 
         this.initializeStyleSheet("/css/components_style.css", scene);
 
@@ -51,16 +57,41 @@ public class LoginView extends MyStage {
         stage.setHeight(800);
         stage.setResizable(false);
 
-        root.getChildren().addAll(titleBar, MySpacer.createVSpacer(), this.createLoginForm(), MySpacer.createVSpacer());
+        root.getChildren().addAll(
+                titleBar,
+                MySpacer.createVSpacer(),
+                this.createLoginForm(),
+                MySpacer.createVSpacer()
+        );
 
         stage.setScene(scene);
     }
 
-    public Pane createLoginForm() {
+    private Pane createLoginForm() {
         VBox loginForm =  new VBox();
         loginForm.setId("login-form");
-        loginForm.setAlignment(Pos.CENTER);
+        loginForm.setAlignment(Pos.TOP_CENTER);
 
+        loginForm.getChildren().addAll(
+                MySpacer.createVSpacer(),
+                this.createLogo(),
+                MySpacer.createVSpacer(),
+                this.createAnimatedText(),
+                MySpacer.createVSpacer(),
+                this.createTextFieldWithIcon(usernameField, "Username", "/icons/user_icon.png"),
+                MySpacer.createVSpacer(),
+                this.createTextFieldWithIcon(passwordField, "Password", "/icons/locker_icon.png"),
+                MySpacer.createVSpacer(),
+                this.createLoginButton(),
+                MySpacer.createVSpacer(),
+                this.createRegisterSuggestionPane(),
+                MySpacer.createVSpacer()
+        );
+
+        return loginForm;
+    }
+
+    private TextFlow createAnimatedText() {
         Text staticText = new Text("It's not a bug, it's a ");
 
         Text animatedText = new Text();
@@ -68,28 +99,104 @@ public class LoginView extends MyStage {
 
         TextFlow textWrapper = new TextFlow(staticText, animatedText);
         textWrapper.setTextAlignment(TextAlignment.CENTER);
+        textWrapper.getStyleClass().add("motto-text");
 
         TextTypingEffect textTypingAnimation = new TextTypingEffect(
                 animatedText,
                 "new feature", "question", "documentation issue"
         );
 
-        loginForm.getChildren().addAll(
-                MySpacer.createVSpacer(),
-                textWrapper,
-                new Label("Username"),
-                new TextField(),
-                new Label("Password"),
-                new PasswordField(),
-                MySpacer.createVSpacer()
-        );
-
         textTypingAnimation.startAnimation();
 
-        return loginForm;
+        return textWrapper;
     }
 
-    public void clickLoginButton() {
+    private Pane createTextFieldWithIcon(TextField textField, String placeholder, String iconURL) {
+        StackPane textFieldWrapper = new StackPane();
+
+        textField.setPromptText(placeholder);
+        textField.setId("text-field-with-icon");
+
+        ImageView icon = new ImageView(new Image(getClass().getResource(iconURL).toExternalForm()));
+        icon.setFitHeight(30);
+        icon.setFitWidth(30);
+        icon.translateXProperty().set(5);
+        icon.setPreserveRatio(true);
+        icon.mouseTransparentProperty().set(true);
+
+        textFieldWrapper.setAlignment(icon,  Pos.CENTER_LEFT);
+        textFieldWrapper.getChildren().addAll(textField, icon);
+
+        return textFieldWrapper;
+    }
+
+    private Pane createLogo() {
+        VBox logoWrapper = new VBox();
+        logoWrapper.setAlignment(Pos.TOP_CENTER);
+        logoWrapper.setPadding(new Insets(10, 0, 0, 0));
+
+        ImageView logo = new ImageView(new Image(getClass().getResource("/images/logo_bugboard.png").toExternalForm()));
+        logo.setFitHeight(175);
+        logo.setFitWidth(175);
+        logo.setPreserveRatio(true);
+        logo.mouseTransparentProperty().set(true);
+
+        logoWrapper.getChildren().add(logo);
+
+        return logoWrapper;
+    }
+
+    private Button createLoginButton() {
+        Button loginButton = new MyButton("LOGIN");
+        loginButton.setPrefSize(450, 30);
+        loginButton.setOnMouseClicked(event -> {
+            this.clickLoginButton();
+        });
+
+        return loginButton;
+    }
+
+    private Pane createRegisterSuggestionPane() {
+        VBox registerSuggestionPane = new VBox();
+        registerSuggestionPane.setAlignment(Pos.CENTER);
+
+        Label registerSuggestionLabel = new Label("Want to register your business? Get in touch!");
+        registerSuggestionLabel.setAlignment(Pos.CENTER);
+        registerSuggestionLabel.setTextAlignment(TextAlignment.CENTER);
+
+        HBox contactUsPane = new HBox();
+        contactUsPane.setAlignment(Pos.CENTER);
+        contactUsPane.setSpacing(10);
+
+        contactUsPane.getChildren().addAll(
+                this.createSocialMediaButton("/icons/facebook-f.png", "facebook-btn"),
+                this.createSocialMediaButton("/icons/google.png", "google-btn"),
+                this.createSocialMediaButton("/icons/instagram.png", "instagram-btn")
+        );
+
+        registerSuggestionPane.getChildren().addAll(
+                registerSuggestionLabel,
+                MySpacer.createVSpacer(),
+                contactUsPane
+        );
+
+        return registerSuggestionPane;
+    }
+
+    private Button createSocialMediaButton(String logoURL, String cssID) {
+        ImageView logoSocialMedia = new ImageView(new Image(this.getClass().getResourceAsStream(logoURL)));
+        logoSocialMedia.setFitHeight(20);
+        logoSocialMedia.setFitWidth(20);
+        logoSocialMedia.setPreserveRatio(true);
+
+        Button socialMediaButton = new Button("", logoSocialMedia);
+        socialMediaButton.getStyleClass().add("social-media-btn");
+        socialMediaButton.setId(cssID);
+
+        return socialMediaButton;
+    }
+
+    private void clickLoginButton() {
         try {
             loginPC.onLoginButtonClicked(usernameField.getText(), passwordField.getText());
         }

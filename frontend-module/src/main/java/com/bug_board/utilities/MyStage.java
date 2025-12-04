@@ -2,6 +2,7 @@ package com.bug_board.utilities;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class MyStage extends Stage {

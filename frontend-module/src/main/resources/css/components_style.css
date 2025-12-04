@@ -28,21 +28,81 @@
 
 /* Buttons */
 .button{
-    -fx-border-radius: 30px;
     -fx-text-fill: white;
-    -fx-background-radius: 30px;
     -fx-border-width: 10px;
+    -fx-background-radius: 30px;
+    -fx-border-radius: 30px;
     -fx-background-color: #2AC4AC;
+    -fx-effect: dropshadow(
+            gaussian,
+            rgb(0, 0, 0, 0.4),
+            8,
+            0,
+            0,
+            5
+    );
 }
 
 .button:hover{
-    -fx-background-color: #4bcab2;
+
+}
+
+.social-media-btn{
+    -fx-font-family: "Font Awesome 6 Free";
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+
+#google-btn{
+    -fx-background-color: #C5221F;
+}
+
+#facebook-btn{
+    -fx-background-color: #3B5998;
+}
+
+#instagram-btn{
+    -fx-background-color: linear-gradient(
+            to top right,
+            #feda75,
+            #fa7e1e,
+            #d62976,
+            #962fbf,
+            #4f5bd5
+    );
 }
 
 /* Text */
+.text-field {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: white;
+}
+
 .text-field:focused{
     -fx-border-color: #2AC4AC;
-    -fx-border-width: 2px;
+    -fx-border-width: 0px 0px 2px 0px;
+}
+
+#text-field-with-icon{
+    -fx-padding: 10px 10px 10px 40px;
+}
+
+/* Icons */
+.icon{
+    -fx-translate-x: 10px;
+
+    -fx-pref-width: 10px;
+    -fx-max-width: 10px;
+    -fx-pref-height: 10px;
+    -fx-max-height: 10px;
+
+    -fx-mouse-transparent: true;
 }
 
 #title-bar{
@@ -62,19 +122,38 @@
 #login-form{
     -fx-pref-width: 500px;
     -fx-max-width: 500px;
+    -fx-pref-height: 500px;
+    -fx-max-height: 500px;
+
     -fx-padding: 20px;
     -fx-spacing: 10px;
-    -fx-background-color: #F0F0F0; /* Sfondo del form */
-    -fx-border-color: #CCCCCC;
+    -fx-background-color: white;
+    -fx-border-color: transparent;
     -fx-border-width: 1px;
     -fx-border-radius: 30px;
     -fx-background-radius: 30px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 5, 5);
     -fx-alignment: center;
 }
 
+.motto-text{
+    -fx-font-size: 20;
+}
+
 #animated-text{
-    -fx-fill: #2AC4AC;
-    -fx-font-family: "Poppins";
+    -fx-fill: linear-gradient(
+        to right,
+        #273B7A,
+        #2AC4AC
+    );
     -fx-font-style: italic;
+}
+
+#background-gradient{
+    -fx-background-color: linear-gradient(
+            to top,
+            #273B7A,
+            #2AC4AC,
+            #FFFFFF
+    );
 }
