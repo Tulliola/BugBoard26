@@ -15,7 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
 
 import java.io.ByteArrayInputStream;
 
@@ -25,6 +24,7 @@ public class ProjectCard extends StackPane {
     private final Pane frontCard;
     private final Pane backCard;
     private Button flipButton;
+    private final CardFlipEffect cardAnimation;
 
     public ProjectCard(ProjectSummaryDTO projectSummaryDTO) {
         projectToShow = projectSummaryDTO;
@@ -38,10 +38,7 @@ public class ProjectCard extends StackPane {
         StackPane.setAlignment(buttonPane, Pos.TOP_CENTER);
         this.getChildren().addAll(cardPane, buttonPane);
 
-        CardFlipEffect flipEffect = new CardFlipEffect(frontCard, backCard, cardPane);
-        buttonPane.setOnMouseClicked(event -> {
-            flipEffect.handleFlip();
-        });
+        cardAnimation = new CardFlipEffect(frontCard, backCard, cardPane);
     }
 
     /* Methods for front card */
@@ -184,9 +181,13 @@ public class ProjectCard extends StackPane {
 
         flipButton.setMouseTransparent(true);
 
-        flipPane.setOnMouseEntered(e -> {
+        flipPane.setOnMouseEntered(event -> {
             flipPane.setCursor(Cursor.HAND);
+        });
+
+        flipPane.setOnMouseClicked(e -> {
             flipImageView.setImage(flipGif);
+            cardAnimation.handleFlip();
         });
 
         flipPane.setOnMouseExited(e -> {

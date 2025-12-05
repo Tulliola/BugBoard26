@@ -41,7 +41,9 @@ public class AnimatedSearchBar extends SearchBar {
             searchField.setOpacity(1.0);
             searchField.setTranslateX(0.0);
         });
+
         container.setAlignment(searchButton, Pos.CENTER_RIGHT);
+
         timeline.play();
     }
 
