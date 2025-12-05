@@ -21,14 +21,13 @@ import java.util.List;
 public class HomePageView extends MyStage {
     private final HomePagePC homePagePC;
     private final List<ProjectSummaryDTO> projectsOnBoard;
-    private VBox vBox = new VBox();
-    private Scene scene = new Scene(vBox);
+    private VBox root = new VBox();
+    private Scene scene = new Scene(root);
     private VBox internVBox = new VBox();
     private AnimatedSearchBar searchProject =  new AnimatedSearchBar();
     private HBox projectCardsBox = new HBox();
     private Text heading;
     List<ProjectCard> projectsCards;
-
 
     public HomePageView(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
         this.homePagePC = homePagePC;
@@ -59,8 +58,9 @@ public class HomePageView extends MyStage {
 
         setProjectCardsBox();
 
-        vBox.getChildren().addAll(
-                new TitleBar(this, 80),
+        root.setAlignment(Pos.TOP_CENTER);
+
+        root.getChildren().addAll(        new TitleBar(this, 80),
                 internVBox
         );
 

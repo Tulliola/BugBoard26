@@ -3,9 +3,9 @@ package com.bug_board.utilities;
 import com.bug_board.dto.ProjectSummaryDTO;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -45,14 +45,44 @@ public class ProjectCard extends VBox {
             "#2AC4AC);" +
                 "-fx-border-radius: 30px 30px 0 0; -fx-background-radius: 30px 30px 0 0");
 
-        Circle rotateCardBtn = new Circle(25);
-        rotateCardBtn.setFill(Color.RED);
-        rotateCardBtn.translateYProperty().set(-30);
-
         headerPane.getChildren().add(this.createProjectCreatorPane());
-        wrapper.getChildren().addAll(headerPane,  rotateCardBtn);
+        wrapper.getChildren().addAll(headerPane,  this.createButtonFlipPane());
 
         return wrapper;
+    }
+
+    private Pane createButtonFlipPane() {
+        StackPane buttonWrapper = new StackPane();
+        buttonWrapper.setStyle("-fx-border-radius: 2px; -fx-background-radius: 2px; -fx-border-color: #2AC4AC");
+
+        Circle circularBackground = new Circle(25);
+        circularBackground.setFill(Color.WHITE);
+
+        Image flipStatic = new Image(getClass().getResourceAsStream("/icons/flip_static.png"));
+        Image flipGif = new Image(getClass().getResourceAsStream("/gifs/flip.gif"));
+
+        ImageView flipImageView = new ImageView(flipStatic);
+        flipImageView.setFitHeight(34);
+        flipImageView.setFitWidth(34);
+
+        Button flipButton = new Button();
+        flipButton.setGraphic(flipImageView);
+        flipButton.setStyle("-fx-background-color: transparent");
+        flipButton.setEffect(null);
+
+        flipButton.setOnMouseEntered(e -> {
+            flipImageView.setImage(flipGif);
+        });
+
+        flipButton.setOnMouseExited(e -> {
+            flipImageView.setImage(flipStatic);
+        });
+
+        buttonWrapper.getChildren().addAll(circularBackground,  flipButton);
+        buttonWrapper.translateYProperty().set(-30);
+        buttonWrapper.setStyle("-fx-background-radius: 35px; -fx-border-radius: 35px");
+
+        return buttonWrapper;
     }
 
     private Pane createProjectCreatorPane() {
