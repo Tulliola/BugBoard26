@@ -172,3 +172,7 @@
     -fx-max-height: 400px;
     -fx-background-color: white;
 }
+
+#homepage_heading{
+    -fx-font-size: 70px;
+}

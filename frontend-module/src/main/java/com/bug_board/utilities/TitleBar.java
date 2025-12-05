@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class TitleBar extends HBox {
-    private int height;
+    private int barHeight;
     private Button minimizeButton = new Button();
     private Button closeButton = new Button();
     private Button redimensionButton = new Button();
@@ -28,12 +28,12 @@ public class TitleBar extends HBox {
     public TitleBar(Stage parentStage, int height) {
         parentStage.initStyle(StageStyle.TRANSPARENT);
 
-        this.height = height;
+        this.barHeight = height;
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         setPropertiesForNewTitleBar(parentStage);
         setCentralBrandNameForNewTitleBar();
-        setActionPropertiesForNewTitleBarButtons(this.height);
+        setActionPropertiesForNewTitleBarButtons(this.barHeight);
         setActionPropertiesForNewTitleBar(parentStage);
         this.setFontSize(firstPortionToColor, height/2);
         this.setFontSize(secondPortionToColor, height/2);
@@ -54,17 +54,17 @@ public class TitleBar extends HBox {
 
     private void setButton(Button buttonToSet, Image buttonsImage){
         ImageView imageView = new ImageView(buttonsImage);
-        imageView.setFitHeight(height/3);
-        imageView.setFitWidth(height/3);
+        imageView.setFitHeight(barHeight /3);
+        imageView.setFitWidth(barHeight /3);
         buttonToSet.setGraphic(imageView);
-        buttonToSet.setMinSize(height/2, height/2);
-        buttonToSet.setMaxSize(height/2, height/2);
-        buttonToSet.setPrefSize(height/2, height/2);
+        buttonToSet.setMinSize(barHeight /2, barHeight /2);
+        buttonToSet.setMaxSize(barHeight /2, barHeight /2);
+        buttonToSet.setPrefSize(barHeight /2, barHeight /2);
     }
 
     private void setPropertiesForNewTitleBar(Stage parentStage) {
         this.setAlignment(Pos.CENTER_RIGHT);
-        this.setPrefSize(parentStage.getWidth(), height);
+        this.setPrefSize(parentStage.getWidth(), barHeight);
         this.setId("title-bar");
     }
 
