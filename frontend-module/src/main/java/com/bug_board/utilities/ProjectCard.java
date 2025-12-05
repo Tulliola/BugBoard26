@@ -177,7 +177,7 @@ public class ProjectCard extends StackPane {
         flipButton = new Button();
         flipButton.setGraphic(flipImageView);
         flipButton.setStyle("-fx-background-color: transparent");
-        flipButton.setEffect(null);
+        flipButton.setId("flip-button");
 
         flipButton.setMouseTransparent(true);
 
