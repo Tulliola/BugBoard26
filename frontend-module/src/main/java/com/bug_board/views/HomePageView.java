@@ -2,17 +2,12 @@ package com.bug_board.views;
 
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.presentation_controllers.HomePagePC;
-import com.bug_board.utilities.MySpacer;
-import com.bug_board.utilities.MyStage;
-import com.bug_board.utilities.ProjectCard;
-import com.bug_board.utilities.TitleBar;
-import javafx.geometry.Insets;
+import com.bug_board.session_manager.SessionManager;
+import com.bug_board.utilities.*;
+import com.bug_board.utilities.animations.AnimatedSearchBar;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -29,9 +24,10 @@ public class HomePageView extends MyStage {
     private VBox vBox = new VBox();
     private Scene scene = new Scene(vBox);
     private VBox internVBox = new VBox();
-    private TextField searchProject =  new TextField();
+    private AnimatedSearchBar searchProject =  new AnimatedSearchBar();
     private HBox projectCardsBox = new HBox();
-    private Text heading = new Text("You are currently working on these projects");
+    private Text heading;
+    List<ProjectCard> projectsCards;
 
 
     public HomePageView(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
@@ -74,13 +70,17 @@ public class HomePageView extends MyStage {
     }
 
     private void setProjectCardsBox() {
-        ArrayList<ProjectCard> projectCards = new ArrayList<>();
-        projectCards.add(new ProjectCard(this.projectsOnBoard.getLast()));
-        projectCardsBox.getChildren().addAll(projectCards);
+        projectsCards = new ArrayList<>();
+        projectsCards.add(new ProjectCard(this.projectsOnBoard.getLast()));
+        projectCardsBox.getChildren().addAll(projectsCards);
         internVBox.getChildren().addAll(MySpacer.createVSpacer(), MySpacer.createVSpacer(), projectCardsBox);
     }
 
     public void setHeading(){
+        if(SessionManager.getInstance().getRole().getRoleName().equals("ROLE_USER"))
+            heading = new Text("You are currently working on these projects");
+        else
+            heading = new Text("You are currently overviewing these projects");
         heading.setId("homepage_heading");
         heading.setWrappingWidth(300);
         heading.wrappingWidthProperty().bind(this.widthProperty());
@@ -90,19 +90,11 @@ public class HomePageView extends MyStage {
     }
 
     public void setSearchProjectBar(){
-        searchProject.setPromptText("Search Project");
         searchProject.setAlignment(Pos.CENTER);
         searchProject.setPrefWidth(300);
         searchProject.setMaxWidth(300);
-        Image searchIcon = new Image(getClass().getResourceAsStream("/icons/user_icon.png"));
-        ImageView searchIconView = new ImageView(searchIcon);
-        searchIconView.setFitHeight(16);
-        searchIconView.setFitWidth(16);
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(searchProject);
-        stackPane.getChildren().add(searchIconView);
-        stackPane.setAlignment(searchIconView, Pos.CENTER_RIGHT);
-        StackPane.setMargin(searchIconView, new Insets(0, 8, 0, 0));
         searchProject.setStyle("-fx-padding: 0.5em 25px 0.5em 0.5em;");
         internVBox.getChildren().addAll(MySpacer.createVSpacer(), searchProject);
     }

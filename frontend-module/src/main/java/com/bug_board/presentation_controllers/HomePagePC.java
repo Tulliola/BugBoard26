@@ -2,6 +2,9 @@ package com.bug_board.presentation_controllers;
 
 import com.bug_board.architectural_controllers.UserProjectController;
 import com.bug_board.dto.ProjectSummaryDTO;
+import com.bug_board.exceptions.dao.BackendErrorException;
+import com.bug_board.exceptions.dao.BadConversionToDTOException;
+import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
 
 import java.util.List;
@@ -15,5 +18,10 @@ public class HomePagePC {
     public HomePagePC(UserProjectController userProjectController, INavigationManager navigationManager) {
         this.userProjectController = userProjectController;
         this.navigationManager = navigationManager;
+    }
+
+    public List<ProjectSummaryDTO> onSearchProjectButtonClick(String projectNameToFilter)
+            throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
+        return userProjectController.getOverviewedProjectsByUser();
     }
 }

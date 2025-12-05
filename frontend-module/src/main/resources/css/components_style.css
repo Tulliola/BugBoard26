@@ -176,3 +176,15 @@
 #homepage_heading{
     -fx-font-size: 70px;
 }
+
+#search-field{
+    -fx-background-radius: 30px;
+    -fx-border-radius: 30px;
+
+    -fx-border-width: 2px;
+}
+
+#search-button{
+    -fx-effect: none;
+    -fx-padding-right: 20px
+}

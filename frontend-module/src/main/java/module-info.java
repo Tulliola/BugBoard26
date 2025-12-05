@@ -9,6 +9,7 @@ module com.bug_board.frontendmodule {
     requires javafx.graphics;
     requires java.desktop;
     requires java.sql;
+    requires javafx.base;
 
     exports com.bug_board;
 }
