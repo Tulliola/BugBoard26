@@ -1,6 +1,9 @@
 package com.bug_board.views;
 
 import com.bug_board.dto.ProjectSummaryDTO;
+import com.bug_board.exceptions.dao.BackendErrorException;
+import com.bug_board.exceptions.dao.BadConversionToDTOException;
+import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.*;
@@ -20,10 +23,10 @@ import java.util.List;
 
 public class HomePageView extends MyStage {
     private final HomePagePC homePagePC;
-    private final List<ProjectSummaryDTO> projectsOnBoard;
+    private List<ProjectSummaryDTO> projectsOnBoard;
     private VBox root = new VBox();
     private Scene scene = new Scene(root);
-    private VBox internVBox = new VBox();
+    private VBox homePagePane = new VBox();
     private AnimatedSearchBar searchProject =  new AnimatedSearchBar();
     private HBox projectCardsBox = new HBox();
     private Text heading;
@@ -62,7 +65,7 @@ public class HomePageView extends MyStage {
         root.setAlignment(Pos.TOP_CENTER);
 
         root.getChildren().addAll(        new TitleBar(this, 80),
-                internVBox
+                homePagePane
         );
 
         this.setScene(scene);
@@ -72,9 +75,15 @@ public class HomePageView extends MyStage {
 
     private void setProjectCardsBox() {
         projectsCards = new ArrayList<>();
-        projectsCards.add(new ProjectCard(this.projectsOnBoard.getLast()));
+        for(ProjectSummaryDTO project: projectsOnBoard){
+            projectsCards.add(new ProjectCard(project));
+        }
+
+        projectCardsBox.getChildren().clear();
         projectCardsBox.getChildren().addAll(projectsCards);
-        internVBox.getChildren().addAll(MySpacer.createVSpacer(), MySpacer.createVSpacer(), projectCardsBox);
+
+        homePagePane.getChildren().remove(projectCardsBox);
+        homePagePane.getChildren().add(projectCardsBox);
     }
 
     public void setHeading(){
@@ -86,17 +95,39 @@ public class HomePageView extends MyStage {
         heading.setWrappingWidth(300);
         heading.wrappingWidthProperty().bind(this.widthProperty());
         heading.setTextAlignment(TextAlignment.CENTER);
-        internVBox.getChildren().add(heading);
-        internVBox.setAlignment(Pos.CENTER);
+        homePagePane.getChildren().add(heading);
+        homePagePane.setAlignment(Pos.CENTER);
     }
 
     public void setSearchProjectBar(){
         searchProject.setAlignment(Pos.CENTER);
         searchProject.setPrefWidth(300);
         searchProject.setMaxWidth(300);
+        setSearchButtonAction();
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(searchProject);
         searchProject.setStyle("-fx-padding: 0.5em 25px 0.5em 0.5em;");
-        internVBox.getChildren().addAll(MySpacer.createVSpacer(), searchProject);
+        homePagePane.getChildren().addAll(MySpacer.createVSpacer(), searchProject);
+    }
+
+    private void setSearchButtonAction(){
+        searchProject.setButtonAction(() -> {
+            this.filterProjects(searchProject.getBarText());
+        });
+    }
+
+    private void filterProjects(String barText) {
+        try {
+            projectsOnBoard = homePagePC.onSearchProjectButtonClick(barText);
+        } catch (HTTPSendException e) {
+            throw new RuntimeException(e);
+        } catch (BadConversionToDTOException e) {
+            throw new RuntimeException(e);
+        } catch (BackendErrorException e) {
+            throw new RuntimeException(e);
+        }
+
+        projectsCards.clear();
+        setProjectCardsBox();
     }
 }

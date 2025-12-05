@@ -26,7 +26,7 @@ public interface IProjectRepositoryJPA extends JpaRepository<Project, Integer> {
 
     @Query(value = "SELECT titolo, descrizione, immagine, idProgetto, utente_creatore " +
             "FROM progetto NATURAL JOIN partecipa_a_progetto " +
-            "WHERE utente_partecipante = ?1 AND titolo = ?2",
+            "WHERE utente_partecipante = ?1 AND titolo LIKE %?2%",
         nativeQuery = true)
     public List<Project> findAllByTitleAndPartecipants_Username(String username, String titleToFilter);
 
@@ -38,7 +38,7 @@ public interface IProjectRepositoryJPA extends JpaRepository<Project, Integer> {
 
     @Query(value = "SELECT titolo, descrizione, immagine, idProgetto, utente_creatore " +
             "FROM progetto NATURAL JOIN supervisiona_progetto " +
-            "WHERE amministratore = ?1 AND titolo = ?2",
+            "WHERE amministratore = ?1 AND titolo LIKE %?2%",
             nativeQuery = true)
     public List<Project> findAllByTitleAndAdmins_Username(String username, String titleToFilter);
 }

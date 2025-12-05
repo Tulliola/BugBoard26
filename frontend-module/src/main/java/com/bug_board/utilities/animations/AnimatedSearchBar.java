@@ -9,6 +9,8 @@ import javafx.util.Duration;
 
 public class AnimatedSearchBar extends SearchBar {
 
+    private boolean isExpanded = false;
+
     public AnimatedSearchBar() {
         super();
         container.setAlignment(searchButton, Pos.CENTER);
@@ -37,7 +39,7 @@ public class AnimatedSearchBar extends SearchBar {
         timeline.setOnFinished(e -> {
             searchField.setVisible(true);
             isExpanded = true;
-            searchField.setPrefWidth(400.0);
+            searchField.setPrefWidth(250.0);
             searchField.setOpacity(1.0);
             searchField.setTranslateX(0.0);
         });
@@ -47,13 +49,14 @@ public class AnimatedSearchBar extends SearchBar {
         timeline.play();
     }
 
-    @Override
-    protected void setButton(){
-        super.setButton();
+    public void setButtonAction(Runnable action){
         searchButton.setOnAction(e -> {
             if(!isExpanded){
                 animate();
+                isExpanded = true;
             }
+            else
+                action.run();
         });
     }
 }

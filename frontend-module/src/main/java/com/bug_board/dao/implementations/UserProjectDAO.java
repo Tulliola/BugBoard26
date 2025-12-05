@@ -22,11 +22,19 @@ public class UserProjectDAO implements IUserProjectDAO {
     }
 
     @Override
-    public List<ProjectSummaryDTO> getOverviewedProjectsByUser()
+    public List<ProjectSummaryDTO> getOverviewedProjectsByUser(String projectNameToFilter)
             throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
         HttpRequest request;
+        URI uri;
+
+        if(projectNameToFilter == null || projectNameToFilter.equals(""))
+            uri = URI.create(baseUrl + "overviewed");
+        else
+            uri = URI.create(baseUrl+"overviewed?projectName="+projectNameToFilter);
+
+
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "overviewed"))
+                .uri(uri)
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                 .GET()
@@ -38,11 +46,17 @@ public class UserProjectDAO implements IUserProjectDAO {
     }
 
     @Override
-    public List<ProjectSummaryDTO> getWorkingOnProjectsByUser()
+    public List<ProjectSummaryDTO> getWorkingOnProjectsByUser(String projectNameToFilter)
             throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
         HttpRequest request;
+        URI uri;
+        if(projectNameToFilter == null || projectNameToFilter.equals(""))
+            uri = URI.create(baseUrl + "working-on");
+        else
+            uri = URI.create(baseUrl + "working-on?projectName="+projectNameToFilter);
+
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "working-on"))
+                .uri(uri)
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                 .GET()

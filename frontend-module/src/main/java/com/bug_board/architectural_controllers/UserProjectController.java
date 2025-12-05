@@ -15,13 +15,13 @@ public class UserProjectController {
         this.userProjectDAO = userProjectDAO;
     }
 
-    public List<ProjectSummaryDTO> getOverviewedProjectsByUser()
+    public List<ProjectSummaryDTO> getOverviewedProjectsByUser(String projectNameToFilter)
             throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
-        return userProjectDAO.getOverviewedProjectsByUser();
+        return userProjectDAO.getOverviewedProjectsByUser(projectNameToFilter);
     }
 
-    public List<ProjectSummaryDTO> getWorkingOnProjectsByUser()
+    public List<ProjectSummaryDTO> getWorkingOnProjectsByUser(String projectNameToFilter)
             throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
-        return userProjectDAO.getWorkingOnProjectsByUser();
+        return userProjectDAO.getWorkingOnProjectsByUser(projectNameToFilter);
     }
 }

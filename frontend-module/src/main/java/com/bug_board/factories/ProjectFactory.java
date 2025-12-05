@@ -35,9 +35,9 @@ public class ProjectFactory {
             throw new IllegalArgumentException("ProjectController still not set.");
 
         if(loggedUserRole.getRoleName().equals("ROLE_USER"))
-            return projectController.getWorkingOnProjectsByUser();
+            return projectController.getWorkingOnProjectsByUser(null);
         else if(loggedUserRole.getRoleName().equals("ROLE_ADMIN") || loggedUserRole.getRoleName().equals("ROLE_SUPERADMIN"))
-            return projectController.getOverviewedProjectsByUser();
+            return projectController.getOverviewedProjectsByUser(null);
         else
             throw new IllegalArgumentException("Role specified not found.");
     }
