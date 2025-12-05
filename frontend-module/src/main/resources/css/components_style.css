@@ -94,6 +94,12 @@
     -fx-padding: 10px 10px 10px 40px;
 }
 
+/* Scroll pane */
+.scroll-pane {
+    -fx-background-color: #273B7A;
+    -fx-text-fill: white;
+}
+
 /* Icons */
 .icon{
     -fx-translate-x: 10px;
@@ -175,11 +181,7 @@
 }
 
 #project-card-header {
-    -fx-background-color: linear-gradient(
-        to top,
-        #273B7A,
-        #2AC4AC
-    );
+    -fx-background-color: #273B7A;
     -fx-border-radius: 30px 30px 0 0;
     -fx-background-radius: 30px 30px 0 0;
     -fx-pref-height: 75px;

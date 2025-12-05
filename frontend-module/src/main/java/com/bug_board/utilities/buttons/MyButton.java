@@ -1,4 +1,4 @@
-package com.bug_board.utilities;
+package com.bug_board.utilities.buttons;
 
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;

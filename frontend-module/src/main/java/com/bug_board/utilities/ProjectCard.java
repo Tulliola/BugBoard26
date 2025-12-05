@@ -1,7 +1,11 @@
 package com.bug_board.utilities;
 
 import com.bug_board.dto.ProjectSummaryDTO;
+import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.animations.CardFlipEffect;
+import com.bug_board.utilities.buttons.ButtonDefinition;
+import com.bug_board.utilities.buttons.factory.implementations.ComponentButtonFactory;
+import com.bug_board.utilities.buttons.factory.interfaces.ButtonFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -10,13 +14,17 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectCard extends StackPane {
     final ProjectSummaryDTO projectToShow;
@@ -25,9 +33,11 @@ public class ProjectCard extends StackPane {
     private final Pane backCard;
     private Button flipButton;
     private final CardFlipEffect cardAnimation;
+    private Integer idProject;
 
     public ProjectCard(ProjectSummaryDTO projectSummaryDTO) {
         projectToShow = projectSummaryDTO;
+        idProject = projectToShow.getIdProject();
 
         frontCard = createFrontCard();
         backCard = createBackCard();
@@ -47,15 +57,10 @@ public class ProjectCard extends StackPane {
         VBox front = new VBox();
         front.getStyleClass().add("project-card");
 
-        Button prova = new Button("Prova");
-        prova.setOnMouseClicked(event -> {
-            System.out.println("Funziona");
-        });
-
         front.getChildren().addAll(
                 this.createFrontHeaderPane(),
                 this.createLogoPane(),
-                prova
+                this.createFrontFooter()
         );
 
         return front;
@@ -66,23 +71,20 @@ public class ProjectCard extends StackPane {
         headerPane.setAlignment(Pos.TOP_CENTER);
         headerPane.setId("project-card-header");
 
-        headerPane.getChildren().add(this.createProjectCreatorPane());
+        headerPane.getChildren().add(this.createProjectNamePane());
 
         return headerPane;
     }
 
-    private Pane createProjectCreatorPane() {
+    private Pane createProjectNamePane() {
         VBox projectCreatorPane = new VBox();
         projectCreatorPane.setPadding(new Insets(10, 10, 10, 10));
+        projectCreatorPane.setAlignment(Pos.CENTER);
 
         Text projectName = new Text(projectToShow.getTitle());
-        projectName.setFill(Color.WHITE);
+        projectName.setStyle("-fx-font-size: 20px; -fx-fill: white");
 
-        Text projectCreator = new Text("Created by " + projectToShow.getProjectCreator());
-        projectCreator.setStyle("-fx-font-family: Poppins; -fx-font-weight: normal; -fx-font-size: 13");
-        projectCreator.setFill(Color.WHITE);
-
-        projectCreatorPane.getChildren().addAll(projectName, projectCreator);
+        projectCreatorPane.getChildren().addAll(MySpacer.createVSpacer(), projectName, MySpacer.createVSpacer());
 
         return projectCreatorPane;
     }
@@ -105,6 +107,36 @@ public class ProjectCard extends StackPane {
         logoPane.getChildren().add(logoImage);
 
         return logoPane;
+    }
+
+    private Pane createFrontFooter() {
+        VBox footer = new VBox();
+        footer.setAlignment(Pos.BOTTOM_CENTER);
+
+        Text projectCreator = new Text("Created by " + projectToShow.getProjectCreator());
+        projectCreator.setStyle("-fx-font-size: 15px; -fx-font-style: italic; -fx-fill: gray");
+        projectCreator.setTextAlignment(TextAlignment.CENTER);
+        VBox.setVgrow(footer, Priority.ALWAYS);
+
+        ButtonFactory buttonFactory = ComponentButtonFactory.getButtonsByRole(
+                SessionManager.getInstance().getRole().getRoleName()
+        );
+
+        for(ButtonDefinition definition:  buttonFactory.createButtons()) {
+            Button buttonToAdd = new Button(definition.getText());
+
+            buttonToAdd.setOnMouseClicked(event -> {
+                buttonActionHandler(definition.getActionId());
+            });
+
+            footer.getChildren().add(buttonToAdd);
+        }
+
+        footer.getChildren().addAll(projectCreator);
+//        footer.setId("background-gradient");
+        footer.setStyle("-fx-background-radius: 0 0 30px 30px; -fx-border-radius: 0 0 30px 30px; -fx-padding: 10px; -fx-spacing: 10");
+
+        return footer;
     }
 
     /* Methods for back card */
@@ -137,6 +169,7 @@ public class ProjectCard extends StackPane {
     private ScrollPane createDescriptionPane() {
         VBox descriptionPane = new VBox();
         descriptionPane.setPadding(new Insets(10, 10, 10, 10));
+        descriptionPane.setStyle("-fx-background-color: #273B7A");
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(descriptionPane);
@@ -145,7 +178,10 @@ public class ProjectCard extends StackPane {
         descriptionPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
         Text description = new Text(projectToShow.getDescription());
-        description.setStyle("-fx-font-family: Poppins; -fx-font-weight: normal; -fx-font-size: 13");
+        description.setStyle("-fx-fill: white");
+        description.setStyle("-fx-font-family: Poppins; " +
+                "-fx-font-weight: normal; -fx-font-size: 13; " +
+                "-fx-fill: white");
         description.wrappingWidthProperty().bind(
                 descriptionPane.widthProperty().subtract(descriptionPane.getPadding().getLeft() + descriptionPane.getPadding().getRight())
         );
@@ -204,4 +240,26 @@ public class ProjectCard extends StackPane {
         return flipPane;
     }
 
+    /* Methods for factory and action handlers */
+
+    private void buttonActionHandler(String actionId) {
+        switch (actionId) {
+            case "VIEW_ISSUES":
+                clickViewIssueButton();
+            case "REPORT_ISSUE":
+                clickReportIssueButton();
+            default:
+                break;
+        }
+    }
+
+    private void clickReportIssueButton() {
+    }
+
+    private void clickViewIssueButton() {
+    }
+
+    private Integer getIdProject() {
+        return this.idProject;
+    }
 }

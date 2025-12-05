@@ -1,11 +1,15 @@
 package com.bug_board.utilities;
 
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class MyStage extends Stage {
+
+    protected MyStage() {
+        this.getIcons().add(new Image(getClass().getResourceAsStream("/images/logo_bugboard.png")));
+    }
 
     protected Pane createTitleBar() {
         return new TitleBar(this, 50);

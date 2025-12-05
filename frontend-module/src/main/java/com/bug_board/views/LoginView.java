@@ -8,6 +8,7 @@ import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.presentation_controllers.LoginPC;
 import com.bug_board.utilities.*;
 import com.bug_board.utilities.animations.TextTypingEffect;
+import com.bug_board.utilities.buttons.MyButton;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,8 +27,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-
-import java.io.InputStream;
 
 public class LoginView extends MyStage {
     private final LoginPC loginPC;
@@ -64,6 +63,8 @@ public class LoginView extends MyStage {
         );
 
         stage.setScene(scene);
+
+
     }
 
     private Pane createLoginForm() {

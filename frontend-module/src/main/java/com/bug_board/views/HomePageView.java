@@ -46,6 +46,7 @@ public class HomePageView extends MyStage {
         setSearchProjectBar();
         setHeading();
         setScene();
+
     }
 
     public void setFullScreen(){
