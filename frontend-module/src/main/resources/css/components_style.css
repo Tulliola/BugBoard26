@@ -174,6 +174,31 @@
     -fx-background-color: white;
 }
 
+#project-card-header {
+    -fx-background-color: linear-gradient(
+        to top,
+        #273B7A,
+        #2AC4AC
+    );
+    -fx-border-radius: 30px 30px 0 0;
+    -fx-background-radius: 30px 30px 0 0;
+    -fx-pref-height: 75px;
+    -fx-min-height: 75px;
+    -fx-max-height: 75px;
+}
+
+#project-card-footer {
+    -fx-background-color: linear-gradient(
+            to bottom,
+            #273B7A,
+            #2AC4AC
+    );    -fx-border-radius: 0 0 30px 30px;
+    -fx-background-radius: 0 0 30px 30px;
+    -fx-pref-height: 75px;
+    -fx-min-height: 75px;
+    -fx-max-height: 75px;
+}
+
 #homepage_heading{
     -fx-font-size: 70px;
 }

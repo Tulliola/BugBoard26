@@ -22,5 +22,6 @@ public class Main extends Application {
         LoginView loginView = new LoginView(loginPC);
 
         loginView.show();
+
     }
 }

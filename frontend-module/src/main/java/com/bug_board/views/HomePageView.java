@@ -32,6 +32,7 @@ public class HomePageView extends MyStage {
     public HomePageView(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
         this.homePagePC = homePagePC;
         this.projectsOnBoard = projectList;
+
         this.initialize();
     }
 
