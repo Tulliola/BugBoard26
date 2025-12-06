@@ -220,3 +220,7 @@
 #flip-button{
     -fx-effect: null
 }
+
+.carousel-button{
+    -fx-margin: 10px;
+}

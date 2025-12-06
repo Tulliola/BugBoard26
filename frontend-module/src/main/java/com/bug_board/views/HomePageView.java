@@ -8,10 +8,13 @@ import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.*;
 import com.bug_board.utilities.animations.AnimatedSearchBar;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -24,17 +27,21 @@ import java.util.List;
 public class HomePageView extends MyStage {
     private final HomePagePC homePagePC;
     private List<ProjectSummaryDTO> projectsOnBoard;
+    private List<ProjectSummaryDTO> projectsRetrieved;
     private VBox root = new VBox();
     private Scene scene = new Scene(root);
     private VBox homePagePane = new VBox();
     private AnimatedSearchBar searchProject =  new AnimatedSearchBar();
     private HBox projectCardsBox = new HBox();
     private Text heading;
+    private Text hintFiltering = new Text("But you can filter them by project name...");
+    private HBox carouselsBox = new HBox();
+    private List<Button> carousel;
     List<ProjectCard> projectsCards;
 
     public HomePageView(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
         this.homePagePC = homePagePC;
-        this.projectsOnBoard = projectList;
+        this.projectsRetrieved = projectList;
 
         this.initialize();
     }
@@ -43,13 +50,39 @@ public class HomePageView extends MyStage {
 
     private void initialize() {
         setFullScreen();
-        setSearchProjectBar();
         setHeading();
+        setHintFiltering();
+        setSearchProjectBar();
         setScene();
-
+        setCarousel();
     }
 
-    public void setFullScreen(){
+    private void setCarousel() {
+        int carouselsIndexes = (projectsRetrieved.size() + 2)/3;
+        carousel = new ArrayList<>(3);
+        setCarouselsButtons(carouselsIndexes);
+        carouselsBox.setPadding(new Insets(5));
+        carouselsBox.setSpacing(5);
+        carouselsBox.setAlignment(Pos.CENTER);
+        carouselsBox.getChildren().addAll(carousel);
+        homePagePane.getChildren().add(carouselsBox);
+    }
+
+    private void setCarouselsButtons(int numOfButtons){
+        for(int i = 0; i < numOfButtons; i++){
+            Button carouselButton = new Button(String.valueOf(i+1));
+            carouselButton.setStyle("-fx-effect: none");
+            carousel.add(carouselButton);
+        }
+    }
+
+    private void setHintFiltering(){
+        Region region = new Region();
+        homePagePane.getChildren().add(region);
+        homePagePane.getChildren().add(hintFiltering);
+    }
+
+    private void setFullScreen(){
         Screen screen = Screen.getPrimary();
         Rectangle2D screenBounds = screen.getVisualBounds();
         this.setX(screenBounds.getMinX());
@@ -58,7 +91,7 @@ public class HomePageView extends MyStage {
         this.setHeight(screenBounds.getHeight());
     }
 
-    public void setScene(){
+    private void setScene(){
         scene.getStylesheets().add(getClass().getResource("/css/components_style.css").toExternalForm());
 
         setProjectCardsBox();
@@ -76,18 +109,28 @@ public class HomePageView extends MyStage {
 
     private void setProjectCardsBox() {
         projectsCards = new ArrayList<>();
+        projectsOnBoard = projectsRetrieved.subList(0, 3);
         for(ProjectSummaryDTO project: projectsOnBoard){
             projectsCards.add(new ProjectCard(project));
         }
 
-        projectCardsBox.getChildren().clear();
-        projectCardsBox.getChildren().addAll(projectsCards);
+        projectCardsBox.setAlignment(Pos.CENTER);
 
+        projectCardsBox.getChildren().clear();
+        projectCardsBox.setPadding(new Insets(50));
+        addProjectCardsToBox();
         homePagePane.getChildren().remove(projectCardsBox);
         homePagePane.getChildren().add(projectCardsBox);
     }
 
-    public void setHeading(){
+    private void addProjectCardsToBox(){
+        for(ProjectCard card: projectsCards){
+            card.setPadding(new Insets(15));
+            projectCardsBox.getChildren().add(card);
+        }
+    }
+
+    private void setHeading(){
         if(SessionManager.getInstance().getRole().getRoleName().equals("ROLE_USER"))
             heading = new Text("You are currently working on these projects");
         else
@@ -100,7 +143,7 @@ public class HomePageView extends MyStage {
         homePagePane.setAlignment(Pos.CENTER);
     }
 
-    public void setSearchProjectBar(){
+    private void setSearchProjectBar(){
         searchProject.setAlignment(Pos.CENTER);
         searchProject.setPrefWidth(300);
         searchProject.setMaxWidth(300);
@@ -119,7 +162,7 @@ public class HomePageView extends MyStage {
 
     private void filterProjects(String barText) {
         try {
-            projectsOnBoard = homePagePC.onSearchProjectButtonClick(barText);
+            projectsRetrieved = homePagePC.onSearchProjectButtonClick(barText);
         } catch (HTTPSendException e) {
             throw new RuntimeException(e);
         } catch (BadConversionToDTOException e) {
