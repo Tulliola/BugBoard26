@@ -20,10 +20,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class HomePageView extends MyStage {
     private Text hintFiltering = new Text("But you can filter them by project name...");
     private HBox carouselsBox = new HBox();
     private List<Button> carousel;
+    private Button activeCarouselButton = null;
     private TitleBar titleBar;
     List<ProjectCard> projectsCards;
 
@@ -63,23 +66,56 @@ public class HomePageView extends MyStage {
 
     private void setCarousel() {
         int carouselsIndexes = (projectsRetrieved.size() + 2)/3;
+
+        if(activeCarouselButton != null){
+            activeCarouselButton.getStyleClass().remove("active-carousel-button");
+        }
+
         carousel = new ArrayList<>(3);
         setCarouselsButtons(carouselsIndexes);
+
+
         carouselsBox.setPadding(new Insets(5));
         carouselsBox.setSpacing(5);
         carouselsBox.setAlignment(Pos.CENTER);
+
         carouselsBox.getChildren().clear();
         carouselsBox.getChildren().addAll(carousel);
-        homePagePane.getChildren().remove(carouselsBox);
-        homePagePane.getChildren().add(carouselsBox);
+
+        if(activeCarouselButton == null) {
+            setActiveButton(carousel.get(0));
+        }
+
+    }
+
+    private void setActiveButton(Button button) {
+        button.getStyleClass().add("active-carousel-button");
+        activeCarouselButton = button;
     }
 
     private void setCarouselsButtons(int numOfButtons){
-        for(int i = 0; i < numOfButtons; i++){
-            Button carouselButton = new Button(String.valueOf(i+1));
-            carouselButton.setStyle("-fx-effect: none");
+        for (int i = 0; i < numOfButtons; i++) {
+            Button carouselButton = new Button(String.valueOf(i + 1));
+            carouselButton.getStyleClass().add("carousel-button");
+
+            carouselButton.getStyleClass().add("carousel-button-hover");
+
+            int finalI = i;
+            carouselButton.setOnAction(e -> {
+                setProjectCardsBox(finalI);
+                handleClickButtonGraphics(carouselButton);
+            });
+
             carousel.add(carouselButton);
         }
+    }
+
+    private void handleClickButtonGraphics(Button carouselButton) {
+        if(activeCarouselButton != null) {
+            activeCarouselButton.getStyleClass().remove("active-carousel-button");
+        }
+
+        setActiveButton(carouselButton);
     }
 
     private void setHintFiltering(){
@@ -100,12 +136,17 @@ public class HomePageView extends MyStage {
     private void setScene(){
         scene.getStylesheets().add(getClass().getResource("/css/components_style.css").toExternalForm());
 
-        setProjectCardsBox();
+        setProjectCardsBox(0);
 
         root.setAlignment(Pos.TOP_CENTER);
 
         titleBar = new TitleBar(this, 80);
         this.setTitleBarButtons();
+
+        homePagePane.getChildren().addAll(
+                projectCardsBox,
+                carouselsBox
+        );
 
         root.getChildren().addAll(
                 titleBar,
@@ -117,12 +158,14 @@ public class HomePageView extends MyStage {
 
     }
 
-    private void setProjectCardsBox() {
+    private void setProjectCardsBox(int index) {
         projectsCards = new ArrayList<>();
-        if(projectsRetrieved.size() >= 3)
-            projectsOnBoard = projectsRetrieved.subList(0, 3);
+
+        if(projectsRetrieved.size() >= (index+1) * 3)
+            projectsOnBoard = projectsRetrieved.subList(index*3, (index*3)+3);
         else
-            projectsOnBoard = projectsRetrieved;
+            projectsOnBoard = projectsRetrieved.subList(index*3, projectsRetrieved.size());
+
         for(ProjectSummaryDTO project: projectsOnBoard){
             projectsCards.add(new ProjectCard(project));
         }
@@ -131,9 +174,8 @@ public class HomePageView extends MyStage {
 
         projectCardsBox.getChildren().clear();
         projectCardsBox.setPadding(new Insets(50));
+
         addProjectCardsToBox();
-        homePagePane.getChildren().remove(projectCardsBox);
-        homePagePane.getChildren().add(projectCardsBox);
     }
 
     private void addProjectCardsToBox(){
@@ -148,11 +190,17 @@ public class HomePageView extends MyStage {
             heading = new Text("You are currently working on these projects");
         else
             heading = new Text("You are currently overviewing these projects");
+
         heading.setId("homepage_heading");
+
         heading.setWrappingWidth(300);
+
         heading.wrappingWidthProperty().bind(this.widthProperty());
+
         heading.setTextAlignment(TextAlignment.CENTER);
+
         homePagePane.getChildren().add(heading);
+
         homePagePane.setAlignment(Pos.CENTER);
     }
 
@@ -160,7 +208,9 @@ public class HomePageView extends MyStage {
         searchProject.setAlignment(Pos.CENTER);
         searchProject.setPrefWidth(300);
         searchProject.setMaxWidth(300);
+
         setSearchButtonAction();
+
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(searchProject);
         searchProject.setStyle("-fx-padding: 0.5em 25px 0.5em 0.5em;");
@@ -176,16 +226,19 @@ public class HomePageView extends MyStage {
     private void filterProjects(String barText) {
         try {
             projectsRetrieved = homePagePC.onSearchProjectButtonClick(barText);
-        } catch (HTTPSendException e) {
+        }
+        catch (HTTPSendException e) {
             throw new RuntimeException(e);
-        } catch (BadConversionToDTOException e) {
+        }
+        catch (BadConversionToDTOException e) {
             throw new RuntimeException(e);
-        } catch (BackendErrorException e) {
+        }
+        catch (BackendErrorException e) {
             throw new RuntimeException(e);
         }
 
         projectsCards.clear();
-        setProjectCardsBox();
+        setProjectCardsBox(0);
         setCarousel();
     }
 

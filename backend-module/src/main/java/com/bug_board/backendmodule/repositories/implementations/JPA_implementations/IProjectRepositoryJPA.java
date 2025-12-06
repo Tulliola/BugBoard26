@@ -13,7 +13,7 @@ public interface IProjectRepositoryJPA extends JpaRepository<Project, Integer> {
                         "SELECT amministratore as username FROM Supervisiona_progetto WHERE idProgetto = ?1" +
                         " UNION " +
                         "SELECT utente_partecipante as username FROM Partecipa_a_progetto WHERE idProgetto = ?1" +
-                    ") NATURAL JOIN Utente",
+                    ") NATURAL JOIN Utente ",
         nativeQuery = true
     )
     public List<User> getProjectMembers(Integer idProject);

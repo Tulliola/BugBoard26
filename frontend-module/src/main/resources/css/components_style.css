@@ -221,7 +221,23 @@
 }
 
 .carousel-button{
-    -fx-margin: 10px;
+    -fx-background-color: transparent;
+    -fx-border-radius: none;
+    -fx-background-radius: none;
+    -fx-text-fill: black;
+    -fx-effect: none;
+}
+
+.active-carousel-button{
+    -fx-text-fill: #2AC4AC;
+    -fx-border-color: #2AC4AC;
+    -fx-border-width: 0px 0px 2px 0px;
+}
+
+.carousel-button:hover{
+    -fx-text-fill: #2AC4AC;
+    -fx-border-color: #2AC4AC;
+    -fx-border-width: 0px 0px 2px 0px;
 }
 
 .title-bar-button {
