@@ -43,7 +43,6 @@ public class SearchBar extends HBox {
 
     protected void setButton() {
         searchButton.setId("search-button");;
-//        searchButton.setTranslateX(-10);
     }
 
     protected void setButtonImage(){

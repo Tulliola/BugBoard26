@@ -9,8 +9,11 @@ import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.session_manager.SessionManager;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpRequest;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class UserProjectDAO implements IUserProjectDAO {
@@ -29,8 +32,14 @@ public class UserProjectDAO implements IUserProjectDAO {
 
         if(projectNameToFilter == null || projectNameToFilter.equals(""))
             uri = URI.create(baseUrl + "overviewed");
-        else
-            uri = URI.create(baseUrl+"overviewed?projectName="+projectNameToFilter);
+        else {
+            try {
+                String encodedString = URLEncoder.encode(projectNameToFilter, StandardCharsets.UTF_8.toString());
+                uri = URI.create(baseUrl + "overviewed?projectName=" + encodedString);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
 
         request = HttpRequest.newBuilder()
@@ -52,8 +61,14 @@ public class UserProjectDAO implements IUserProjectDAO {
         URI uri;
         if(projectNameToFilter == null || projectNameToFilter.equals(""))
             uri = URI.create(baseUrl + "working-on");
-        else
-            uri = URI.create(baseUrl + "working-on?projectName="+projectNameToFilter);
+        else {
+            try {
+                String encodedString = URLEncoder.encode(projectNameToFilter, StandardCharsets.UTF_8.toString());
+                uri = URI.create(baseUrl + "working-on?projectName=" + encodedString);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         request = HttpRequest.newBuilder()
                 .uri(uri)

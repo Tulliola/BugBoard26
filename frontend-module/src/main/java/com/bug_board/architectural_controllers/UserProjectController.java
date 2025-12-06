@@ -6,6 +6,7 @@ import com.bug_board.exceptions.dao.BackendErrorException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class UserProjectController {
