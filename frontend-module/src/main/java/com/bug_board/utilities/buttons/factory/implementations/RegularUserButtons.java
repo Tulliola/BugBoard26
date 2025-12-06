@@ -1,19 +1,23 @@
 package com.bug_board.utilities.buttons.factory.implementations;
 
 import com.bug_board.utilities.buttons.ButtonDefinition;
-import com.bug_board.utilities.buttons.factory.interfaces.ButtonFactory;
-
-import java.util.ArrayList;
+import com.bug_board.utilities.buttons.factory.interfaces.IButtonsProvider;
 import java.util.List;
 
-public class RegularUserButtons extends AdminButtons implements ButtonFactory {
+public class RegularUserButtons extends AdminButtons implements IButtonsProvider {
     @Override
     public List<ButtonDefinition> createProjectCardButtons() {
-        List<ButtonDefinition> sameButtonsAsAdmin = super.createButtons();
-        List<ButtonDefinition> regularUserButtons = new ArrayList<>(sameButtonsAsAdmin);
+        return List.of(
+                new ButtonDefinition("Report a new issue", "REPORT_ISSUE"),
+                new ButtonDefinition("View all issues", "VIEW_ISSUES")
+        );
+    }
 
-        regularUserButtons.add(new ButtonDefinition("Report a new issue", "REPORT_ISSUE"));
-
-        return regularUserButtons;
+    @Override
+    public List<ButtonDefinition> createTitleBarButtons() {
+        return List.of(
+                new ButtonDefinition("Issues reported by me", "VIEW_PERSONAL_ISSUES"),
+                new ButtonDefinition("Create a new label", "CREATE_LABEL")
+        );
     }
 }

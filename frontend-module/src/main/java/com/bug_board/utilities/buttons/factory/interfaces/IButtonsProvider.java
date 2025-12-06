@@ -4,6 +4,7 @@ import com.bug_board.utilities.buttons.ButtonDefinition;
 
 import java.util.List;
 
-public interface ButtonFactory {
+public interface IButtonsProvider {
     public List<ButtonDefinition> createProjectCardButtons();
+    public List<ButtonDefinition> createTitleBarButtons();
 }

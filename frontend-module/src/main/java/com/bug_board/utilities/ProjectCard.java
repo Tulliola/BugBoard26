@@ -3,9 +3,10 @@ package com.bug_board.utilities;
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.animations.CardFlipEffect;
+import com.bug_board.utilities.animations.OnMouseEnteredHoverEffect;
 import com.bug_board.utilities.buttons.ButtonDefinition;
 import com.bug_board.utilities.buttons.factory.implementations.ComponentButtonFactory;
-import com.bug_board.utilities.buttons.factory.interfaces.ButtonFactory;
+import com.bug_board.utilities.buttons.factory.interfaces.IButtonsProvider;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -46,6 +47,7 @@ public class ProjectCard extends StackPane {
         this.getChildren().addAll(cardPane, buttonPane);
 
         cardAnimation = new CardFlipEffect(frontCard, backCard, cardPane);
+        OnMouseEnteredHoverEffect.addHoverEffect(this);
     }
 
     /* Methods for front card */
@@ -115,11 +117,11 @@ public class ProjectCard extends StackPane {
         projectCreator.setTextAlignment(TextAlignment.CENTER);
         VBox.setVgrow(footer, Priority.ALWAYS);
 
-        ButtonFactory buttonFactory = ComponentButtonFactory.getProjectCardButtonsByRole(
+        IButtonsProvider buttonProvider = ComponentButtonFactory.getButtonFactoryByRole(
                 SessionManager.getInstance().getRole().getRoleName()
         );
 
-        for(ButtonDefinition definition:  buttonFactory.createProjectCardButtons()) {
+        for(ButtonDefinition definition:  buttonProvider.createProjectCardButtons()) {
             Button buttonToAdd = new Button(definition.getText());
 
             buttonToAdd.setOnMouseClicked(event -> {
@@ -174,7 +176,6 @@ public class ProjectCard extends StackPane {
         descriptionPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
         Text description = new Text(projectToShow.getDescription());
-        description.setStyle("-fx-fill: white");
         description.setStyle("-fx-font-family: Poppins; " +
                 "-fx-font-weight: normal; -fx-font-size: 13; " +
                 "-fx-fill: white");

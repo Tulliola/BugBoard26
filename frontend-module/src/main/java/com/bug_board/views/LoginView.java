@@ -7,6 +7,7 @@ import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.presentation_controllers.LoginPC;
 import com.bug_board.utilities.*;
+import com.bug_board.utilities.animations.FloatingLabelWithIcon;
 import com.bug_board.utilities.animations.TextTypingEffect;
 import com.bug_board.utilities.buttons.MyButton;
 import javafx.geometry.Insets;
@@ -119,9 +120,8 @@ public class LoginView extends MyStage {
     }
 
     private Pane createTextFieldWithIcon(TextField textField, String placeholder, String iconURL) {
-        StackPane textFieldWrapper = new StackPane();
 
-        textField.setPromptText(placeholder);
+        StackPane textFieldWrapper = FloatingLabelWithIcon.createFloatingLabelField(textField, placeholder);
         textField.setId("text-field-with-icon");
 
         ImageView icon = new ImageView(new Image(getClass().getResource(iconURL).toExternalForm()));
@@ -132,7 +132,7 @@ public class LoginView extends MyStage {
         icon.mouseTransparentProperty().set(true);
 
         textFieldWrapper.setAlignment(icon,  Pos.CENTER_LEFT);
-        textFieldWrapper.getChildren().addAll(textField, icon);
+        textFieldWrapper.getChildren().add(icon);
 
         return textFieldWrapper;
     }

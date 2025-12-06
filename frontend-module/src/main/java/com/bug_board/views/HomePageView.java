@@ -8,6 +8,9 @@ import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.*;
 import com.bug_board.utilities.animations.AnimatedSearchBar;
+import com.bug_board.utilities.buttons.ButtonDefinition;
+import com.bug_board.utilities.buttons.factory.implementations.ComponentButtonFactory;
+import com.bug_board.utilities.buttons.factory.interfaces.IButtonsProvider;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -37,6 +40,7 @@ public class HomePageView extends MyStage {
     private Text hintFiltering = new Text("But you can filter them by project name...");
     private HBox carouselsBox = new HBox();
     private List<Button> carousel;
+    private TitleBar titleBar;
     List<ProjectCard> projectsCards;
 
     public HomePageView(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
@@ -100,7 +104,11 @@ public class HomePageView extends MyStage {
 
         root.setAlignment(Pos.TOP_CENTER);
 
-        root.getChildren().addAll(        new TitleBar(this, 80),
+        titleBar = new TitleBar(this, 80);
+        this.setTitleBarButtons();
+
+        root.getChildren().addAll(
+                titleBar,
                 homePagePane
         );
 
@@ -179,5 +187,47 @@ public class HomePageView extends MyStage {
         projectsCards.clear();
         setProjectCardsBox();
         setCarousel();
+    }
+
+    private void setTitleBarButtons() {
+        IButtonsProvider buttonProvider =  ComponentButtonFactory.getButtonFactoryByRole(
+                SessionManager.getInstance().getRole().getRoleName()
+        );
+
+        for(ButtonDefinition definition: buttonProvider.createTitleBarButtons()){
+            Button buttonToAdd = new Button(definition.getText());
+            buttonToAdd.getStyleClass().add("title-bar-button");
+
+            buttonToAdd.setOnMouseClicked(event -> {
+                buttonActionHandler(definition.getActionId());
+            });
+
+            titleBar.getChildren().add(1, buttonToAdd);
+        }
+    }
+
+    private void buttonActionHandler(String actionId) {
+        switch(actionId){
+            case "CREATE_LABEL":
+                clickCreateLabelButton();
+                break;
+            case "VIEW_PERSONAL_ISSUES":
+                clickViewPersonalIssuesButton();
+                break;
+            case "REGISTER_COLLABORATOR":
+                clickRegisterCollaboratorButton();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void clickRegisterCollaboratorButton() {
+    }
+
+    private void clickViewPersonalIssuesButton() {
+    }
+
+    private void clickCreateLabelButton() {
     }
 }

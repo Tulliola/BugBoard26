@@ -208,7 +208,6 @@
 #search-field{
     -fx-background-radius: 30px;
     -fx-border-radius: 30px;
-
     -fx-border-width: 2px;
 }
 
@@ -223,4 +222,17 @@
 
 .carousel-button{
     -fx-margin: 10px;
+}
+
+.title-bar-button {
+    -fx-background-color: transparent;
+    -fx-border-radius: none;
+    -fx-background-radius: none;
+    -fx-text-fill: #2AC4AC;
+    -fx-effect: none;
+}
+
+.title-bar-button:hover {
+    -fx-border-color: #2AC4AC;
+    -fx-border-width: 0px 0px 2px 0px;
 }
