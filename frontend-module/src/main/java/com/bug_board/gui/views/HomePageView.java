@@ -2,6 +2,7 @@ package com.bug_board.gui.views;
 
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.gui.panes.HomePagePane;
+import com.bug_board.gui.panes.LabelCreationFormPane;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.*;
@@ -21,12 +22,16 @@ public class HomePageView extends MyStage {
     private final HomePagePC homePagePC;
     private VBox root = new VBox();
     private Scene scene = new Scene(root);
+    private StackPane containerUnderTitleBar = new StackPane();
     private final HomePagePane homePagePane;
     private TitleBar titleBar;
 
     public HomePageView(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
         this.homePagePC = homePagePC;
         homePagePane = new HomePagePane(homePagePC, projectList);
+
+        VBox.setVgrow(containerUnderTitleBar, Priority.ALWAYS);
+        containerUnderTitleBar.getChildren().add(homePagePane);
 
         this.initialize();
     }
@@ -58,7 +63,7 @@ public class HomePageView extends MyStage {
 
         root.getChildren().addAll(
                 titleBar,
-                homePagePane
+                containerUnderTitleBar
         );
 
         this.setScene(scene);
@@ -106,5 +111,8 @@ public class HomePageView extends MyStage {
     }
 
     private void clickCreateLabelButton() {
+        LabelCreationFormPane labelCreationPane = new LabelCreationFormPane(containerUnderTitleBar);
+
+        containerUnderTitleBar.getChildren().add(labelCreationPane);
     }
 }
