@@ -3,7 +3,6 @@ package com.bug_board.architectural_controllers;
 import com.bug_board.dao.interfaces.IAuthenticationDAO;
 import com.bug_board.dto.LoginResponseDTO;
 import com.bug_board.dto.UserAuthenticationDTO;
-import com.bug_board.exceptions.architectural_controllers.InvalidCredentialsException;
 import com.bug_board.exceptions.dao.BackendErrorException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
@@ -17,9 +16,7 @@ public class AuthenticationController {
     }
 
     public LoginResponseDTO authenticate(String username, String password)
-            throws HTTPSendException, BadConversionToDTOException, BackendErrorException, BadConversionToJSONException, InvalidCredentialsException {
-        if(username == null || username.isEmpty() ||  password == null || password.isEmpty())
-            throw new InvalidCredentialsException("Invalid credentials.");
+            throws HTTPSendException, BadConversionToDTOException, BackendErrorException, BadConversionToJSONException {
 
         UserAuthenticationDTO  userAuthenticationDTO = new UserAuthenticationDTO();
 

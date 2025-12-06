@@ -3,6 +3,7 @@ package com.bug_board.utilities;
 import com.bug_board.session_manager.SessionManager;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -44,7 +45,7 @@ public class TitleBar extends StackPane {
         centralButtonsWrapper.setPickOnBounds(false);
     }
 
-    public void addButtonToTitleBar(Button button) {
+    public void addButtonToTitleBar(ToggleButton button) {
         button.prefHeightProperty().bind(centralButtonsWrapper.heightProperty());
         centralButtonsWrapper.getChildren().add(button);
     }

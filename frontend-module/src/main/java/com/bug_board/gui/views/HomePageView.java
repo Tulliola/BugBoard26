@@ -14,6 +14,8 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
@@ -77,13 +79,16 @@ public class HomePageView extends MyStage {
                 SessionManager.getInstance().getRole().getRoleName()
         );
 
+        ToggleGroup groupButtons = new ToggleGroup();
+
         for(ButtonDefinition definition: buttonProvider.createTitleBarButtons()){
-            Button buttonToAdd = new Button(definition.getText());
-            buttonToAdd.getStyleClass().add("title-bar-button");
+            ToggleButton buttonToAdd = new ToggleButton(definition.getText());
 
             buttonToAdd.setOnMouseClicked(event -> {
                 buttonActionHandler(definition.getActionId());
             });
+
+            buttonToAdd.setToggleGroup(groupButtons);
 
             titleBar.addButtonToTitleBar(buttonToAdd);
         }
@@ -114,8 +119,10 @@ public class HomePageView extends MyStage {
     }
 
     private void clickCreateLabelButton() {
-        LabelCreationFormPane labelCreationPane = new LabelCreationFormPane(containerUnderTitleBar);
+        if(containerUnderTitleBar.getChildren().getLast() == this.homePagePane) {
+            LabelCreationFormPane labelCreationPane = new LabelCreationFormPane(homePagePC, containerUnderTitleBar);
 
-        containerUnderTitleBar.getChildren().add(labelCreationPane);
+            containerUnderTitleBar.getChildren().add(labelCreationPane);
+        }
     }
 }

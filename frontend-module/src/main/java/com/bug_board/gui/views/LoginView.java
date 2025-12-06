@@ -5,9 +5,10 @@ import com.bug_board.exceptions.dao.BackendErrorException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.HTTPSendException;
+import com.bug_board.exceptions.views.CredentialsNotProvidedException;
 import com.bug_board.presentation_controllers.LoginPC;
 import com.bug_board.utilities.*;
-import com.bug_board.utilities.animations.FloatingLabelWithIcon;
+import com.bug_board.utilities.animations.FloatingLabel;
 import com.bug_board.utilities.animations.TextTypingEffect;
 import com.bug_board.utilities.buttons.MyButton;
 import javafx.geometry.Insets;
@@ -86,9 +87,9 @@ public class LoginView extends MyStage {
                 MySpacer.createVSpacer(),
                 this.createTextFieldWithIcon(passwordField, "Password", "/icons/locker_icon.png"),
                 MySpacer.createVSpacer(),
-                this.createLoginButton(),
-                MySpacer.createVSpacer(),
                 errorLabel,
+                MySpacer.createVSpacer(),
+                this.createLoginButton(),
                 MySpacer.createVSpacer(),
                 this.createRegisterSuggestionPane(),
                 MySpacer.createVSpacer()
@@ -121,7 +122,7 @@ public class LoginView extends MyStage {
 
     private Pane createTextFieldWithIcon(TextField textField, String placeholder, String iconURL) {
 
-        StackPane textFieldWrapper = FloatingLabelWithIcon.createFloatingLabelField(textField, placeholder);
+        StackPane textFieldWrapper = FloatingLabel.createFloatingLabelField(textField, placeholder);
         textField.setId("text-field-with-icon");
 
         ImageView icon = new ImageView(new Image(getClass().getResource(iconURL).toExternalForm()));
@@ -154,8 +155,27 @@ public class LoginView extends MyStage {
     }
 
     private Button createLoginButton() {
-        Button loginButton = new MyButton("LOGIN");
+        Button loginButton = new MyButton();
+        Image staticLoginImage = new Image(getClass().getResource("/icons/login_static.png").toExternalForm());
+        Image gifLoginImage = new Image(getClass().getResource("/gifs/login.gif").toExternalForm());
+
+        ImageView loginImageView = new ImageView(staticLoginImage);
+        loginImageView.setFitHeight(50);
+        loginImageView.setFitWidth(50);
+
         loginButton.setPrefSize(450, 30);
+        loginButton.setGraphic(loginImageView);
+
+        loginButton.setOnMouseEntered(event -> {
+            loginImageView.setImage(gifLoginImage);
+            loginButton.setGraphic(loginImageView);
+        });
+
+        loginButton.setOnMouseExited(event -> {
+            loginImageView.setImage(staticLoginImage);
+            loginButton.setGraphic(loginImageView);
+        });
+
         loginButton.setOnMouseClicked(event -> {
             this.clickLoginButton();
         });
@@ -205,23 +225,29 @@ public class LoginView extends MyStage {
 
     private void clickLoginButton() {
         try {
-            errorLabel.setManaged(false);
+            checkMandatoryFields();
             loginPC.onLoginButtonClicked(usernameField.getText(), passwordField.getText(), this);
         }
-        catch (InvalidCredentialsException exc) {
+        catch (CredentialsNotProvidedException exc) {
             errorLabel.setText(exc.getMessage());
+            errorLabel.setTextFill(Color.RED);
+            errorLabel.setManaged(true);
         }
         catch(BackendErrorException exc) {
             if(exc.getMessage().contains("401"))
                 errorLabel.setText("Username or password not valid.");
-        }
-        catch(HTTPSendException | BadConversionToDTOException | BadConversionToJSONException throwables) {
-            errorLabel.setText("Server is currently not responding.");
-        }
-        finally {
-
             errorLabel.setTextFill(Color.RED);
             errorLabel.setManaged(true);
         }
+        catch(HTTPSendException | BadConversionToDTOException | BadConversionToJSONException throwables) {
+            errorLabel.setText("Server is currently not responding.");
+            errorLabel.setTextFill(Color.RED);
+            errorLabel.setManaged(true);
+        }
+    }
+
+    private void checkMandatoryFields() {
+        if(usernameField.getText().isEmpty() ||  passwordField.getText().isEmpty())
+            throw new CredentialsNotProvidedException("You must enter your username and password.");
     }
 }

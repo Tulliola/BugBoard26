@@ -13,6 +13,7 @@ import java.awt.*;
 public class BugBoardLabel extends StackPane {
     private Text textInShape;
     private SVGPath shape;
+    private String color;
 
     public BugBoardLabel(String text, String fillColor) {
         this.createBugBoardLabel(text, fillColor);
@@ -23,7 +24,7 @@ public class BugBoardLabel extends StackPane {
 
         String borderColor = calculateBorderColorFromFillColor(fillColor);
 
-        String shapePath = "M0 0 H200 L215 20 L200 40 H0 Z ";
+        String shapePath = "M0 0 H300 L315 20 L300 40 H0 Z ";
         shape = new SVGPath();
         shape.setContent(shapePath);
         shape.getStyleClass().add("bugboard-label");
@@ -32,7 +33,7 @@ public class BugBoardLabel extends StackPane {
                 "-fx-stroke-width: 1px;");
 
         textInShape = new Text(text);
-        textInShape.setStyle("-fx-fill: white");
+        textInShape.setStyle("-fx-fill: white; -fx-font-size: 13px");
 
         Circle pin = new Circle(10);
         pin.setStyle("-fx-fill: white; -fx-stroke: " + borderColor + "; -fx-stroke-width: 1px");
@@ -59,5 +60,14 @@ public class BugBoardLabel extends StackPane {
 
     public void setColor(String newColor) {
         shape.setStyle("-fx-fill: " + newColor + "; -fx-stroke: " + calculateBorderColorFromFillColor(newColor));
+        color = newColor;
+    }
+
+    public Text getTextField() {
+        return this.textInShape;
+    }
+
+    public String getColor() {
+        return color;
     }
 }

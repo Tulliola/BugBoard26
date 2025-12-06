@@ -28,4 +28,8 @@ public class HomePagePC {
         else
             return userProjectController.getOverviewedProjectsByUser(projectNameToFilter);
     }
+
+    public void onCreateLabelButtonClicked(String labelColor, String title, String description) {
+
+    }
 }

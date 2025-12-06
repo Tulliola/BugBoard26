@@ -20,7 +20,7 @@ public class LoginPC {
     }
 
     public void onLoginButtonClicked(String username, String password, Object viewToHandle)
-            throws InvalidCredentialsException, HTTPSendException, BadConversionToDTOException, BackendErrorException, BadConversionToJSONException {
+            throws HTTPSendException, BadConversionToDTOException, BackendErrorException, BadConversionToJSONException {
         LoginResponseDTO loginResponse = authenticationController.authenticate(username, password);
 
         SessionManager.getInstance().createSession(loginResponse.getToken(), loginResponse.getUsername(), loginResponse.getRole());

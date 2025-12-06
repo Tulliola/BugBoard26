@@ -78,8 +78,8 @@
 
 /* Text */
 .text-field {
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+    -fx-border-color: transparent transparent #A3A3A3 transparent;
+    -fx-border-width: 1px;
 
     -fx-background-radius: 0;
     -fx-background-insets: 0;
@@ -93,6 +93,35 @@
 
 #text-field-with-icon{
     -fx-padding: 10px 10px 10px 40px;
+}
+
+.no-border-textarea {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: never;
+
+    -fx-border-color: transparent transparent #A3A3A3 transparent;
+    -fx-border-width: 1px;
+}
+
+.no-border-textarea:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent -color-primary transparent;
+}
+
+.no-border-textarea .scroll-pane {
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+}
+
+.no-border-textarea .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.no-border-textarea .scroll-pane .content {
+    -fx-background-color: transparent;
 }
 
 /* Scroll pane */
@@ -241,34 +270,41 @@
     -fx-border-width: 0px 0px 2px 0px;
 }
 
-.title-bar-button {
+/* Per i bottoni della title bar */
+.toggle-button {
     -fx-background-color: transparent;
     -fx-border-radius: none;
     -fx-background-radius: none;
     -fx-text-fill: -color-primary;
     -fx-effect: none;
+    -fx-cursor: hand;
 }
 
-.title-bar-button:hover {
+.toggle-button:hover {
     -fx-border-color: -color-primary;
     -fx-border-width: 0px 0px 4px 0px;
 }
 
+.toggle-button:selected {
+    -fx-border-color: -color-primary;
+    -fx-border-width: 0px 0px 4px 0px;
+}
+
+
 #label-creation-form {
     -fx-pref-width: 500px;
-    -fx-max-width: 500px;
+    -fx-max-width: 700px;
     -fx-pref-height: 500px;
-    -fx-max-height: 500px;
+    -fx-max-height: 700px;
 
     -fx-padding: 20px;
-    -fx-spacing: 10px;
+    -fx-spacing: 20px;
     -fx-background-color: white;
     -fx-border-color: transparent;
     -fx-border-width: 1px;
     -fx-border-radius: 30px;
     -fx-background-radius: 30px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0 , 5, 5);
-    -fx-alignment: center;
 }
 
 .palette-button {

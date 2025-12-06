@@ -1,22 +1,37 @@
 package com.bug_board.gui.panes;
 
+import com.bug_board.exceptions.views.TitleNotSpecifiedForLabelException;
+import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.utilities.BugBoardLabel;
 import com.bug_board.utilities.PaletteButton;
+import com.bug_board.utilities.animations.FloatingLabel;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
+import java.util.function.UnaryOperator;
 
 public class LabelCreationFormPane extends StackPane {
     private final StackPane parentContainer;
     private BugBoardLabel sampleLabel;
-    private String[] colorPalette = {"#FF0000", "#FF8000", "#FFFF00",
+    private Label errorLabel = new Label();
+    private TextField titleTextField;
+    private TextArea descriptionTextArea;
+    private final HomePagePC homePagePC;
+    private final String[] colorPalette = {"#FF0000", "#FF8000", "#FFFF00",
             "#80FF00", "#00FF00", "#00FF80", "#00FFFF", "#0080FF"};
+    private static final int MAX_TITLE_CHARS = 35;
+    private static final int MAX_DESCRIPTION_CHARS = 200;
 
-    public LabelCreationFormPane(StackPane parentContainer) {
+    public LabelCreationFormPane(HomePagePC homePagePC, StackPane parentContainer) {
+        this.homePagePC = homePagePC;
         this.parentContainer = parentContainer;
 
         this.initalize();
@@ -24,6 +39,8 @@ public class LabelCreationFormPane extends StackPane {
 
     private void initalize() {
         this.setBackground();
+
+        errorLabel.setManaged(false);
 
         this.getChildren().add(this.createCreationForm());
     }
@@ -44,18 +61,69 @@ public class LabelCreationFormPane extends StackPane {
 
         sampleLabel = new BugBoardLabel("This is a label", "#FFFFFF");
 
+
         form.getChildren().addAll(
                 createYourLabelText,
+                sampleLabel,
                 this.createPalette(),
-                sampleLabel
+                this.createTitleTextField(),
+                this.createDescriptionTextArea(),
+                errorLabel,
+                this.createConfirmButton()
         );
 
         return form;
     }
 
+
+    private StackPane createTitleTextField() {
+        titleTextField = new TextField();
+
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.length() > MAX_TITLE_CHARS)
+                return null;
+            return change;
+        };
+
+        titleTextField.setTextFormatter(new TextFormatter<>(filter));
+
+        sampleLabel.getTextField().textProperty().bind(titleTextField.textProperty());
+
+        StackPane wrapper = FloatingLabel.createFloatingLabelField(titleTextField, "Title (max " + MAX_TITLE_CHARS + " characters)");
+        VBox.setMargin(wrapper, new Insets(20, 0, 20, 0));
+
+        return wrapper;
+    }
+
+    private StackPane createDescriptionTextArea() {
+        descriptionTextArea = new TextArea();
+
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.length() > MAX_DESCRIPTION_CHARS)
+                return null;
+            return change;
+        };
+
+        descriptionTextArea.setTextFormatter(new TextFormatter<>(filter));
+
+        descriptionTextArea.setWrapText(true);
+        descriptionTextArea.setPrefRowCount(4);
+        descriptionTextArea.getStyleClass().add("no-border-textarea");
+
+        StackPane wrapper = FloatingLabel.createFloatingLabelField(descriptionTextArea, "Description (max " + MAX_DESCRIPTION_CHARS + " characters)");
+        VBox.setMargin(wrapper, new Insets(20, 0, 20, 0));
+        return wrapper;
+    }
+
     private HBox createPalette() {
         HBox palette = new HBox();
+        palette.setAlignment(Pos.CENTER);
         palette.setSpacing(10);
+        VBox.setMargin(palette, new Insets(10, 10, 10, 10));
 
         for(String color : colorPalette) {
             PaletteButton paletteButton = new PaletteButton(color);
@@ -68,6 +136,52 @@ public class LabelCreationFormPane extends StackPane {
         }
 
         return palette;
+    }
+
+    private Button createConfirmButton() {
+        Button confirmButton = new Button();
+
+        Image staticConfirmImage = new Image(getClass().getResource("/icons/confirm_static.png").toExternalForm());
+        Image gifConfirmImage = new Image(getClass().getResource("/gifs/confirm.gif").toExternalForm());
+
+        ImageView confirmImageView = new ImageView(staticConfirmImage);
+        confirmImageView.setFitHeight(50);
+        confirmImageView.setFitWidth(50);
+
+        confirmButton.setGraphic(confirmImageView);
+
+        confirmButton.setOnMouseEntered(event -> {
+            confirmImageView.setImage(gifConfirmImage);
+            confirmButton.setGraphic(confirmImageView);
+        });
+
+        confirmButton.setOnMouseExited(event -> {
+            confirmImageView.setImage(staticConfirmImage);
+            confirmButton.setGraphic(confirmImageView);
+        });
+
+        confirmButton.setOnMouseClicked(event -> {
+            this.clickConfirmCreationButton();
+        });
+
+        return confirmButton;
+    }
+
+    private void clickConfirmCreationButton() {
+        try{
+            errorLabel.setManaged(false);
+            checkMandatoryFields();
+        }
+        catch(TitleNotSpecifiedForLabelException exc){
+            errorLabel.setText(exc.getMessage());
+            errorLabel.setTextFill(Color.RED);
+            errorLabel.setManaged(true);
+        }
+    }
+
+    private void checkMandatoryFields() {
+        if(titleTextField.getText().isEmpty())
+            throw new TitleNotSpecifiedForLabelException("You must specify at least a title for your label");
     }
 
     private void setBackground() {
