@@ -1,4 +1,4 @@
-package com.bug_board.views;
+package com.bug_board.gui.panes;
 
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.exceptions.dao.BackendErrorException;
@@ -6,36 +6,25 @@ import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
-import com.bug_board.utilities.*;
+import com.bug_board.utilities.MySpacer;
+import com.bug_board.utilities.ProjectCard;
 import com.bug_board.utilities.animations.AnimatedSearchBar;
-import com.bug_board.utilities.buttons.ButtonDefinition;
-import com.bug_board.utilities.buttons.factory.implementations.ComponentButtonFactory;
-import com.bug_board.utilities.buttons.factory.interfaces.IButtonsProvider;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Screen;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomePageView extends MyStage {
+public class HomePagePane extends VBox {
+
     private final HomePagePC homePagePC;
+    private static final int PROJECTS_TO_SHOW = 5;
     private List<ProjectSummaryDTO> projectsOnBoard;
     private List<ProjectSummaryDTO> projectsRetrieved;
-    private VBox root = new VBox();
-    private Scene scene = new Scene(root);
-    private VBox homePagePane = new VBox();
     private AnimatedSearchBar searchProject =  new AnimatedSearchBar();
     private HBox projectCardsBox = new HBox();
     private Text heading;
@@ -43,10 +32,9 @@ public class HomePageView extends MyStage {
     private HBox carouselsBox = new HBox();
     private List<Button> carousel;
     private Button activeCarouselButton = null;
-    private TitleBar titleBar;
     List<ProjectCard> projectsCards;
 
-    public HomePageView(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
+    public HomePagePane(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
         this.homePagePC = homePagePC;
         this.projectsRetrieved = projectList;
 
@@ -54,25 +42,23 @@ public class HomePageView extends MyStage {
     }
 
     private void initialize() {
-        setFullScreen();
         setHeading();
         setHintFiltering();
         setSearchProjectBar();
-        setScene();
+        addCarousel();
         setCarousel();
     }
 
     private void setCarousel() {
-        int carouselsIndexes = (projectsRetrieved.size() + 2)/3;
+        int carouselsIndexes = (projectsRetrieved.size() + PROJECTS_TO_SHOW - 1) / PROJECTS_TO_SHOW;
 
         if(activeCarouselButton != null){
             activeCarouselButton.getStyleClass().remove("active-carousel-button");
         }
 
-        carousel = new ArrayList<>(3);
+        carousel = new ArrayList<>(PROJECTS_TO_SHOW);
         setCarouselsButtons(carouselsIndexes);
-
-
+        
         carouselsBox.setPadding(new Insets(5));
         carouselsBox.setSpacing(5);
         carouselsBox.setAlignment(Pos.CENTER);
@@ -118,51 +104,30 @@ public class HomePageView extends MyStage {
 
     private void setHintFiltering(){
         Region region = new Region();
-        homePagePane.getChildren().add(region);
-        homePagePane.getChildren().add(hintFiltering);
+        this.getChildren().add(region);
+        this.getChildren().add(hintFiltering);
     }
 
-    private void setFullScreen(){
-        Screen screen = Screen.getPrimary();
-        Rectangle2D screenBounds = screen.getVisualBounds();
-        this.setX(screenBounds.getMinX());
-        this.setY(screenBounds.getMinY());
-        this.setWidth(screenBounds.getWidth());
-        this.setHeight(screenBounds.getHeight());
-    }
-
-    private void setScene(){
-        scene.getStylesheets().add(getClass().getResource("/css/components_style.css").toExternalForm());
+    private void addCarousel(){
 
         setProjectCardsBox(0);
 
-        root.setAlignment(Pos.TOP_CENTER);
-
-        titleBar = new TitleBar(this, 80);
-        this.setTitleBarButtons();
-
-        homePagePane.getChildren().addAll(
+        this.getChildren().addAll(
                 projectCardsBox,
                 carouselsBox
         );
 
-        root.getChildren().addAll(
-                titleBar,
-                homePagePane
-        );
-
-        this.setScene(scene);
-        this.setMaximized(true);
-
+        this.setAlignment(Pos.CENTER);
+        VBox.setVgrow(this, Priority.ALWAYS);
     }
 
     private void setProjectCardsBox(int index) {
         projectsCards = new ArrayList<>();
 
-        if(projectsRetrieved.size() >= (index+1) * 3)
-            projectsOnBoard = projectsRetrieved.subList(index*3, (index*3)+3);
+        if(projectsRetrieved.size() >= (index+1) * PROJECTS_TO_SHOW)
+            projectsOnBoard = projectsRetrieved.subList(index * PROJECTS_TO_SHOW, (index * PROJECTS_TO_SHOW) + PROJECTS_TO_SHOW);
         else
-            projectsOnBoard = projectsRetrieved.subList(index*3, projectsRetrieved.size());
+            projectsOnBoard = projectsRetrieved.subList(index * PROJECTS_TO_SHOW, projectsRetrieved.size());
 
         for(ProjectSummaryDTO project: projectsOnBoard){
             projectsCards.add(new ProjectCard(project));
@@ -197,9 +162,9 @@ public class HomePageView extends MyStage {
 
         heading.setTextAlignment(TextAlignment.CENTER);
 
-        homePagePane.getChildren().add(heading);
+        this.getChildren().add(heading);
 
-        homePagePane.setAlignment(Pos.CENTER);
+        this.setAlignment(Pos.CENTER);
     }
 
     private void setSearchProjectBar(){
@@ -212,7 +177,7 @@ public class HomePageView extends MyStage {
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(searchProject);
         searchProject.setStyle("-fx-padding: 0.5em 25px 0.5em 0.5em;");
-        homePagePane.getChildren().addAll(MySpacer.createVSpacer(), searchProject);
+        this.getChildren().addAll(MySpacer.createVSpacer(), searchProject);
     }
 
     private void setSearchButtonAction(){
@@ -238,47 +203,5 @@ public class HomePageView extends MyStage {
         projectsCards.clear();
         setProjectCardsBox(0);
         setCarousel();
-    }
-
-    private void setTitleBarButtons() {
-        IButtonsProvider buttonProvider =  ComponentButtonFactory.getButtonFactoryByRole(
-                SessionManager.getInstance().getRole().getRoleName()
-        );
-
-        for(ButtonDefinition definition: buttonProvider.createTitleBarButtons()){
-            Button buttonToAdd = new Button(definition.getText());
-            buttonToAdd.getStyleClass().add("title-bar-button");
-
-            buttonToAdd.setOnMouseClicked(event -> {
-                buttonActionHandler(definition.getActionId());
-            });
-
-            titleBar.addButtonToTitleBar(buttonToAdd);
-        }
-    }
-
-    private void buttonActionHandler(String actionId) {
-        switch(actionId){
-            case "CREATE_LABEL":
-                clickCreateLabelButton();
-                break;
-            case "VIEW_PERSONAL_ISSUES":
-                clickViewPersonalIssuesButton();
-                break;
-            case "REGISTER_COLLABORATOR":
-                clickRegisterCollaboratorButton();
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void clickRegisterCollaboratorButton() {
-    }
-
-    private void clickViewPersonalIssuesButton() {
-    }
-
-    private void clickCreateLabelButton() {
     }
 }

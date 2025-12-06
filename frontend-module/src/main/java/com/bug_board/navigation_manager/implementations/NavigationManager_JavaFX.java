@@ -7,7 +7,7 @@ import com.bug_board.factories.ProjectFactory;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
-import com.bug_board.views.HomePageView;
+import com.bug_board.gui.views.HomePageView;
 import javafx.stage.Stage;
 
 public class NavigationManager_JavaFX implements INavigationManager {

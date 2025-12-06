@@ -1,4 +1,4 @@
-package com.bug_board.views;
+package com.bug_board.gui.views;
 
 import com.bug_board.exceptions.architectural_controllers.InvalidCredentialsException;
 import com.bug_board.exceptions.dao.BackendErrorException;

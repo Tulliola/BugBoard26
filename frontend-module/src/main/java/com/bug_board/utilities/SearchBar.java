@@ -1,7 +1,5 @@
 package com.bug_board.utilities;
 
-import com.bug_board.dto.ProjectSummaryDTO;
-import com.bug_board.views.HomePageView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,8 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-
-import java.util.List;
 
 public class SearchBar extends HBox {
     protected TextField searchField = new TextField();
