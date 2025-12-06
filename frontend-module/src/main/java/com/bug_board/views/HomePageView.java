@@ -64,7 +64,9 @@ public class HomePageView extends MyStage {
         carouselsBox.setPadding(new Insets(5));
         carouselsBox.setSpacing(5);
         carouselsBox.setAlignment(Pos.CENTER);
+        carouselsBox.getChildren().clear();
         carouselsBox.getChildren().addAll(carousel);
+        homePagePane.getChildren().remove(carouselsBox);
         homePagePane.getChildren().add(carouselsBox);
     }
 
@@ -109,7 +111,10 @@ public class HomePageView extends MyStage {
 
     private void setProjectCardsBox() {
         projectsCards = new ArrayList<>();
-        projectsOnBoard = projectsRetrieved.subList(0, 3);
+        if(projectsRetrieved.size() >= 3)
+            projectsOnBoard = projectsRetrieved.subList(0, 3);
+        else
+            projectsOnBoard = projectsRetrieved;
         for(ProjectSummaryDTO project: projectsOnBoard){
             projectsCards.add(new ProjectCard(project));
         }
@@ -173,5 +178,6 @@ public class HomePageView extends MyStage {
 
         projectsCards.clear();
         setProjectCardsBox();
+        setCarousel();
     }
 }
