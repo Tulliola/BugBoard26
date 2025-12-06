@@ -8,7 +8,7 @@ import java.util.List;
 
 public class RegularUserButtons extends AdminButtons implements ButtonFactory {
     @Override
-    public List<ButtonDefinition> createButtons() {
+    public List<ButtonDefinition> createProjectCardButtons() {
         List<ButtonDefinition> sameButtonsAsAdmin = super.createButtons();
         List<ButtonDefinition> regularUserButtons = new ArrayList<>(sameButtonsAsAdmin);
 

@@ -21,10 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProjectCard extends StackPane {
     final ProjectSummaryDTO projectToShow;
@@ -118,11 +115,11 @@ public class ProjectCard extends StackPane {
         projectCreator.setTextAlignment(TextAlignment.CENTER);
         VBox.setVgrow(footer, Priority.ALWAYS);
 
-        ButtonFactory buttonFactory = ComponentButtonFactory.getButtonsByRole(
+        ButtonFactory buttonFactory = ComponentButtonFactory.getProjectCardButtonsByRole(
                 SessionManager.getInstance().getRole().getRoleName()
         );
 
-        for(ButtonDefinition definition:  buttonFactory.createButtons()) {
+        for(ButtonDefinition definition:  buttonFactory.createProjectCardButtons()) {
             Button buttonToAdd = new Button(definition.getText());
 
             buttonToAdd.setOnMouseClicked(event -> {
@@ -133,8 +130,7 @@ public class ProjectCard extends StackPane {
         }
 
         footer.getChildren().addAll(projectCreator);
-//        footer.setId("background-gradient");
-        footer.setStyle("-fx-background-radius: 0 0 30px 30px; -fx-border-radius: 0 0 30px 30px; -fx-padding: 10px; -fx-spacing: 10");
+        footer.setStyle("-fx-background-radius: 0 0 30px 30px; -fx-border-radius: 0 0 30px 30px; -fx-padding: 10px; -fx-spacing: 20");
 
         return footer;
     }
@@ -207,8 +203,8 @@ public class ProjectCard extends StackPane {
         Image flipGif = new Image(getClass().getResourceAsStream("/gifs/flip.gif"));
 
         ImageView flipImageView = new ImageView(flipStatic);
-        flipImageView.setFitHeight(34);
-        flipImageView.setFitWidth(34);
+        flipImageView.setFitHeight(40);
+        flipImageView.setFitWidth(40);
 
         flipButton = new Button();
         flipButton.setGraphic(flipImageView);
@@ -259,7 +255,7 @@ public class ProjectCard extends StackPane {
     private void clickViewIssueButton() {
     }
 
-    private Integer getIdProject() {
-        return this.idProject;
+    private ProjectSummaryDTO getProject() {
+        return this.projectToShow;
     }
 }

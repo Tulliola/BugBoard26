@@ -7,7 +7,7 @@ import java.util.List;
 
 public class AdminButtons implements ButtonFactory {
     @Override
-    public List<ButtonDefinition> createButtons() {
+    public List<ButtonDefinition> createProjectCardButtons() {
         return List.of(
                 new ButtonDefinition("View all issues", "VIEW_ISSUES")
         );
