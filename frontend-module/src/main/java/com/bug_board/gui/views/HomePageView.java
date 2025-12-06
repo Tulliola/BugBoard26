@@ -3,6 +3,7 @@ package com.bug_board.gui.views;
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.gui.panes.HomePagePane;
 import com.bug_board.gui.panes.LabelCreationFormPane;
+import com.bug_board.gui.panes.UserRegistrationFormPane;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.*;
@@ -105,6 +106,8 @@ public class HomePageView extends MyStage {
     }
 
     private void clickRegisterCollaboratorButton() {
+        UserRegistrationFormPane userRegistrationPane= new UserRegistrationFormPane(containerUnderTitleBar);
+        containerUnderTitleBar.getChildren().add(userRegistrationPane);
     }
 
     private void clickViewPersonalIssuesButton() {

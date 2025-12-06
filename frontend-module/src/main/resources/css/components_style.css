@@ -283,3 +283,21 @@
 
     -fx-effect: none;
 }
+
+#user-registration-form{
+    -fx-pref-width: 500px;
+    -fx-pref-height: 500px;
+
+    -fx-max-height: 500px;
+    -fx-max-width: 500px;
+
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+    -fx-border-width: 1px;
+    -fx-border-radius: 30px;
+    -fx-background-radius: 30px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0 , 5, 5);
+    -fx-alignment: center;
+}
