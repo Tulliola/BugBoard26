@@ -13,6 +13,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
+
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -119,6 +121,7 @@ public class HomePagePane extends VBox {
 
         this.setAlignment(Pos.CENTER);
         VBox.setVgrow(this, Priority.ALWAYS);
+
     }
 
     private void setProjectCardsBox(int index) {

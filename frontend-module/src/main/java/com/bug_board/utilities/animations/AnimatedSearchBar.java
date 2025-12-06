@@ -13,11 +13,13 @@ public class AnimatedSearchBar extends SearchBar {
 
     public AnimatedSearchBar() {
         super();
-        container.setAlignment(searchButton, Pos.CENTER);
+        container.setAlignment(Pos.CENTER_RIGHT);
         searchField.setVisible(false);
+        searchField.setManaged(false);
     }
 
     public void animate(){
+        searchField.setManaged(true);
         Timeline timeline = new Timeline();
 
         timeline.getKeyFrames().add(
@@ -36,15 +38,22 @@ public class AnimatedSearchBar extends SearchBar {
                 new KeyValue(searchField.translateXProperty(), 0.0)
         ));
 
+        timeline.getKeyFrames().add(
+                new KeyFrame(
+                        Duration.millis(300),
+                        new KeyValue(searchButton.translateXProperty(), -10.0)
+                )
+        );
+
         timeline.setOnFinished(e -> {
             searchField.setVisible(true);
             isExpanded = true;
             searchField.setPrefWidth(250.0);
             searchField.setOpacity(1.0);
             searchField.setTranslateX(0.0);
+            searchButton.setTranslateX(-10);
         });
 
-        container.setAlignment(searchButton, Pos.CENTER_RIGHT);
 
         timeline.play();
     }
