@@ -5,15 +5,13 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class TitleBar extends HBox {
+public class TitleBar extends StackPane {
     private int barHeight;
     private Button minimizeButton = new Button();
     private Button closeButton = new Button();
@@ -23,23 +21,32 @@ public class TitleBar extends HBox {
     private HBox textWrapper = new HBox();
     private Text firstPortionToColor;
     private Text secondPortionToColor;
-
+    private HBox firstLayerTitleBar = new HBox();
+    private HBox centralButtonsWrapper = new HBox();
 
     public TitleBar(Stage parentStage, int height) {
         parentStage.initStyle(StageStyle.TRANSPARENT);
 
         this.barHeight = height;
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        setPropertiesForNewTitleBar(parentStage);
-        setCentralBrandNameForNewTitleBar();
-        setActionPropertiesForNewTitleBarButtons(this.barHeight);
-        setActionPropertiesForNewTitleBar(parentStage);
+
+        setPropertiesForFirstLayerTitleBar(parentStage);
+        setPropertiesForCentralButtonsWrapper();
+
         this.setFontSize(firstPortionToColor, height/2);
         this.setFontSize(secondPortionToColor, height/2);
         this.setButtons();
+        this.getChildren().addAll(firstLayerTitleBar, centralButtonsWrapper);
+    }
 
-        this.getChildren().addAll(spacer, minimizeButton, redimensionButton, closeButton);
+    private void setPropertiesForCentralButtonsWrapper() {
+        centralButtonsWrapper.setAlignment(Pos.CENTER);
+        centralButtonsWrapper.prefHeightProperty().bind(this.heightProperty());
+        centralButtonsWrapper.setPickOnBounds(false);
+    }
+
+    public void addButtonToTitleBar(Button button) {
+        button.prefHeightProperty().bind(centralButtonsWrapper.heightProperty());
+        centralButtonsWrapper.getChildren().add(button);
     }
 
     private void setButtons() {
@@ -62,13 +69,21 @@ public class TitleBar extends HBox {
         buttonToSet.setPrefSize(barHeight /2, barHeight /2);
     }
 
-    private void setPropertiesForNewTitleBar(Stage parentStage) {
-        this.setAlignment(Pos.CENTER_RIGHT);
-        this.setPrefSize(parentStage.getWidth(), barHeight);
-        this.setId("title-bar");
+    private void setPropertiesForFirstLayerTitleBar(Stage parentStage) {
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        firstLayerTitleBar.setAlignment(Pos.CENTER_RIGHT);
+        firstLayerTitleBar.setPrefSize(parentStage.getWidth(), barHeight);
+        firstLayerTitleBar.setId("title-bar");
+        setBrandNameForFirstLayerTitleBar();
+        firstLayerTitleBar.getChildren().addAll(spacer, minimizeButton, redimensionButton, closeButton);
+
+        setActionPropertiesForFirstLayerTitleBarButtons(this.barHeight);
+        setActionPropertiesForFirstLayerTitleBar(parentStage);
     }
 
-    private void setActionPropertiesForNewTitleBarButtons(int height) {
+    private void setActionPropertiesForFirstLayerTitleBarButtons(int height) {
         minimizeButton.setOnAction(e -> {
             Stage stage = (Stage) minimizeButton.getScene().getWindow();
             stage.setIconified(true);
@@ -91,7 +106,7 @@ public class TitleBar extends HBox {
         });
     }
 
-    private void setActionPropertiesForNewTitleBar(Stage parentStage) {
+    private void setActionPropertiesForFirstLayerTitleBar(Stage parentStage) {
         this.onMouseClickedProperty().set(e -> {
             Stage stage = (Stage) this.getScene().getWindow();
             xOffset = stage.getX() - e.getScreenX();
@@ -105,8 +120,8 @@ public class TitleBar extends HBox {
         });
     }
 
-    private void setCentralBrandNameForNewTitleBar() {
-        this.getChildren().add(
+    private void setBrandNameForFirstLayerTitleBar() {
+        firstLayerTitleBar.getChildren().add(
                 createTwotoneText("BugBoard26", 3, Color.web("#000000"), Color.web("2AC4AC"))
         );
     }

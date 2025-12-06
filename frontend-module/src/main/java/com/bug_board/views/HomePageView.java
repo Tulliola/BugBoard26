@@ -20,7 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
@@ -52,8 +52,6 @@ public class HomePageView extends MyStage {
 
         this.initialize();
     }
-
-
 
     private void initialize() {
         setFullScreen();
@@ -255,7 +253,7 @@ public class HomePageView extends MyStage {
                 buttonActionHandler(definition.getActionId());
             });
 
-            titleBar.getChildren().add(1, buttonToAdd);
+            titleBar.addButtonToTitleBar(buttonToAdd);
         }
     }
 

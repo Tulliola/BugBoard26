@@ -131,7 +131,7 @@ public class LoginView extends MyStage {
         icon.setPreserveRatio(true);
         icon.mouseTransparentProperty().set(true);
 
-        textFieldWrapper.setAlignment(icon,  Pos.CENTER_LEFT);
+        textFieldWrapper.setAlignment(icon, Pos.CENTER_LEFT);
         textFieldWrapper.getChildren().add(icon);
 
         return textFieldWrapper;
@@ -210,11 +210,16 @@ public class LoginView extends MyStage {
         }
         catch (InvalidCredentialsException exc) {
             errorLabel.setText(exc.getMessage());
-            errorLabel.setTextFill(Color.RED);
-            errorLabel.setManaged(true);
         }
-        catch(HTTPSendException | BadConversionToDTOException | BackendErrorException | BadConversionToJSONException throwables) {
+        catch(BackendErrorException exc) {
+            if(exc.getMessage().contains("401"))
+                errorLabel.setText("Username or password not valid.");
+        }
+        catch(HTTPSendException | BadConversionToDTOException | BadConversionToJSONException throwables) {
             errorLabel.setText("Server is currently not responding.");
+        }
+        finally {
+
             errorLabel.setTextFill(Color.RED);
             errorLabel.setManaged(true);
         }
