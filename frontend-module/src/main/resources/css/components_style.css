@@ -321,19 +321,67 @@
 }
 
 #user-registration-form{
-    -fx-pref-width: 500px;
+    -fx-pref-width: 800px;
     -fx-pref-height: 500px;
 
     -fx-max-height: 500px;
-    -fx-max-width: 500px;
+    -fx-max-width: 800px;
 
     -fx-padding: 20px;
-    -fx-spacing: 10px;
+    -fx-spacing: 20px;
     -fx-background-color: white;
     -fx-border-color: transparent;
     -fx-border-width: 1px;
     -fx-border-radius: 30px;
     -fx-background-radius: 30px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0 , 5, 5);
+    -fx-alignment: top-center;
+}
+
+.radio-button{
+    -fx-padding: 8px;
+    -fx-border-radius: 50px;
+
+    -fx-content-display: graphic-only;
+
     -fx-alignment: center;
+
+    -fx-background-color: transparent;
+    -fx-border-color: -color-primary;
+    -fx-border-width: 2px;
+}
+
+.radio-button:selected{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0 , 0, 0);
+}
+
+.radio-button .radio-mark{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-shape: null;
+}
+
+.radio-button .radio {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+    -fx-min-width: 0;
+    -fx-min-height: 0;
+    -fx-max-width: 0;
+    -fx-max-height: 0;
+}
+
+#radio-group-container{
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+}
+
+.description-box{
+    -fx-pref-width: 50px;
+}
+
+.role-radio-button-box-width{
+    -fx-pref-width: 400px;
+    -fx-max-width: 400px;
+    -fx-min-width: 400px;
 }

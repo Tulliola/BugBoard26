@@ -1,18 +1,21 @@
 package com.bug_board.gui.panes;
 
+import com.bug_board.utilities.MyRadioButton;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserRegistrationFormPane extends StackPane {
     private StackPane parentPane;
@@ -21,13 +24,20 @@ public class UserRegistrationFormPane extends StackPane {
     private HBox userTypeChooser = new HBox();
     private TextField emailToRegister = new TextField();
     private Button confirmButton = new Button("Confirm registration");
+    private MyRadioButton adminButton;
+    private MyRadioButton userButton;
     private ToggleGroup userTypeChooserGroup = new ToggleGroup();
-    private List<RadioButton> userTypeButtons =  new ArrayList<>(2);
+    private Text userDescription;
+    private Text adminDescription;
 
+    private VBox adminButtonBox = new VBox();
+    private VBox userButtonBox = new VBox();
+
+    private StackPane userDescriptionBox = new StackPane();
+    private StackPane adminDescriptionBox = new StackPane();
 
     public  UserRegistrationFormPane(StackPane parentPane) {
         this.parentPane = parentPane;
-
         this.initialize();
     }
 
@@ -41,7 +51,7 @@ public class UserRegistrationFormPane extends StackPane {
     private void setContentPane() {
         this.setAddCollaboratorText();
         this.setRadioButtonsBox();
-        this.setEmailTectField();
+        this.setEmailTextField();
         this.setConfirmButton();
     }
 
@@ -52,30 +62,134 @@ public class UserRegistrationFormPane extends StackPane {
         contentPane.getChildren().addAll(confirmButton);
     }
 
-    private void setEmailTectField() {
+    private void setEmailTextField() {
         emailToRegister.setPromptText("New user's email address");
         contentPane.getChildren().add(emailToRegister);
     }
 
     private void setRadioButtonsBox() {
         this.setRadioButtons();
-        userTypeChooser.getChildren().addAll(userTypeButtons);
+        this.setUserTypeChooserBox();
+
+        userTypeChooser.setId("radio-group-container");
         userTypeChooser.setAlignment(Pos.CENTER);
-        contentPane.getChildren().addAll(userTypeChooser);
+        contentPane.getChildren().add(userTypeChooser);
+    }
+
+    private void setUserTypeChooserBox() {
+        adminButtonBox.getChildren().add(adminButton);
+        Text administrator = new Text("Administrator");
+        administrator.setStyle("-fx-fill: red; -fx-font-style: italic");
+        adminButtonBox.getChildren().add(administrator);
+        adminButtonBox.setAlignment(Pos.TOP_CENTER);
+        adminButtonBox.setSpacing(15);
+
+        userButtonBox.getChildren().add(userButton);
+        Text user = new Text("Regular User");
+        user.setStyle("-fx-fill: red; -fx-font-style: italic");
+        userButtonBox.getChildren().add(user);
+        userButtonBox.setAlignment(Pos.TOP_CENTER);
+        userButtonBox.setSpacing(15);
+
+        adminButtonBox.getStyleClass().add("role-radio-button-box-width");
+        userButtonBox.getStyleClass().add("role-radio-button-box-width");
+
+        setDescriptionsStackPanes();
+
+        userTypeChooser.getChildren().addAll(adminButtonBox, userButtonBox);
+        userTypeChooser.setStyle("-fx-border-color: #2AC4AC; -fx-border-width: 2px 0 2px 0; -fx-padding: 5px");
+    }
+
+    private void setDescriptionsStackPanes() {
+        userDescription = new Text("A regular user can:\n\tReport an issue\n\tCheck his own issues (filter and order them)\n\tComment an issue\n\tUpdate an own issue's state");
+        adminDescription = new Text("An adminastrator can:\n\tCreate a new user\n\tAssign a particular issue to a specific user\n\t" +
+                "Check an issue report dashboard\n\tReceive monthly reports about projects' issues\n\tMark an issue as duplicated\n\tUpdate all issues' states");
+
+        userDescriptionBox.getStyleClass().add("role-radio-button-box-width");
+        adminDescriptionBox.getStyleClass().add("role-radio-button-box-width");
+
+        userDescription.wrappingWidthProperty().bind(userDescriptionBox.widthProperty());
+        adminDescription.wrappingWidthProperty().bind(adminDescriptionBox.widthProperty());
+
+        userDescriptionBox.setMaxHeight(0);
+        adminDescriptionBox.setMaxHeight(0);
+
+        adminDescriptionBox.setOpacity(0);
+        userDescriptionBox.setOpacity(0);
+
+        userDescriptionBox.getChildren().add(userDescription);
+        adminDescriptionBox.getChildren().add(adminDescription);
+
+        adminButtonBox.getChildren().add(adminDescriptionBox);
+        userButtonBox.getChildren().add(userDescriptionBox);
+    }
+
+    private void animateDescription(StackPane container, boolean show){
+        Duration duration = Duration.millis(500);
+
+        double endOpacity;
+        double endHeight;
+        if(show){
+            endOpacity = 1.0;
+            endHeight = Double.MAX_VALUE;
+        }
+        else{
+            endHeight = 0;
+            endOpacity = 0.0;
+        }
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(duration,
+                        new KeyValue(
+                                container.maxHeightProperty(), endHeight
+                        )
+                ),
+                new KeyFrame(
+                        duration,
+                        new KeyValue(
+                                container.opacityProperty(), endOpacity
+                        )
+                )
+        );
+
+        timeline.play();
     }
 
     private void setRadioButtons() {
-        RadioButton radioButton = new RadioButton("RegularUser");
-        RadioButton radioButton2 = new RadioButton("Admin");
-        radioButton.setToggleGroup(userTypeChooserGroup);
-        radioButton2.setToggleGroup(userTypeChooserGroup);
-        userTypeButtons.add(radioButton);
-        userTypeButtons.add(radioButton2);
+        setRadioButtonsIcons();
+        setRadioButtonsActions();
+
+        userButton.setToggleGroup(userTypeChooserGroup);
+        adminButton.setToggleGroup(userTypeChooserGroup);
+    }
+
+    private void setRadioButtonsActions() {
+        userTypeChooserGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle == adminButton) {
+                animateDescription(adminDescriptionBox, true);
+                animateDescription(userDescriptionBox, false);
+            }
+            else if (newToggle == userButton) {
+                animateDescription(userDescriptionBox, true);
+                animateDescription(adminDescriptionBox, false);
+            }
+        });
+    }
+
+
+    private void setRadioButtonsIcons(){
+        adminButton = new MyRadioButton(new Image(getClass().getResourceAsStream("/icons/adminIcon.png")));
+        userButton = new MyRadioButton(new Image(getClass().getResourceAsStream("/icons/userIcon.png")));
+
+        adminButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        userButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
     }
 
     private void setAddCollaboratorText() {
         addCollaborator = new Text("Add new collaborator");
+        addCollaborator.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
         addCollaborator.setTextAlignment(TextAlignment.CENTER);
+        contentPane.getChildren().add(addCollaborator);
     }
 
     private void setBackground() {

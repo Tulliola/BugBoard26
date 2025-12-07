@@ -33,11 +33,6 @@ public class AnimatedSearchBar extends SearchBar {
                 new KeyValue(searchField.opacityProperty(), 1.0)
         ));
 
-        timeline.getKeyFrames().add(new KeyFrame(
-                Duration.millis(300),
-                new KeyValue(searchField.translateXProperty(), 0.0)
-        ));
-
         timeline.getKeyFrames().add(
                 new KeyFrame(
                         Duration.millis(300),
