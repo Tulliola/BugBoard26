@@ -25,7 +25,7 @@ public class UserServiceFactory {
     @Primary
     public IUserService getUserService() {
         if(implementation.equalsIgnoreCase("jpa")) {
-            log.info("UserService implementation: jpa");
+            log.info("JPA implementation");
             return userServiceJPA;
         }
         else{

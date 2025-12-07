@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorResponseDTO {
-    private int status;
-    private String phrase;
-    private String error;
+public class EmailToSendDTO {
+    private String addressee;
+    private String subject;
+    private String body;
 }
