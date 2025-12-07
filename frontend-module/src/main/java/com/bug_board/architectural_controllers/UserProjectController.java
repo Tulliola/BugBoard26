@@ -2,6 +2,7 @@ package com.bug_board.architectural_controllers;
 
 import com.bug_board.dao.interfaces.IUserProjectDAO;
 import com.bug_board.dto.ProjectSummaryDTO;
+import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.HTTPSendException;
@@ -16,12 +17,22 @@ public class UserProjectController {
     }
 
     public List<ProjectSummaryDTO> getOverviewedProjectsByUser(String projectNameToFilter)
-            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
-        return userProjectDAO.getOverviewedProjectsByUser(projectNameToFilter);
+            throws RetrieveProjectException {
+        try {
+            return userProjectDAO.getOverviewedProjectsByUser(projectNameToFilter);
+        }
+        catch (HTTPSendException | BadConversionToDTOException | ErrorHTTPResponseException throwables) {
+            throw new RetrieveProjectException("Couldn't retrieve projects from database");
+        }
     }
 
     public List<ProjectSummaryDTO> getWorkingOnProjectsByUser(String projectNameToFilter)
-            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
-        return userProjectDAO.getWorkingOnProjectsByUser(projectNameToFilter);
+            throws RetrieveProjectException{
+        try {
+            return userProjectDAO.getWorkingOnProjectsByUser(projectNameToFilter);
+        }
+        catch (HTTPSendException | BadConversionToDTOException | ErrorHTTPResponseException throwables) {
+            throw new RetrieveProjectException("Couldn't retrieve projects from database");
+        }
     }
 }

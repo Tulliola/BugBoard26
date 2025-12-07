@@ -46,10 +46,10 @@ public class NavigationManager_JavaFX implements INavigationManager {
     }
 
     @Override
-    public Pane buildLabelCreationComponent(StackPane parentContainer) {
+    public Pane buildLabelCreationComponent(StackPane parentContainer, HomePagePC parentPC) {
         UserLabelController labelController = new UserLabelController(new UserLabelDAO_REST(new MyHTTPClient()));
 
-        LabelManagementPC labelPC = new LabelManagementPC(labelController, this);
+        LabelManagementPC labelPC = new LabelManagementPC(labelController);
 
         LabelCreationFormPane labelCreationFormPane = new LabelCreationFormPane(labelPC, parentContainer);
 

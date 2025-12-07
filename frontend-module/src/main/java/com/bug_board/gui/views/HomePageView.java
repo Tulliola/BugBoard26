@@ -2,7 +2,6 @@ package com.bug_board.gui.views;
 
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.gui.panes.HomePagePane;
-import com.bug_board.gui.panes.LabelCreationFormPane;
 import com.bug_board.gui.panes.UserRegistrationFormPane;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
@@ -13,7 +12,6 @@ import com.bug_board.utilities.buttons.factory.interfaces.IButtonsProvider;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
@@ -125,5 +123,9 @@ public class HomePageView extends MyStage {
 
     public void displayOverlayedContent(Pane newLayer) {
         containerUnderTitleBar.getChildren().add(newLayer);
+    }
+
+    public Pane getContainerUnderTitleBar() {
+        return containerUnderTitleBar;
     }
 }

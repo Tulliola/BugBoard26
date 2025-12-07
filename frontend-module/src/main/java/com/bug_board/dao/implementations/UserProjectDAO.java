@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class UserProjectDAO implements IUserProjectDAO {
-    private final String baseUrl = "http://localhost:8080/api/me/projects/";
+    private final String baseUrl = "http://localhost:8080/api/me/projects";
     private final MyHTTPClient httpClient;
 
     public UserProjectDAO(MyHTTPClient httpClient) {
@@ -31,11 +31,11 @@ public class UserProjectDAO implements IUserProjectDAO {
         URI uri;
 
         if(projectNameToFilter == null || projectNameToFilter.equals(""))
-            uri = URI.create(baseUrl + "overviewed");
+            uri = URI.create(baseUrl + "/overviewed");
         else {
             try {
                 String encodedString = URLEncoder.encode(projectNameToFilter, StandardCharsets.UTF_8.toString());
-                uri = URI.create(baseUrl + "overviewed?projectName=" + encodedString);
+                uri = URI.create(baseUrl + "/overviewed?projectName=" + encodedString);
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
@@ -60,11 +60,11 @@ public class UserProjectDAO implements IUserProjectDAO {
         HttpRequest request;
         URI uri;
         if(projectNameToFilter == null || projectNameToFilter.equals(""))
-            uri = URI.create(baseUrl + "working-on");
+            uri = URI.create(baseUrl + "/working-on");
         else {
             try {
                 String encodedString = URLEncoder.encode(projectNameToFilter, StandardCharsets.UTF_8.toString());
-                uri = URI.create(baseUrl + "working-on?projectName=" + encodedString);
+                uri = URI.create(baseUrl + "/working-on?projectName=" + encodedString);
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }

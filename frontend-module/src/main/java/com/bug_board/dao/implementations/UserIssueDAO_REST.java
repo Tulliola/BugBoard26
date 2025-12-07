@@ -14,7 +14,7 @@ import java.net.http.HttpRequest;
 import java.util.List;
 
 public class UserIssueDAO_REST implements IUserIssueDAO {
-    private final String baseUrl = "http://localhost:8080/api/me/issues/";
+    private final String baseUrl = "http://localhost:8080/api/me/issues";
     private final MyHTTPClient httpClient;
 
     public UserIssueDAO_REST(MyHTTPClient httpClient) {

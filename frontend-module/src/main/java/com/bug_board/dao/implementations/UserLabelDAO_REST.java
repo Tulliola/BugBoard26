@@ -19,7 +19,7 @@ import java.net.http.HttpRequest;
 import java.util.List;
 
 public class UserLabelDAO_REST implements IUserLabelDAO {
-    private final String baseUrl = "http://localhost:8080/api/me/labels/";
+    private final String baseUrl = "http://localhost:8080/api/me/labels";
     private final MyHTTPClient httpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -54,7 +54,7 @@ public class UserLabelDAO_REST implements IUserLabelDAO {
         HttpRequest request;
 
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + idLabel))
+                .uri(URI.create(baseUrl + "/" + idLabel))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                 .DELETE()
@@ -69,7 +69,7 @@ public class UserLabelDAO_REST implements IUserLabelDAO {
 
         try{
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + labelToModify.getIdLabel()))
+                    .uri(URI.create(baseUrl + "/" + labelToModify.getIdLabel()))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                     .PUT(HttpRequest.BodyPublishers.ofString(

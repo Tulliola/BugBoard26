@@ -18,7 +18,7 @@ import java.net.http.HttpRequest;
 import java.util.List;
 
 public class IssueDAO_REST implements IIssueDAO {
-    private final String baseUrl = "http://localhost:8080/api/projects/";
+    private final String baseUrl = "http://localhost:8080/api/projects";
     private final MyHTTPClient httpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -31,7 +31,7 @@ public class IssueDAO_REST implements IIssueDAO {
             throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl+idProject+"/issues"))
+                .uri(URI.create(baseUrl + "/" + idProject + "/issues"))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                 .GET()
@@ -48,7 +48,7 @@ public class IssueDAO_REST implements IIssueDAO {
         HttpRequest request;
         try{
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl+idProject+"/issues"))
+                    .uri(URI.create(baseUrl + "/" + idProject + "/issues"))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer "+SessionManager.getInstance().getJwtToken())
                     .POST(HttpRequest.BodyPublishers.ofString(

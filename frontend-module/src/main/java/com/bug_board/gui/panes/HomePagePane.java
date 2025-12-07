@@ -1,6 +1,7 @@
 package com.bug_board.gui.panes;
 
 import com.bug_board.dto.ProjectSummaryDTO;
+import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.HTTPSendException;
@@ -205,13 +206,7 @@ public class HomePagePane extends VBox {
         try {
             projectsRetrieved = homePagePC.onSearchProjectButtonClick(barText);
         }
-        catch (HTTPSendException e) {
-            throw new RuntimeException(e);
-        }
-        catch (BadConversionToDTOException e) {
-            throw new RuntimeException(e);
-        }
-        catch (ErrorHTTPResponseException e) {
+        catch (RetrieveProjectException e) {
             throw new RuntimeException(e);
         }
 

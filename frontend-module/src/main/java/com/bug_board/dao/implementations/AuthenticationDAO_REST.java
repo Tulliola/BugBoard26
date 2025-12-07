@@ -15,7 +15,7 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 
 public class AuthenticationDAO_REST implements IAuthenticationDAO {
-    private final String baseUrl = "http://localhost:8080/api/";
+    private final String baseUrl = "http://localhost:8080/api";
     private final MyHTTPClient httpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -30,7 +30,7 @@ public class AuthenticationDAO_REST implements IAuthenticationDAO {
 
         try {
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "auth"))
+                    .uri(URI.create(baseUrl + "/auth"))
                     .headers("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(
                             objectMapper.writeValueAsString(authenticationDTO)

@@ -1,5 +1,6 @@
 package com.bug_board.gui.panes;
 
+import com.bug_board.exceptions.architectural_controllers.LabelCreationException;
 import com.bug_board.exceptions.views.TitleNotSpecifiedForLabelException;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.presentation_controllers.LabelManagementPC;
@@ -22,6 +23,7 @@ import java.util.function.UnaryOperator;
 public class LabelCreationFormPane extends StackPane {
     private final LabelManagementPC labelPC;
 
+    private VBox form;
     private final StackPane parentContainer;
     private BugBoardLabel sampleLabel;
     private Label errorLabel = new Label();
@@ -48,7 +50,7 @@ public class LabelCreationFormPane extends StackPane {
     }
 
     private VBox createCreationForm() {
-        VBox form = new VBox();
+        form = new VBox();
         form.setAlignment(Pos.TOP_CENTER);
         form.setId("label-creation-form");
 
@@ -172,9 +174,9 @@ public class LabelCreationFormPane extends StackPane {
         try{
             errorLabel.setManaged(false);
             checkMandatoryFields();
-
+            labelPC.onConfirmCreationButtonClicked();
         }
-        catch(TitleNotSpecifiedForLabelException exc){
+        catch(TitleNotSpecifiedForLabelException | LabelCreationException exc){
             errorLabel.setText(exc.getMessage());
             errorLabel.setTextFill(Color.RED);
             errorLabel.setManaged(true);
@@ -187,14 +189,18 @@ public class LabelCreationFormPane extends StackPane {
     }
 
     private void setBackground() {
-        this.setStyle("-fx-background-color: rgb(0, 0, 0, 0.4);");
+        this.setStyle("-fx-background-color: rgb(0, 0, 0, 0.6);");
 
         this.setOnMouseClicked(event -> {
             if(event.getTarget() == this)
-                parentContainer.getChildren().remove(this);
+                close();
         });
     }
 
+    public void close() {
+        parentContainer.getChildren().remove(this);
+    }
+    
     public String getChosenColor() {
         return this.sampleLabel.getColor();
     }
@@ -205,5 +211,9 @@ public class LabelCreationFormPane extends StackPane {
 
     public TextArea getDescriptionTextArea() {
         return descriptionTextArea;
+    }
+
+    public VBox getForm() {
+        return form;
     }
 }

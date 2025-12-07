@@ -16,7 +16,7 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 
 public class UserDAO_REST implements IUserDAO {
-    private final String baseUrl = "http://localhost:8080/api/users/";
+    private final String baseUrl = "http://localhost:8080/api/users";
     private final MyHTTPClient httpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -30,7 +30,7 @@ public class UserDAO_REST implements IUserDAO {
         HttpRequest request;
         try{
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "register"))
+                    .uri(URI.create(baseUrl + "/" + "register"))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                     .POST(HttpRequest.BodyPublishers.ofString(
