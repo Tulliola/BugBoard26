@@ -48,4 +48,10 @@ public class HomePagePC {
     public void setView(HomePageView homePageView) {
         this.homePageView = homePageView;
     }
+
+    public void showRegisterUserOverlay(StackPane containerUnderTitleBar) {
+        Pane registerUserOverlay = navigationManager.buildRegisterUserComponent(containerUnderTitleBar, this);
+
+        homePageView.displayOverlayedContent(registerUserOverlay);
+    }
 }

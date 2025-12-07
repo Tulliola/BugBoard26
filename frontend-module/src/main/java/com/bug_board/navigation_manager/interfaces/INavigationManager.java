@@ -11,4 +11,6 @@ public interface INavigationManager {
     void closeWindow(Object windowToClose);
 
     Pane buildLabelCreationComponent(StackPane parentContainer, HomePagePC parentPC);
+
+    Pane buildRegisterUserComponent(StackPane containerUnderTitleBar, HomePagePC homePagePC);
 }

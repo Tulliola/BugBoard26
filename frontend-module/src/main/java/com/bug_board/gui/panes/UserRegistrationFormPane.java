@@ -1,11 +1,15 @@
 package com.bug_board.gui.panes;
 
+import com.bug_board.enum_classes.UserRole;
+import com.bug_board.exceptions.architectural_controllers.LabelCreationException;
+import com.bug_board.exceptions.architectural_controllers.UserRegistrationException;
+import com.bug_board.exceptions.views.InvalidEmailException;
+import com.bug_board.exceptions.views.NoEmailSpecifiedException;
+import com.bug_board.exceptions.views.NoRoleSpecifiedException;
+import com.bug_board.exceptions.views.TitleNotSpecifiedForLabelException;
+import com.bug_board.presentation_controllers.UserRegistrationPC;
 import com.bug_board.utilities.MyRadioButton;
 import com.bug_board.utilities.animations.RoleRadioButtonAnimation;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -16,13 +20,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.util.Duration;
 
 import java.util.List;
 
 
 public class UserRegistrationFormPane extends StackPane {
     private StackPane parentPane;
+
+    private UserRegistrationPC userRegistrationPC;
 
     private VBox contentPane = new VBox();
 
@@ -41,9 +46,12 @@ public class UserRegistrationFormPane extends StackPane {
 
     private TextField emailToRegister = new TextField();
 
+    private Label errorLabel = new Label();
+
     private Button confirmButton = new Button("Confirm registration");
 
-    public  UserRegistrationFormPane(StackPane parentPane) {
+    public  UserRegistrationFormPane(StackPane parentPane, UserRegistrationPC userRegistrationPC) {
+        this.userRegistrationPC = userRegistrationPC;
         this.parentPane = parentPane;
         this.initialize();
     }
@@ -76,6 +84,8 @@ public class UserRegistrationFormPane extends StackPane {
         contentPane.getChildren().add(this.setRadioButtonsBox());
 
         contentPane.getChildren().add(this.setEmailTextField());
+
+        contentPane.getChildren().add(this.setErrorLabel());
 
         contentPane.getChildren().add(this.setConfirmButton());
     }
@@ -207,11 +217,56 @@ public class UserRegistrationFormPane extends StackPane {
         adminDescription.setManaged(false);
     }
 
+    private Label setErrorLabel(){
+        this.errorLabel.setStyle("-fx-text-fill: red");
+        this.errorLabel.setManaged(false);
+        this.errorLabel.setVisible(false);
+        return this.errorLabel;
+    }
+
     private Button setConfirmButton() {
         this.confirmButton.setOnAction(e -> {
-
+            this.onConfirmButtonClicked();
         });
-
         return confirmButton;
+    }
+
+    private void onConfirmButtonClicked(){
+        this.errorLabel.setManaged(false);
+        this.errorLabel.setVisible(false);
+        try {
+            this.checkInputValidity();
+            this.userRegistrationPC.onRegisterUserButtonClicked();
+        }
+        catch(NoRoleSpecifiedException | NoEmailSpecifiedException | InvalidEmailException | UserRegistrationException ex) {
+            errorLabel.setText(ex.getMessage());
+            errorLabel.setManaged(true);
+            errorLabel.setVisible(true);
+        }
+    }
+
+    private void checkInputValidity(){
+        if(roleRadioButtonGroup.getSelectedToggle() == null)
+            throw new NoRoleSpecifiedException("The role must be specified");
+
+        if(emailToRegister.getText().isEmpty())
+            throw new NoEmailSpecifiedException("The email address must be specified");
+
+        if(!emailToRegister.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}$"))
+            throw new InvalidEmailException("The email address is not valid");
+
+    }
+
+    public UserRole getRole() {
+        if(adminRadioButton.isSelected())
+            return UserRole.ROLE_ADMIN;
+        else if(userRadioButton.isSelected())
+            return UserRole.ROLE_USER;
+        else
+            throw new NoRoleSpecifiedException("The role must be specified");
+    }
+
+    public String getEmail(){
+        return emailToRegister.getText();
     }
 }

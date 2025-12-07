@@ -70,7 +70,8 @@ public class HomePagePane extends VBox {
         carouselsBox.getChildren().addAll(carousel);
 
         if(activeCarouselButton == null) {
-            setActiveButton(carousel.get(0));
+            if(carousel.size() > 0)
+                setActiveButton(carousel.get(0));
         }
 
     }
@@ -132,13 +133,14 @@ public class HomePagePane extends VBox {
             projectsOnBoard = projectsRetrieved.subList(index * PROJECTS_TO_SHOW, (index * PROJECTS_TO_SHOW) + PROJECTS_TO_SHOW);
         else if(!projectsRetrieved.isEmpty())
             projectsOnBoard = projectsRetrieved.subList(index * PROJECTS_TO_SHOW, projectsRetrieved.size());
-        else
+        else{
             this.handleNoProjectsFound();
-
-
-        for(ProjectSummaryDTO project: projectsOnBoard){
-            projectsCards.add(new ProjectCard(project));
         }
+
+        if(projectsOnBoard != null && !projectsOnBoard.isEmpty())
+            for(ProjectSummaryDTO project: projectsOnBoard){
+                projectsCards.add(new ProjectCard(project));
+            }
 
         projectCardsBox.setAlignment(Pos.CENTER);
 
@@ -154,10 +156,11 @@ public class HomePagePane extends VBox {
     }
 
     private void addProjectCardsToBox(){
-        for(ProjectCard card: projectsCards){
-            card.setPadding(new Insets(15));
-            projectCardsBox.getChildren().add(card);
-        }
+        if(projectsCards != null && !projectsCards.isEmpty())
+            for(ProjectCard card: projectsCards){
+                card.setPadding(new Insets(15));
+                projectCardsBox.getChildren().add(card);
+            }
     }
 
     private void setHeading(){
