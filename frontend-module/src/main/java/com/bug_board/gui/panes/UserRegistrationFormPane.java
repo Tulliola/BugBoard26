@@ -7,11 +7,10 @@ import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
@@ -49,10 +48,20 @@ public class UserRegistrationFormPane extends StackPane {
     }
 
     private void setContentPane() {
+        this.setGif();
         this.setAddCollaboratorText();
         this.setRadioButtonsBox();
         this.setEmailTextField();
         this.setConfirmButton();
+    }
+
+    private void setGif() {
+        Image gif = new Image(getClass().getResourceAsStream("/gifs/painter.gif"));
+        ImageView imageView = new ImageView(gif);
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+
+        contentPane.getChildren().add(imageView);
     }
 
     private void setConfirmButton() {
@@ -79,14 +88,14 @@ public class UserRegistrationFormPane extends StackPane {
     private void setUserTypeChooserBox() {
         adminButtonBox.getChildren().add(adminButton);
         Text administrator = new Text("Administrator");
-        administrator.setStyle("-fx-fill: red; -fx-font-style: italic");
+//        administrator.setStyle("-fx-fill: red;");
         adminButtonBox.getChildren().add(administrator);
         adminButtonBox.setAlignment(Pos.TOP_CENTER);
         adminButtonBox.setSpacing(15);
 
         userButtonBox.getChildren().add(userButton);
         Text user = new Text("Regular User");
-        user.setStyle("-fx-fill: red; -fx-font-style: italic");
+//        user.setStyle("-fx-fill: red;");
         userButtonBox.getChildren().add(user);
         userButtonBox.setAlignment(Pos.TOP_CENTER);
         userButtonBox.setSpacing(15);
@@ -101,15 +110,21 @@ public class UserRegistrationFormPane extends StackPane {
     }
 
     private void setDescriptionsStackPanes() {
-        userDescription = new Text("A regular user can:\n\tReport an issue\n\tCheck his own issues (filter and order them)\n\tComment an issue\n\tUpdate an own issue's state");
-        adminDescription = new Text("An adminastrator can:\n\tCreate a new user\n\tAssign a particular issue to a specific user\n\t" +
-                "Check an issue report dashboard\n\tReceive monthly reports about projects' issues\n\tMark an issue as duplicated\n\tUpdate all issues' states");
+        userDescription = new Text("A regular user can:\n\u2022 Report an issue\n\u2022 Check his own issues (filter and order them)\n\u2022 Comment an issue\n\u2022 Update an own issue's state");
+        adminDescription = new Text("An adminastrator can:\n\u2022 Create a new user\n\u2022 Assign a particular issue to a specific user\n\u2022 " +
+                "Check an issue report dashboard\n\u2022 Receive monthly reports about projects' issues\n\u2022 Mark an issue as duplicated\n\u2022 Update all issues' states");
+
+        userDescription.setStyle("-fx-font-size: 13px; -fx-font-weight: 200");
+        adminDescription.setStyle("-fx-font-size: 13px; -fx-font-weight: 200");
 
         userDescriptionBox.getStyleClass().add("role-radio-button-box-width");
         adminDescriptionBox.getStyleClass().add("role-radio-button-box-width");
 
         userDescription.wrappingWidthProperty().bind(userDescriptionBox.widthProperty());
         adminDescription.wrappingWidthProperty().bind(adminDescriptionBox.widthProperty());
+
+        userDescription.setManaged(false);
+        adminDescription.setManaged(false);
 
         userDescriptionBox.setMaxHeight(0);
         adminDescriptionBox.setMaxHeight(0);
@@ -166,10 +181,12 @@ public class UserRegistrationFormPane extends StackPane {
     private void setRadioButtonsActions() {
         userTypeChooserGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == adminButton) {
+                adminDescription.setManaged(true);
                 animateDescription(adminDescriptionBox, true);
                 animateDescription(userDescriptionBox, false);
             }
             else if (newToggle == userButton) {
+                userDescription.setManaged(true);
                 animateDescription(userDescriptionBox, true);
                 animateDescription(adminDescriptionBox, false);
             }

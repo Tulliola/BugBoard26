@@ -322,9 +322,9 @@
 
 #user-registration-form{
     -fx-pref-width: 800px;
-    -fx-pref-height: 500px;
+    -fx-pref-height: 600px;
 
-    -fx-max-height: 500px;
+    -fx-max-height: 600px;
     -fx-max-width: 800px;
 
     -fx-padding: 20px;
