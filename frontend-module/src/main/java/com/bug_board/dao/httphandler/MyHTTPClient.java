@@ -73,7 +73,7 @@ public class MyHTTPClient {
 
             throw new ErrorHTTPResponseException("There has been an error from the server.\n" +
                     "STATUS CODE: " + errorDTO.getStatus() + "\n" +
-                    "MESSAGE: " + errorDTO.getMessage() + "\n" +
+                    "MESSAGE: " + errorDTO.getPhrase() + "\n" +
                     "ERROR: " + errorDTO.getError());
         }
         catch(IOException exc){
