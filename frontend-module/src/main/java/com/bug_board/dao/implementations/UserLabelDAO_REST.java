@@ -5,18 +5,16 @@ import com.bug_board.dao.interfaces.IUserLabelDAO;
 import com.bug_board.dto.LabelCreationDTO;
 import com.bug_board.dto.LabelModifyingDTO;
 import com.bug_board.dto.LabelSummaryDTO;
-import com.bug_board.exceptions.dao.BackendErrorException;
+import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.session_manager.SessionManager;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class UserLabelDAO_REST implements IUserLabelDAO {
 
     @Override
     public LabelSummaryDTO createNewLabel(LabelCreationDTO labelToCreate)
-            throws BadConversionToJSONException, HTTPSendException, BadConversionToDTOException, BackendErrorException {
+            throws BadConversionToJSONException, HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
 
         try{
@@ -52,7 +50,7 @@ public class UserLabelDAO_REST implements IUserLabelDAO {
 
     @Override
     public void deleteLabel(Integer idLabel)
-            throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
+            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
 
         request = HttpRequest.newBuilder()
@@ -66,7 +64,7 @@ public class UserLabelDAO_REST implements IUserLabelDAO {
 
     @Override
     public LabelSummaryDTO modifyLabel(LabelModifyingDTO labelToModify) throws
-            BadConversionToJSONException, HTTPSendException, BadConversionToDTOException, BackendErrorException {
+            BadConversionToJSONException, HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
 
         try{
@@ -86,7 +84,7 @@ public class UserLabelDAO_REST implements IUserLabelDAO {
 
     @Override
     public List<LabelSummaryDTO> getLabels()
-            throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
+            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
 
         request = HttpRequest.newBuilder()

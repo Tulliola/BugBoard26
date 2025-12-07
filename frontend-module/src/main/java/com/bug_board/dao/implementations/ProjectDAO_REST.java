@@ -4,7 +4,7 @@ import com.bug_board.dao.httphandler.MyHTTPClient;
 import com.bug_board.dao.interfaces.IProjectDAO;
 import com.bug_board.dto.CollaboratorAssociationDTO;
 import com.bug_board.dto.UserSummaryDTO;
-import com.bug_board.exceptions.dao.BackendErrorException;
+import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.HTTPSendException;
@@ -28,7 +28,7 @@ public class ProjectDAO_REST implements IProjectDAO {
 
     @Override
     public UserSummaryDTO assignCollaboratorToProject(Integer idProject, CollaboratorAssociationDTO collaborator)
-            throws HTTPSendException, BadConversionToDTOException, BackendErrorException, BadConversionToJSONException {
+            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException, BadConversionToJSONException {
         HttpRequest request;
 
         try{
@@ -48,7 +48,7 @@ public class ProjectDAO_REST implements IProjectDAO {
 
     @Override
     public List<UserSummaryDTO> getAddableUsersToProject(Integer idProject)
-            throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
+            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
         request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + idProject +"/addable-users"))

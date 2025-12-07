@@ -3,7 +3,7 @@ package com.bug_board.dao.httphandler;
 import com.bug_board.dto.ErrorResponseDTO;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.HTTPSendException;
-import com.bug_board.exceptions.dao.BackendErrorException;
+import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -16,7 +16,7 @@ public class MyHTTPClient {
     private final ObjectMapper mapper = new ObjectMapper();
 
     private HttpResponse<String> executeSend(HttpRequest request)
-            throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
+            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
 
         HttpClient http = HttpClient.newHttpClient();
         HttpResponse<String> response;
@@ -37,7 +37,7 @@ public class MyHTTPClient {
     }
 
     public <T> T sendAndHandle(HttpRequest request, TypeReference<T> responseType)
-            throws BackendErrorException, HTTPSendException, BadConversionToDTOException {
+            throws ErrorHTTPResponseException, HTTPSendException, BadConversionToDTOException {
 
         HttpResponse<String> response = this.executeSend(request);
 
@@ -51,7 +51,7 @@ public class MyHTTPClient {
     }
 
     public <T> T sendAndHandle(HttpRequest request, Class<T> responseType)
-            throws BackendErrorException, HTTPSendException, BadConversionToDTOException {
+            throws ErrorHTTPResponseException, HTTPSendException, BadConversionToDTOException {
 
         HttpResponse<String> response = this.executeSend(request);
 
@@ -67,11 +67,11 @@ public class MyHTTPClient {
         }
     }
 
-    private void handleErrorResponse(HttpResponse<String> responseToHandle) throws BackendErrorException, BadConversionToDTOException {
+    private void handleErrorResponse(HttpResponse<String> responseToHandle) throws ErrorHTTPResponseException, BadConversionToDTOException {
         try{
             ErrorResponseDTO errorDTO = mapper.readValue(responseToHandle.body(), ErrorResponseDTO.class);
 
-            throw new BackendErrorException("There has been an error from the server.\n" +
+            throw new ErrorHTTPResponseException("There has been an error from the server.\n" +
                     "STATUS CODE: " + errorDTO.getStatus() + "\n" +
                     "MESSAGE: " + errorDTO.getMessage() + "\n" +
                     "ERROR: " + errorDTO.getError());

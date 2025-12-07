@@ -119,10 +119,11 @@ public class HomePageView extends MyStage {
     }
 
     private void clickCreateLabelButton() {
-        if(containerUnderTitleBar.getChildren().getLast() == this.homePagePane) {
-            LabelCreationFormPane labelCreationPane = new LabelCreationFormPane(homePagePC, containerUnderTitleBar);
+        if(containerUnderTitleBar.getChildren().getLast() ==  homePagePane)
+            homePagePC.showLabelCreationOverlay(containerUnderTitleBar);
+    }
 
-            containerUnderTitleBar.getChildren().add(labelCreationPane);
-        }
+    public void displayOverlayedContent(Pane newLayer) {
+        containerUnderTitleBar.getChildren().add(newLayer);
     }
 }

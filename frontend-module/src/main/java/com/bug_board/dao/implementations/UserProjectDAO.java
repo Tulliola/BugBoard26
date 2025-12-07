@@ -3,7 +3,7 @@ package com.bug_board.dao.implementations;
 import com.bug_board.dao.httphandler.MyHTTPClient;
 import com.bug_board.dao.interfaces.IUserProjectDAO;
 import com.bug_board.dto.ProjectSummaryDTO;
-import com.bug_board.exceptions.dao.BackendErrorException;
+import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.session_manager.SessionManager;
@@ -26,7 +26,7 @@ public class UserProjectDAO implements IUserProjectDAO {
 
     @Override
     public List<ProjectSummaryDTO> getOverviewedProjectsByUser(String projectNameToFilter)
-            throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
+            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
         URI uri;
 
@@ -56,7 +56,7 @@ public class UserProjectDAO implements IUserProjectDAO {
 
     @Override
     public List<ProjectSummaryDTO> getWorkingOnProjectsByUser(String projectNameToFilter)
-            throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
+            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
         URI uri;
         if(projectNameToFilter == null || projectNameToFilter.equals(""))

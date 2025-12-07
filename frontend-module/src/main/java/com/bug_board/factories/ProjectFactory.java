@@ -3,7 +3,7 @@ package com.bug_board.factories;
 import com.bug_board.architectural_controllers.UserProjectController;
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.enum_classes.UserRole;
-import com.bug_board.exceptions.dao.BackendErrorException;
+import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 
@@ -30,7 +30,7 @@ public class ProjectFactory {
     }
 
     public List<ProjectSummaryDTO> getProjectsOnBoardByRole(UserRole loggedUserRole)
-            throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
+            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         if(projectController == null)
             throw new IllegalArgumentException("ProjectController still not set.");
 

@@ -2,6 +2,7 @@ package com.bug_board.gui.panes;
 
 import com.bug_board.exceptions.views.TitleNotSpecifiedForLabelException;
 import com.bug_board.presentation_controllers.HomePagePC;
+import com.bug_board.presentation_controllers.LabelManagementPC;
 import com.bug_board.utilities.BugBoardLabel;
 import com.bug_board.utilities.PaletteButton;
 import com.bug_board.utilities.animations.FloatingLabel;
@@ -19,20 +20,21 @@ import javafx.scene.text.Text;
 import java.util.function.UnaryOperator;
 
 public class LabelCreationFormPane extends StackPane {
+    private final LabelManagementPC labelPC;
+
     private final StackPane parentContainer;
     private BugBoardLabel sampleLabel;
     private Label errorLabel = new Label();
     private TextField titleTextField;
     private TextArea descriptionTextArea;
-    private final HomePagePC homePagePC;
     private final String[] colorPalette = {"#FF0000", "#FF8000", "#FFFF00",
             "#80FF00", "#00FF00", "#00FF80", "#00FFFF", "#0080FF"};
     private static final int MAX_TITLE_CHARS = 35;
     private static final int MAX_DESCRIPTION_CHARS = 200;
 
-    public LabelCreationFormPane(HomePagePC homePagePC, StackPane parentContainer) {
-        this.homePagePC = homePagePC;
+    public LabelCreationFormPane(LabelManagementPC labelPC, StackPane parentContainer) {
         this.parentContainer = parentContainer;
+        this.labelPC = labelPC;
 
         this.initalize();
     }
@@ -74,7 +76,6 @@ public class LabelCreationFormPane extends StackPane {
 
         return form;
     }
-
 
     private StackPane createTitleTextField() {
         titleTextField = new TextField();
@@ -171,6 +172,7 @@ public class LabelCreationFormPane extends StackPane {
         try{
             errorLabel.setManaged(false);
             checkMandatoryFields();
+
         }
         catch(TitleNotSpecifiedForLabelException exc){
             errorLabel.setText(exc.getMessage());
@@ -191,5 +193,17 @@ public class LabelCreationFormPane extends StackPane {
             if(event.getTarget() == this)
                 parentContainer.getChildren().remove(this);
         });
+    }
+
+    public String getChosenColor() {
+        return this.sampleLabel.getColor();
+    }
+
+    public TextField getTitleTextField() {
+        return titleTextField;
+    }
+
+    public TextArea getDescriptionTextArea() {
+        return descriptionTextArea;
     }
 }

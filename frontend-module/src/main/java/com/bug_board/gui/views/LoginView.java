@@ -1,10 +1,6 @@
 package com.bug_board.gui.views;
 
-import com.bug_board.exceptions.architectural_controllers.InvalidCredentialsException;
-import com.bug_board.exceptions.dao.BackendErrorException;
-import com.bug_board.exceptions.dao.BadConversionToDTOException;
-import com.bug_board.exceptions.dao.BadConversionToJSONException;
-import com.bug_board.exceptions.dao.HTTPSendException;
+import com.bug_board.exceptions.architectural_controllers.AuthenticationException;
 import com.bug_board.exceptions.views.CredentialsNotProvidedException;
 import com.bug_board.presentation_controllers.LoginPC;
 import com.bug_board.utilities.*;
@@ -226,21 +222,10 @@ public class LoginView extends MyStage {
     private void clickLoginButton() {
         try {
             checkMandatoryFields();
-            loginPC.onLoginButtonClicked(usernameField.getText(), passwordField.getText(), this);
+            loginPC.onLoginButtonClicked();
         }
-        catch (CredentialsNotProvidedException exc) {
-            errorLabel.setText(exc.getMessage());
-            errorLabel.setTextFill(Color.RED);
-            errorLabel.setManaged(true);
-        }
-        catch(BackendErrorException exc) {
-            if(exc.getMessage().contains("401"))
-                errorLabel.setText("Username or password not valid.");
-            errorLabel.setTextFill(Color.RED);
-            errorLabel.setManaged(true);
-        }
-        catch(HTTPSendException | BadConversionToDTOException | BadConversionToJSONException throwables) {
-            errorLabel.setText("Server is currently not responding.");
+        catch (AuthenticationException | CredentialsNotProvidedException throwables) {
+            errorLabel.setText(throwables.getMessage());
             errorLabel.setTextFill(Color.RED);
             errorLabel.setManaged(true);
         }
@@ -249,5 +234,13 @@ public class LoginView extends MyStage {
     private void checkMandatoryFields() {
         if(usernameField.getText().isEmpty() ||  passwordField.getText().isEmpty())
             throw new CredentialsNotProvidedException("You must enter your username and password.");
+    }
+
+    public TextField getUsernameField() {
+        return usernameField;
+    }
+
+    public TextField getPasswordField() {
+        return  passwordField;
     }
 }

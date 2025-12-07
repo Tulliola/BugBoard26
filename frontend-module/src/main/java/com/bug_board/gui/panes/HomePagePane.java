@@ -1,7 +1,7 @@
 package com.bug_board.gui.panes;
 
 import com.bug_board.dto.ProjectSummaryDTO;
-import com.bug_board.exceptions.dao.BackendErrorException;
+import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.presentation_controllers.HomePagePC;
@@ -211,7 +211,7 @@ public class HomePagePane extends VBox {
         catch (BadConversionToDTOException e) {
             throw new RuntimeException(e);
         }
-        catch (BackendErrorException e) {
+        catch (ErrorHTTPResponseException e) {
             throw new RuntimeException(e);
         }
 

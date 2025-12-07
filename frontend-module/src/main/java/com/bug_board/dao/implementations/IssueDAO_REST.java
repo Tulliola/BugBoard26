@@ -4,7 +4,7 @@ import com.bug_board.dao.httphandler.MyHTTPClient;
 import com.bug_board.dao.interfaces.IIssueDAO;
 import com.bug_board.dto.IssueCreationDTO;
 import com.bug_board.dto.IssueSummaryDTO;
-import com.bug_board.exceptions.dao.BackendErrorException;
+import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.HTTPSendException;
@@ -28,7 +28,7 @@ public class IssueDAO_REST implements IIssueDAO {
 
     @Override
     public List<IssueSummaryDTO> getAllProjectIssues(Integer idProject)
-            throws HTTPSendException, BadConversionToDTOException, BackendErrorException {
+            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
         request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl+idProject+"/issues"))
@@ -44,7 +44,7 @@ public class IssueDAO_REST implements IIssueDAO {
 
     @Override
     public IssueSummaryDTO createNewIssue(Integer idProject, IssueCreationDTO issueToCreate)
-            throws BadConversionToJSONException, HTTPSendException, BadConversionToDTOException, BackendErrorException {
+            throws BadConversionToJSONException, HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
         try{
             request = HttpRequest.newBuilder()

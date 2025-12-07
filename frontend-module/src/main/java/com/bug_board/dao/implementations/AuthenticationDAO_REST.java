@@ -4,7 +4,7 @@ import com.bug_board.dao.httphandler.MyHTTPClient;
 import com.bug_board.dao.interfaces.IAuthenticationDAO;
 import com.bug_board.dto.LoginResponseDTO;
 import com.bug_board.dto.UserAuthenticationDTO;
-import com.bug_board.exceptions.dao.BackendErrorException;
+import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.HTTPSendException;
@@ -25,7 +25,7 @@ public class AuthenticationDAO_REST implements IAuthenticationDAO {
 
     @Override
     public LoginResponseDTO authenticate(UserAuthenticationDTO authenticationDTO)
-            throws BadConversionToJSONException, BadConversionToDTOException, HTTPSendException, BackendErrorException {
+            throws BadConversionToJSONException, BadConversionToDTOException, HTTPSendException, ErrorHTTPResponseException {
         HttpRequest request;
 
         try {
