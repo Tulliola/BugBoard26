@@ -81,7 +81,7 @@ public class UserRegistrationFormPane extends StackPane {
     }
 
     private ImageView setGif() {
-        Image gif = new Image(getClass().getResourceAsStream("/gifs/painter.gif"));
+        Image gif = new Image(getClass().getResourceAsStream("/gifs/team_management.gif"));
 
         ImageView imageView = new ImageView(gif);
         imageView.setFitWidth(100);
