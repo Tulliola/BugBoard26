@@ -11,6 +11,6 @@ module com.bug_board.frontendmodule {
     requires java.sql;
     requires javafx.base;
     requires com.simtechdata.jokeapi;
-    
+
     exports com.bug_board;
 }

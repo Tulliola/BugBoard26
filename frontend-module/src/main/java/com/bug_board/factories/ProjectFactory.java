@@ -29,8 +29,7 @@ public class ProjectFactory {
         return projectFactory;
     }
 
-    public List<ProjectSummaryDTO> getProjectsOnBoardByRole(UserRole loggedUserRole)
-            throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
+    public List<ProjectSummaryDTO> getProjectsOnBoardByRole(UserRole loggedUserRole) {
         if(projectController == null)
             throw new IllegalArgumentException("ProjectController still not set.");
 

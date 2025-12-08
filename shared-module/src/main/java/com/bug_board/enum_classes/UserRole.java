@@ -1,5 +1,7 @@
 package com.bug_board.enum_classes;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum UserRole {
     ROLE_USER("ROLE_USER"),
     ROLE_ADMIN("ROLE_ADMIN"),
@@ -11,6 +13,7 @@ public enum UserRole {
         this.role = roleTipology;
     }
 
+    @JsonValue
     public String getRoleName() {
         return role;
     }

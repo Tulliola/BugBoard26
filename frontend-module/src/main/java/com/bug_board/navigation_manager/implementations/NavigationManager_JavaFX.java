@@ -1,18 +1,23 @@
 package com.bug_board.navigation_manager.implementations;
 
+import com.bug_board.architectural_controllers.UserIssueController;
 import com.bug_board.architectural_controllers.UserLabelController;
 import com.bug_board.architectural_controllers.UserProjectController;
 import com.bug_board.architectural_controllers.UserRegistrationController;
 import com.bug_board.dao.httphandler.MyHTTPClient;
-import com.bug_board.dao.implementations.EmailSenderDAO_REST;
-import com.bug_board.dao.implementations.UserDAO_REST;
-import com.bug_board.dao.implementations.UserLabelDAO_REST;
-import com.bug_board.dao.implementations.UserProjectDAO;
+import com.bug_board.dao.implementations.*;
+import com.bug_board.dao.interfaces.IUserIssueDAO;
+import com.bug_board.exceptions.architectural_controllers.RetrievePersonalIssuesException;
+import com.bug_board.exceptions.dao.BadConversionToDTOException;
+import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
+import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.factories.ProjectFactory;
 import com.bug_board.gui.panes.LabelCreationFormPane;
 import com.bug_board.gui.panes.UserRegistrationFormPane;
+import com.bug_board.gui.views.IssueVisualizationView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import com.bug_board.presentation_controllers.HomePagePC;
+import com.bug_board.presentation_controllers.IssueVisualizationPC;
 import com.bug_board.presentation_controllers.LabelManagementPC;
 import com.bug_board.presentation_controllers.UserRegistrationPC;
 import com.bug_board.session_manager.SessionManager;
@@ -24,8 +29,8 @@ import javafx.stage.Stage;
 public class NavigationManager_JavaFX implements INavigationManager {
 
     @Override
-    public void navigateToHomePageFromLogin(){
-        UserProjectController projectController = new UserProjectController(new UserProjectDAO(new MyHTTPClient()));
+    public void navigateToHomePage(){
+        UserProjectController projectController = new UserProjectController(new UserProjectDAO_REST(new MyHTTPClient()));
         HomePagePC homePagePC = new HomePagePC(projectController, this);
 
         try {
@@ -42,6 +47,26 @@ public class NavigationManager_JavaFX implements INavigationManager {
         catch (Exception e){
             System.out.println(e.getMessage());
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void navigateToViewIssues()
+            throws RetrievePersonalIssuesException {
+        IUserIssueDAO userIssueDAO = new UserIssueDAO_REST(new MyHTTPClient());
+        UserIssueController issueController = new UserIssueController(userIssueDAO);
+        IssueVisualizationPC issuePC = new IssueVisualizationPC(issueController, this);
+
+        try {
+            IssueVisualizationView issueView = new IssueVisualizationView(
+                    userIssueDAO.getPersonalIssues()
+            );
+            issuePC.setView(issueView);
+
+            issueView.show();
+        }
+        catch (ErrorHTTPResponseException | HTTPSendException | BadConversionToDTOException throwables) {
+            throw new RetrievePersonalIssuesException(throwables.getMessage());
         }
     }
 

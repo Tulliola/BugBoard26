@@ -1,5 +1,7 @@
 package com.bug_board.enum_classes;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum IssueState {
     Todo("To-do"),
     Working_on("Working on"),
@@ -11,6 +13,7 @@ public enum IssueState {
         this.state = state;
     }
 
+    @JsonValue
     public String getState(){
         return state;
     }

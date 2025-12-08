@@ -16,11 +16,11 @@ import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class UserProjectDAO implements IUserProjectDAO {
+public class UserProjectDAO_REST implements IUserProjectDAO {
     private final String baseUrl = "http://localhost:8080/api/me/projects";
     private final MyHTTPClient httpClient;
 
-    public UserProjectDAO(MyHTTPClient httpClient) {
+    public UserProjectDAO_REST(MyHTTPClient httpClient) {
         this.httpClient = httpClient;
     }
 

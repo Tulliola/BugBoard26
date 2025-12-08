@@ -1,4 +1,4 @@
-package util;
+package com.bug_board.backendmodule.util;
 
 import java.security.SecureRandom;
 

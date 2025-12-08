@@ -30,7 +30,7 @@ public class LoginPC {
         SessionManager.getInstance().createSession(loginResponse.getToken(), loginResponse.getUsername(), loginResponse.getRole());
 
         navigationManager.closeWindow(loginView);
-        navigationManager.navigateToHomePageFromLogin();
+        navigationManager.navigateToHomePage();
     }
 
     public void setView(LoginView loginView) {

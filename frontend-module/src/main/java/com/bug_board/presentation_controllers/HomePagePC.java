@@ -2,17 +2,14 @@ package com.bug_board.presentation_controllers;
 
 import com.bug_board.architectural_controllers.UserProjectController;
 import com.bug_board.dto.ProjectSummaryDTO;
+import com.bug_board.exceptions.architectural_controllers.RetrievePersonalIssuesException;
 import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
-import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
-import com.bug_board.exceptions.dao.BadConversionToDTOException;
-import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.gui.views.HomePageView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import com.bug_board.session_manager.SessionManager;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-
 import java.util.List;
 
 public class HomePagePC {
@@ -41,17 +38,26 @@ public class HomePagePC {
         homePageView.displayOverlayedContent(labelCreationOverlay);
     }
 
+    public void showRegisterUserOverlay(StackPane containerUnderTitleBar) {
+        Pane registerUserOverlay = navigationManager.buildRegisterUserComponent(containerUnderTitleBar, this);
+
+        homePageView.displayOverlayedContent(registerUserOverlay);
+    }
+
+    public void onViewPersonalIssuesButtonClicked() {
+        navigationManager.closeWindow(this.homePageView);
+        try {
+            navigationManager.navigateToViewIssues();
+        } catch (RetrievePersonalIssuesException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void closeOverlay(Region layerToRemove) {
         homePageView.getContainerUnderTitleBar().getChildren().remove(layerToRemove);
     }
 
     public void setView(HomePageView homePageView) {
         this.homePageView = homePageView;
-    }
-
-    public void showRegisterUserOverlay(StackPane containerUnderTitleBar) {
-        Pane registerUserOverlay = navigationManager.buildRegisterUserComponent(containerUnderTitleBar, this);
-
-        homePageView.displayOverlayedContent(registerUserOverlay);
     }
 }

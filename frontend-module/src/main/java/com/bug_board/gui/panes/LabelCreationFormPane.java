@@ -2,7 +2,6 @@ package com.bug_board.gui.panes;
 
 import com.bug_board.exceptions.architectural_controllers.LabelCreationException;
 import com.bug_board.exceptions.views.TitleNotSpecifiedForLabelException;
-import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.presentation_controllers.LabelManagementPC;
 import com.bug_board.utilities.BugBoardLabel;
 import com.bug_board.utilities.PaletteButton;

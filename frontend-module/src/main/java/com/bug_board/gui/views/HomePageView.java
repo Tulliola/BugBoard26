@@ -9,13 +9,11 @@ import com.bug_board.utilities.buttons.ButtonDefinition;
 import com.bug_board.utilities.buttons.factory.implementations.ComponentButtonFactory;
 import com.bug_board.utilities.buttons.factory.interfaces.IButtonsProvider;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.*;
-import javafx.stage.Screen;
 import java.util.List;
 
 public class HomePageView extends MyStage {
@@ -39,15 +37,6 @@ public class HomePageView extends MyStage {
     private void initialize() {
         setFullScreen();
         setScene();
-    }
-
-    private void setFullScreen(){
-        Screen screen = Screen.getPrimary();
-        Rectangle2D screenBounds = screen.getVisualBounds();
-        this.setX(screenBounds.getMinX());
-        this.setY(screenBounds.getMinY());
-        this.setWidth(screenBounds.getWidth());
-        this.setHeight(screenBounds.getHeight());
     }
 
     private void setScene(){
@@ -113,6 +102,7 @@ public class HomePageView extends MyStage {
     }
 
     private void clickViewPersonalIssuesButton() {
+        homePagePC.onViewPersonalIssuesButtonClicked();
     }
 
     private void clickCreateLabelButton() {

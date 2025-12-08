@@ -8,21 +8,21 @@
 /* Fonts */
 @font-face {
     font-family: "Poppins";
-    src: url('fonts/poppins/Poppins-Regular.ttf');
+    src: url('../poppinsppins-Regular.ttf');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: "Poppins";
-    src: url('fonts/poppins/Poppins-Bold.ttf');
+    src: url('../poppinsppins-Bold.ttf');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: "Poppins";
-    src: url('fonts/poppins/Poppins-Italic.ttf');
+    src: url('../poppinsppins-Italic.ttf');
     font-weight: italic;
     font-style: normal;
 }
@@ -391,4 +391,12 @@
     -fx-background-color: -color-primary;
     -fx-pref-height: 75px;
     -fx-padding: 20px;
+}
+
+
+.issue-summary-card {
+    -fx-pref-height: 300px;
+    -fx-max-height: 300px;
+
+    -fx-background-color: red;
 }

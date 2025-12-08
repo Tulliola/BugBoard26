@@ -1,8 +1,10 @@
 package com.bug_board.utilities;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class MyStage extends Stage {
@@ -22,5 +24,14 @@ public class MyStage extends Stage {
         catch(NullPointerException exc){
             System.err.println(exc.getMessage());
         }
+    }
+
+    protected void setFullScreen(){
+        Screen screen = Screen.getPrimary();
+        Rectangle2D screenBounds = screen.getVisualBounds();
+        this.setX(screenBounds.getMinX());
+        this.setY(screenBounds.getMinY());
+        this.setWidth(screenBounds.getWidth());
+        this.setHeight(screenBounds.getHeight());
     }
 }
