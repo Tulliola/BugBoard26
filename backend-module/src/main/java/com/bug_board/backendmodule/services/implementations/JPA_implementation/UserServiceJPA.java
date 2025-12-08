@@ -12,6 +12,8 @@ import com.bug_board.dto.UserCreationDTO;
 import com.bug_board.dto.UserSummaryDTO;
 import com.bug_board.backendmodule.exception.backend.ResourceAlreadyExistsException;
 import com.bug_board.backendmodule.exception.backend.ResourceNotFoundException;
+import com.bug_board.dto.email.EmailToSendDTOFactory;
+import com.bug_board.dto.email.IEmailToSendDTO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,7 +57,7 @@ public class UserServiceJPA implements IUserService {
         newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(generatedPassword));
 
-        EmailToSendDTO emailToSendDTO = new EmailToSendDTO();
+        IEmailToSendDTO emailToSendDTO = EmailToSendDTOFactory.getInstance().getEmailDTO();
         emailToSendDTO.setAddressee(user.getEmail());
         emailToSendDTO.setSubject("Your BugBoard26 Credentials");
         emailToSendDTO.setBody("Your BugBoard26 Credentials are:\nUsername: "+ newUser.getUsername()+"\nPassword: "+generatedPassword);

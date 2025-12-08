@@ -37,19 +37,22 @@ public class UserRegistrationPC {
         catch (UserRegistrationException e) {
             if(e.getMessage().contains("exists")){
                 this.addUserAlreadyExists();
+                this.showConfirmationPane();
             }
 
             throw new UserRegistrationException(e.getMessage());
         }
         this.addConfirmationPane();
-
         this.showConfirmationPane();
     }
 
     private void addUserAlreadyExists() {
         userRegistrationFormPane.getChildren().removeLast();
 
-        userRegistrationFormPane.getChildren().add(new TransactionPane( "/gifs/added_user.gif", "User already exists"));
+        TransactionPane transactionPane = new TransactionPane("/gifs/error_adding_user.gif", "User already exists");
+        transactionPane.setErrorGradient();
+
+        userRegistrationFormPane.getChildren().add(transactionPane);
     }
 
 

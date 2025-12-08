@@ -250,7 +250,7 @@ public class UserRegistrationFormPane extends StackPane {
         if(emailToRegister.getText().isEmpty())
             throw new NoEmailSpecifiedException("The email address must be specified");
 
-        if(!emailToRegister.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}$"))
+        if(!emailToRegister.getText().matches("^[a-zA-Z0-9._%+-]+@softengunina\\.[a-zA-Z]{2,3}$"))
             throw new InvalidEmailException("The email address is not valid");
 
     }

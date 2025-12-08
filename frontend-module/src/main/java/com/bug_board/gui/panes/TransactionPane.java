@@ -45,7 +45,7 @@ public class TransactionPane extends VBox {
     }
 
     public void setErrorGradient() {
-        String errorStyle = "-fx-fill: linear-gradient( to right, red, white );";
+        String errorStyle = "-fx-fill: linear-gradient( to right, red, white ); -fx-font-size: 40px";
         message.setStyle(errorStyle);
     }
 }

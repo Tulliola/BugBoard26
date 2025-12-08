@@ -1,16 +1,11 @@
 package com.bug_board.dto;
 
+import com.bug_board.dto.email.IEmailToSendDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class EmailToSendDTO {
-    private String addressee;
-    private String subject;
-    private String body;
+
+public class EmailToSendDTO extends IEmailToSendDTO {
 }

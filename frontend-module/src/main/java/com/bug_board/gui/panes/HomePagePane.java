@@ -84,8 +84,6 @@ public class HomePagePane extends VBox {
             Button carouselButton = new Button(String.valueOf(i + 1));
             carouselButton.getStyleClass().add("carousel-button");
 
-            carouselButton.getStyleClass().add("carousel-button-hover");
-
             int finalI = i;
             carouselButton.setOnAction(e -> {
                 setProjectCardsBox(finalI);
@@ -138,6 +136,8 @@ public class HomePagePane extends VBox {
     }
 
     private void setProjectCardsBox(int index) {
+        projectsCards.clear();
+
         if(projectsRetrieved.size() >= (index+1) * PROJECTS_TO_SHOW)
             projectsOnBoard = projectsRetrieved.subList(index * PROJECTS_TO_SHOW, (index * PROJECTS_TO_SHOW) + PROJECTS_TO_SHOW);
         else if(!projectsRetrieved.isEmpty())
@@ -153,7 +153,6 @@ public class HomePagePane extends VBox {
 
         projectCardsBox.setAlignment(Pos.CENTER);
 
-        projectCardsBox.getChildren().clear();
         projectCardsBox.setPadding(new Insets(50));
 
         addProjectCardsToBox();
@@ -165,6 +164,8 @@ public class HomePagePane extends VBox {
     }
 
     private void addProjectCardsToBox(){
+        projectCardsBox.getChildren().clear();
+
         if(projectsCards != null && !projectsCards.isEmpty())
             for(ProjectCard card: projectsCards){
                 card.setPadding(new Insets(15));
