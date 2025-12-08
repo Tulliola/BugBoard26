@@ -40,6 +40,7 @@ public class NavigationManager_JavaFX implements INavigationManager {
             homePageView.show();
         }
         catch (Exception e){
+            System.out.println(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
     }

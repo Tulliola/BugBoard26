@@ -2,9 +2,6 @@ package com.bug_board.gui.panes;
 
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
-import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
-import com.bug_board.exceptions.dao.BadConversionToDTOException;
-import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.JokesFooter;
@@ -34,8 +31,8 @@ public class HomePagePane extends VBox {
     private HBox carouselsBox = new HBox();
     private List<Button> carousel;
     private Button activeCarouselButton = null;
-    List<ProjectCard> projectsCards;
-    Text noProjectsFoundText = new Text("There are no projects matching your filter");
+    List<ProjectCard> projectsCards = new ArrayList<>();
+    Text noProjectsFoundText = new Text();
 
     public HomePagePane(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
         this.homePagePC = homePagePC;
@@ -47,7 +44,7 @@ public class HomePagePane extends VBox {
     private void initialize() {
         setHeading();
         setHintFiltering();
-        setNoProjectFoundText();
+        setNoProjectsFoundText();
         setSearchProjectBar();
         addCarousel();
         setCarousel();
@@ -115,7 +112,15 @@ public class HomePagePane extends VBox {
 
     private void addCarousel(){
 
-        setProjectCardsBox(0);
+        if(!projectsRetrieved.isEmpty())
+            setProjectCardsBox(0);
+        else {
+            projectCardsBox.getChildren().removeAll(projectsCards);
+            projectCardsBox.setPrefHeight(550);
+            projectCardsBox.getChildren().add(noProjectsFoundText);
+            carouselsBox.getChildren().clear();
+        }
+
 
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
@@ -133,8 +138,6 @@ public class HomePagePane extends VBox {
     }
 
     private void setProjectCardsBox(int index) {
-        projectsCards = new ArrayList<>();
-
         if(projectsRetrieved.size() >= (index+1) * PROJECTS_TO_SHOW)
             projectsOnBoard = projectsRetrieved.subList(index * PROJECTS_TO_SHOW, (index * PROJECTS_TO_SHOW) + PROJECTS_TO_SHOW);
         else if(!projectsRetrieved.isEmpty())
@@ -157,7 +160,7 @@ public class HomePagePane extends VBox {
     }
 
     private void handleNoProjectsFound() {
-        noProjectsFoundText.setText("There are no projects matching your filter");
+        noProjectsFoundText.setText("No Projects Found");
         projectCardsBox.getChildren().add(noProjectsFoundText);
     }
 
@@ -238,7 +241,7 @@ public class HomePagePane extends VBox {
         }
     }
 
-    private void setNoProjectFoundText() {
+    private void setNoProjectsFoundText() {
         noProjectsFoundText.setStyle("-fx-fill: red; -fx-font-style: italic; -fx-font-size: 20px;");
         noProjectsFoundText.setTextAlignment(TextAlignment.CENTER);
     }

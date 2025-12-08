@@ -1,12 +1,10 @@
 package com.bug_board.gui.panes;
 
 import com.bug_board.enum_classes.UserRole;
-import com.bug_board.exceptions.architectural_controllers.LabelCreationException;
 import com.bug_board.exceptions.architectural_controllers.UserRegistrationException;
 import com.bug_board.exceptions.views.InvalidEmailException;
 import com.bug_board.exceptions.views.NoEmailSpecifiedException;
 import com.bug_board.exceptions.views.NoRoleSpecifiedException;
-import com.bug_board.exceptions.views.TitleNotSpecifiedForLabelException;
 import com.bug_board.presentation_controllers.UserRegistrationPC;
 import com.bug_board.utilities.MyRadioButton;
 import com.bug_board.utilities.animations.RoleRadioButtonAnimation;
