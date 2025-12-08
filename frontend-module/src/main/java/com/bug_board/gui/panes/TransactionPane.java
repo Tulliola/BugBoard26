@@ -6,13 +6,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class ConfirmTransactionPane extends VBox {
-    private String confirmationMessage;
+public class TransactionPane extends VBox {
+    private String transactionResponse;
     private String gifURL;
+    private Text message;
 
-    public ConfirmTransactionPane(String gifURL, String confirmationMessage) {
+    public TransactionPane(String gifURL, String transactionResponse) {
         this.gifURL = gifURL;
-        this.confirmationMessage = confirmationMessage;
+        this.transactionResponse = transactionResponse;
 
         initialize();
     }
@@ -22,7 +23,7 @@ public class ConfirmTransactionPane extends VBox {
 
         this.getChildren().addAll(
                 this.createGif(),
-                this.createConfirmationMessage()
+                this.createTransactionMessage()
         );
     }
 
@@ -34,12 +35,17 @@ public class ConfirmTransactionPane extends VBox {
         return gif;
     }
 
-    private Text createConfirmationMessage() {
-        Text message = new Text(confirmationMessage);
+    private Text createTransactionMessage() {
+        message = new Text(transactionResponse);
         message.setStyle("-fx-fill: " +
                 "linear-gradient(" +
                 "to right, -color-primary, white); -fx-font-size: 40px");
 
         return message;
+    }
+
+    public void setErrorGradient() {
+        String errorStyle = "-fx-fill: linear-gradient( to right, red, white );";
+        message.setStyle(errorStyle);
     }
 }

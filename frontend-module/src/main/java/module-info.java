@@ -10,7 +10,7 @@ module com.bug_board.frontendmodule {
     requires java.desktop;
     requires java.sql;
     requires javafx.base;
-//    requires com.bug_board.frontendmodule;
-
+    requires com.simtechdata.jokeapi;
+    
     exports com.bug_board;
 }

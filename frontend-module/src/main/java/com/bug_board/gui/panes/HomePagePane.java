@@ -7,6 +7,7 @@ import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
+import com.bug_board.utilities.JokesFooter;
 import com.bug_board.utilities.MySpacer;
 import com.bug_board.utilities.ProjectCard;
 import com.bug_board.utilities.animations.AnimatedSearchBar;
@@ -116,9 +117,14 @@ public class HomePagePane extends VBox {
 
         setProjectCardsBox(0);
 
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
         this.getChildren().addAll(
                 projectCardsBox,
-                carouselsBox
+                carouselsBox,
+                spacer,
+                new JokesFooter(10)
         );
 
         this.setAlignment(Pos.CENTER);
@@ -177,7 +183,10 @@ public class HomePagePane extends VBox {
 
         heading.setTextAlignment(TextAlignment.CENTER);
 
-        this.getChildren().add(heading);
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
+        this.getChildren().addAll(spacer, heading);
 
         this.setAlignment(Pos.CENTER);
     }
