@@ -42,7 +42,6 @@ public class MyHTTPClient {
         HttpResponse<String> response = this.executeSend(request);
 
         try {
-            System.out.println(response.body());
             return mapper.readValue(response.body(), responseType);
         }
         catch (IOException exc) {
