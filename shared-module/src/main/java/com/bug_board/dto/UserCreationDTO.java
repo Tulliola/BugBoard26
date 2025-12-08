@@ -12,7 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserCreationDTO {
     private String  email;
-    private String  password;
     private UserRole role;
     private byte[] bioPic;
 }

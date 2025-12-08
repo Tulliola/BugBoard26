@@ -59,5 +59,4 @@ public class LabelManagementPC {
 
         labelCreationFormPane.getChildren().add(new ConfirmTransactionPane("/gifs/successful_transaction.gif", "Label successfully created!"));
     }
-
 }

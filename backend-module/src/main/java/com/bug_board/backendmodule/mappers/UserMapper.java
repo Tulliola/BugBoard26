@@ -17,7 +17,6 @@ public class UserMapper {
 
     public static void updateEntityFromDTO(UserCreationDTO userDTO, User userToUpdate) {
         userToUpdate.setEmail(userDTO.getEmail());
-        userToUpdate.setPassword(userDTO.getPassword());
         userToUpdate.setRole(userDTO.getRole());
         userToUpdate.setBioPic(userDTO.getBioPic());
     }

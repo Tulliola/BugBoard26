@@ -1,4 +1,4 @@
-package com.bug_board.utilities;
+package util;
 
 import java.security.SecureRandom;
 

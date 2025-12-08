@@ -25,9 +25,9 @@ import java.util.List;
 
 
 public class UserRegistrationFormPane extends StackPane {
-    private StackPane parentPane;
+    private final StackPane parentPane;
 
-    private UserRegistrationPC userRegistrationPC;
+    private final UserRegistrationPC userRegistrationPC;
 
     private VBox contentPane = new VBox();
 
@@ -65,7 +65,7 @@ public class UserRegistrationFormPane extends StackPane {
     }
 
     private void setBackground() {
-        this.setStyle("-fx-background-color: rgb(0, 0, 0, 0.4);");
+        this.setStyle("-fx-background-color: rgb(0, 0, 0, 0.6);");
 
         this.setOnMouseClicked(event -> {
             if(event.getTarget() == this) {
@@ -268,5 +268,9 @@ public class UserRegistrationFormPane extends StackPane {
 
     public String getEmail(){
         return emailToRegister.getText();
+    }
+
+    public void close() {
+        parentPane.getChildren().remove(this);
     }
 }

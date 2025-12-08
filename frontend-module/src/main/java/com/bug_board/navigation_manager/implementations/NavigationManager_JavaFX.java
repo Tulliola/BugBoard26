@@ -4,6 +4,7 @@ import com.bug_board.architectural_controllers.UserLabelController;
 import com.bug_board.architectural_controllers.UserProjectController;
 import com.bug_board.architectural_controllers.UserRegistrationController;
 import com.bug_board.dao.httphandler.MyHTTPClient;
+import com.bug_board.dao.implementations.EmailSenderDAO_REST;
 import com.bug_board.dao.implementations.UserDAO_REST;
 import com.bug_board.dao.implementations.UserLabelDAO_REST;
 import com.bug_board.dao.implementations.UserProjectDAO;
@@ -64,7 +65,8 @@ public class NavigationManager_JavaFX implements INavigationManager {
 
     @Override
     public Pane buildRegisterUserComponent(StackPane parentContainer, HomePagePC parentPC) {
-        UserRegistrationController userRegistrationController = new UserRegistrationController(new UserDAO_REST(new MyHTTPClient()));
+        //TODO creiamo un oggetto MyHTTPClient per riutilizzo?
+        UserRegistrationController userRegistrationController = new UserRegistrationController(new UserDAO_REST(new MyHTTPClient()), new EmailSenderDAO_REST(new MyHTTPClient()));
 
         UserRegistrationPC userRegistrationPC = new UserRegistrationPC(userRegistrationController);
 

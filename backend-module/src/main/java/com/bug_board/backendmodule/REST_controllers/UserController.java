@@ -1,6 +1,7 @@
 package com.bug_board.backendmodule.REST_controllers;
 
 import com.bug_board.backendmodule.services.interfaces.IUserService;
+import com.bug_board.dto.EmailToSendDTO;
 import com.bug_board.dto.UserCreationDTO;
 import com.bug_board.dto.UserSummaryDTO;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserSummaryDTO> registerNewUser(@RequestBody UserCreationDTO userCreationDTO){
+    public ResponseEntity<UserSummaryDTO> registerNewUser(@RequestBody UserCreationDTO userCreationDTO) {
         UserSummaryDTO userSummaryDTO = userService.registerNewUser(userCreationDTO);
         return new ResponseEntity<>(userSummaryDTO, HttpStatus.CREATED);
     }

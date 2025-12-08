@@ -4,8 +4,10 @@ import com.bug_board.backendmodule.entity.User;
 import com.bug_board.backendmodule.entity.factories.UserFactory;
 import com.bug_board.backendmodule.repositories.interfaces.IProjectRepository;
 import com.bug_board.backendmodule.repositories.interfaces.IUserRepository;
+import com.bug_board.backendmodule.services.interfaces.IEmailService;
 import com.bug_board.backendmodule.services.interfaces.IUserService;
 import com.bug_board.backendmodule.mappers.UserMapper;
+import com.bug_board.dto.EmailToSendDTO;
 import com.bug_board.dto.UserCreationDTO;
 import com.bug_board.dto.UserSummaryDTO;
 import com.bug_board.backendmodule.exception.backend.ResourceAlreadyExistsException;
@@ -13,6 +15,8 @@ import com.bug_board.backendmodule.exception.backend.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import util.PasswordGenerator;
 
 import java.util.List;
 import java.util.Set;
@@ -24,29 +28,41 @@ public class UserServiceJPA implements IUserService {
     private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserFactory userFactory;
+    private final IEmailService emailService;
 
     public UserServiceJPA(IUserRepository userRepository,
                           PasswordEncoder passwordEncoder,
                           UserFactory userFactory,
-                          IProjectRepository projectRepository) {
+                          IProjectRepository projectRepository, IEmailService emailService) {
         this.projectRepository = projectRepository;
         this.userFactory = userFactory;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Override
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
+    @Transactional
     public UserSummaryDTO registerNewUser(UserCreationDTO user) {
         if(userRepository.existsByEmailAndRole(user.getEmail(), user.getRole()))
             throw new ResourceAlreadyExistsException("User with this email and role already exists.");
 
+        String generatedPassword = PasswordGenerator.generatePassword(16);
+
         User newUser = userFactory.createUser(user.getRole());
         newUser.setUsername(this.assignUsernameAutomatically(user.getEmail(), user.getRole().getRoleName()));
         newUser.setEmail(user.getEmail());
-        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setPassword(passwordEncoder.encode(generatedPassword));
+
+        EmailToSendDTO emailToSendDTO = new EmailToSendDTO();
+        emailToSendDTO.setAddressee(user.getEmail());
+        emailToSendDTO.setSubject("Your BugBoard26 Credentials");
+        emailToSendDTO.setBody("Your BugBoard26 Credentials are:\nUsername: "+ newUser.getUsername()+"\nPassword: "+generatedPassword);
 
         User createdUser = userRepository.registerNewUser(newUser);
+        emailService.sendEmail(emailToSendDTO);
+
         return UserMapper.toUserSummaryDTO(createdUser);
     }
 
