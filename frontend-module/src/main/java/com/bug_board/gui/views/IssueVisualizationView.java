@@ -1,6 +1,7 @@
 package com.bug_board.gui.views;
 
 import com.bug_board.dto.IssueSummaryDTO;
+import com.bug_board.utilities.IssueSummaryCard;
 import com.bug_board.utilities.MyStage;
 import com.bug_board.utilities.TitleBar;
 import javafx.geometry.Pos;
@@ -31,10 +32,12 @@ public class IssueVisualizationView extends MyStage {
 
         root.setAlignment(Pos.TOP_CENTER);
 
+
         titleBar = new TitleBar(this, 80);
 
         root.getChildren().addAll(
-                titleBar
+                titleBar,
+                new IssueSummaryCard(issueList.getLast())
         );
 
         this.setScene(scene);

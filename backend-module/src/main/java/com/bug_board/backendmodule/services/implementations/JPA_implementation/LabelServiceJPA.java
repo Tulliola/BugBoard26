@@ -110,4 +110,5 @@ public class LabelServiceJPA implements ILabelService {
 
         return labelRepository.getLabelById(idLabel);
     }
+
 }

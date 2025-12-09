@@ -68,6 +68,7 @@ public class IssueServiceJPA implements IIssueService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_USER')")
+    @Transactional
     public List<IssueSummaryDTO> getIssuesOfAUser(String username) {
         List<Issue> issuesRetrieved = issueRepository.retrieveAllUsersIssues(username);
         return IssueMapper.toIssueSummaryDTOS(issuesRetrieved);

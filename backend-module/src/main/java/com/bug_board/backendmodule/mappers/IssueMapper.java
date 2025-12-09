@@ -3,6 +3,7 @@ package com.bug_board.backendmodule.mappers;
 import com.bug_board.backendmodule.entity.Issue;
 import com.bug_board.dto.IssueCreationDTO;
 import com.bug_board.dto.IssueSummaryDTO;
+import com.bug_board.dto.LabelSummaryDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,9 +19,11 @@ public class IssueMapper {
         mappedIssue.setDescription(issueToMap.getDescription());
         mappedIssue.setState(issueToMap.getState());
         mappedIssue.setTipology(issueToMap.getTipology());
-        mappedIssue.setImages(issueToMap.getImages());
+        mappedIssue.setCreatorName(issueToMap.getCreator().getUsername());
+        mappedIssue.setCreatorBioPic(issueToMap.getCreator().getBioPic());
         mappedIssue.setCreationDate(issueToMap.getCreationDate());
         mappedIssue.setResolutionDate(issueToMap.getResolutionDate());
+        mappedIssue.setLabels(LabelMapper.toLabelSummaryDTOS(issueToMap.getAttachedLabels()));
 
         return mappedIssue;
     }

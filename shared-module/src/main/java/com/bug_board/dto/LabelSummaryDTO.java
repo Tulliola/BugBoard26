@@ -12,5 +12,4 @@ import lombok.Setter;
 public class LabelSummaryDTO {
     private String name;
     private String color;
-    private String creator;
 }

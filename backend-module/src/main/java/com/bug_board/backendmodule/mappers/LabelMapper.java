@@ -13,7 +13,6 @@ public class LabelMapper {
 
         mappedLabel.setName(labelToMap.getName());
         mappedLabel.setColor(labelToMap.getColor());
-        mappedLabel.setCreator(labelToMap.getCreatorUsername());
 
         return mappedLabel;
     }
