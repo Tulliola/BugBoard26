@@ -22,7 +22,7 @@
 
 @font-face {
     font-family: "Poppins";
-    src: url('../poppinsppins-Italic.ttf');
+    src: url('../Poppins-Italic.ttf');
     font-weight: italic;
     font-style: normal;
 }
@@ -109,6 +109,7 @@
 .no-border-textarea:focused {
     -fx-background-color: transparent;
     -fx-border-color: transparent transparent -color-primary transparent;
+    -fx-border-width: 0px 0px 2px 0px;
 }
 
 .no-border-textarea .scroll-pane {
@@ -341,12 +342,13 @@
 .radio-button{
     -fx-padding: 8px;
     -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
 
     -fx-content-display: graphic-only;
 
     -fx-alignment: center;
 
-    -fx-background-color: transparent;
+    -fx-background-color: -color-primary;
     -fx-border-color: -color-primary;
     -fx-border-width: 2px;
 }
@@ -399,4 +401,48 @@
     -fx-max-height: 300px;
 
     -fx-background-color: white;
+}
+
+.combo-box {
+    -fx-pref-width: 200px;
+
+    -fx-background-color: white;
+
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+
+    -fx-border-color: #A3A3A3;
+    -fx-border-width: 1px;
+
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(0, 0, 0, 0.1),
+            5,
+            0,
+            0,
+            2
+    );
+
+    -fx-padding: 5px 10px 5px 10px;
+
+    -fx-text-fill: black;
+}
+
+.combo-box:focused {
+    -fx-border-color: -color-primary;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(
+            gaussian,
+            -color-primary,
+            10,
+            0,
+            0,
+            0
+    );
+}
+
+.combo-box-popup .list-cell:filled:selected,
+.combo-box-popup .list-cell:filled:selected:hover {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: white;
 }
