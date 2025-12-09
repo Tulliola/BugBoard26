@@ -1,6 +1,7 @@
 package com.bug_board.utilities;
 
 import com.bug_board.dto.ProjectSummaryDTO;
+import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.animations.CardFlipEffect;
 import com.bug_board.utilities.animations.OnMouseEnteredHoverEffect;
@@ -32,9 +33,11 @@ public class ProjectCard extends StackPane {
     private Button flipButton;
     private final CardFlipEffect cardAnimation;
     private Integer idProject;
+    private final HomePagePC  homePagePC;
 
-    public ProjectCard(ProjectSummaryDTO projectSummaryDTO) {
+    public ProjectCard(ProjectSummaryDTO projectSummaryDTO, HomePagePC homePagePC) {
         projectToShow = projectSummaryDTO;
+        this.homePagePC = homePagePC;
         idProject = projectToShow.getIdProject();
 
         frontCard = createFrontCard();
@@ -251,6 +254,7 @@ public class ProjectCard extends StackPane {
     }
 
     private void clickReportIssueButton() {
+        this.homePagePC.showReportIssueOverlay(homePagePC.getContainer());
     }
 
     private void clickViewIssueButton() {

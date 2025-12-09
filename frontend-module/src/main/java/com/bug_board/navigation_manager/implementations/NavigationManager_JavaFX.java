@@ -1,6 +1,7 @@
 package com.bug_board.navigation_manager.implementations;
 
 import com.bug_board.architectural_controllers.UserIssueController;
+import com.bug_board.architectural_controllers.ReportIssueController;
 import com.bug_board.architectural_controllers.UserLabelController;
 import com.bug_board.architectural_controllers.UserProjectController;
 import com.bug_board.architectural_controllers.UserRegistrationController;
@@ -13,12 +14,14 @@ import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.factories.ProjectFactory;
 import com.bug_board.gui.panes.LabelCreationFormPane;
+import com.bug_board.gui.panes.ReportIssuePane;
 import com.bug_board.gui.panes.UserRegistrationFormPane;
 import com.bug_board.gui.views.IssueVisualizationView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.presentation_controllers.IssueVisualizationPC;
 import com.bug_board.presentation_controllers.LabelManagementPC;
+import com.bug_board.presentation_controllers.ReportIssuePC;
 import com.bug_board.presentation_controllers.UserRegistrationPC;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.gui.views.HomePageView;
@@ -101,5 +104,18 @@ public class NavigationManager_JavaFX implements INavigationManager {
         userRegistrationPC.setPane(userRegistrationPane);
 
         return userRegistrationPane;
+    }
+
+    @Override
+    public Pane buildReportIssueComponent(StackPane parentContainer, HomePagePC homePagePC) {
+        ReportIssueController reportIssueController = new ReportIssueController(new UserIssueDAO_REST(new MyHTTPClient()));
+
+        ReportIssuePC reportIssuePC = new ReportIssuePC(reportIssueController);
+
+        ReportIssuePane reportIssuePane = new ReportIssuePane(parentContainer, homePagePC);
+
+        reportIssuePC.setPane(reportIssuePane);
+
+        return reportIssuePane;
     }
 }

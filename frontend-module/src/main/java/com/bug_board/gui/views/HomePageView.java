@@ -114,7 +114,7 @@ public class HomePageView extends MyStage {
         containerUnderTitleBar.getChildren().add(newLayer);
     }
 
-    public Pane getContainerUnderTitleBar() {
+    public StackPane getContainerUnderTitleBar() {
         return containerUnderTitleBar;
     }
 }

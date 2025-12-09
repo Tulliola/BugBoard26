@@ -73,7 +73,7 @@ public class UserRegistrationFormPane extends StackPane {
     }
 
     private void setContentPane() {
-        contentPane.setId("user-registration-form");
+        contentPane.getStyleClass().add("overlay-pane");
 
         contentPane.getChildren().add(this.setGif());
 

@@ -148,7 +148,7 @@ public class HomePagePane extends VBox {
 
         if(projectsOnBoard != null && !projectsOnBoard.isEmpty())
             for(ProjectSummaryDTO project: projectsOnBoard){
-                projectsCards.add(new ProjectCard(project));
+                projectsCards.add(new ProjectCard(project, this.homePagePC));
             }
 
         projectCardsBox.setAlignment(Pos.CENTER);

@@ -15,4 +15,6 @@ public interface INavigationManager {
     Pane buildLabelCreationComponent(StackPane parentContainer, HomePagePC parentPC);
 
     Pane buildRegisterUserComponent(StackPane containerUnderTitleBar, HomePagePC homePagePC);
+
+    Pane buildReportIssueComponent(StackPane containerUnderTitleBar, HomePagePC homePagePC);
 }

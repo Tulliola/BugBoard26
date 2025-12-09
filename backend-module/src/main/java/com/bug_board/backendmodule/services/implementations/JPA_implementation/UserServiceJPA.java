@@ -7,7 +7,6 @@ import com.bug_board.backendmodule.repositories.interfaces.IUserRepository;
 import com.bug_board.backendmodule.services.interfaces.IEmailService;
 import com.bug_board.backendmodule.services.interfaces.IUserService;
 import com.bug_board.backendmodule.mappers.UserMapper;
-import com.bug_board.dto.EmailToSendDTO;
 import com.bug_board.dto.UserCreationDTO;
 import com.bug_board.dto.UserSummaryDTO;
 import com.bug_board.backendmodule.exception.backend.ResourceAlreadyExistsException;

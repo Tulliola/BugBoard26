@@ -60,4 +60,23 @@ public class HomePagePC {
     public void setView(HomePageView homePageView) {
         this.homePageView = homePageView;
     }
+<<<<<<< HEAD
+=======
+
+    public void showRegisterUserOverlay(StackPane containerUnderTitleBar) {
+        Pane registerUserOverlay = navigationManager.buildRegisterUserComponent(containerUnderTitleBar, this);
+
+        homePageView.displayOverlayedContent(registerUserOverlay);
+    }
+
+    public void showReportIssueOverlay(StackPane containerUnderTitleBar) {
+        Pane reportIssueOverlay = navigationManager.buildReportIssueComponent(containerUnderTitleBar, this);
+
+        homePageView.displayOverlayedContent(reportIssueOverlay);
+    }
+
+    public StackPane getContainer() {
+        return homePageView.getContainerUnderTitleBar();
+    }
+>>>>>>> 321cea5 (iniziato sviluppo del form per il report di un'issue)
 }
