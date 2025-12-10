@@ -1,7 +1,6 @@
 package com.bug_board.gui.panes;
 
 import com.bug_board.enum_classes.IssueTipology;
-import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.presentation_controllers.ReportIssuePC;
 import com.bug_board.utilities.animations.FloatingLabel;
 import javafx.collections.FXCollections;
@@ -17,10 +16,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
-import javax.swing.*;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public class ReportIssuePane extends StackPane {
@@ -46,11 +50,19 @@ public class ReportIssuePane extends StackPane {
     private VBox titleAndDescriptionBox = new VBox();
     private TextField titleTextField= new TextField();
     private TextArea descriptionTextArea = new TextArea();
-    private VBox priorityBox = new VBox();
+    private VBox priorityAndLabelsBox = new VBox();
     private ComboBox<String> priorityComboBox = new ComboBox<>();
+
+    private Text addImagesText = new  Text("Attach up to three images");
+    private HBox addImagesBox = new HBox();
+    private List<StackPane> imagesStackPane = new ArrayList<>(NUM_OF_IMAGES);
+    private List<File> filesChoosen = new ArrayList<>(NUM_OF_IMAGES);
+    private byte[][] binaryFiles = new byte[NUM_OF_IMAGES][];
 
     private static final int MAX_TITLE_CHARS = 50;
     private static final int MAX_DESCRIPTION_CHARS = 300;
+    private static final int NUM_OF_IMAGES = 3;
+
 
     public ReportIssuePane(StackPane parentContainer, ReportIssuePC reportIssuePC) {
         this.parentContainer = parentContainer;
@@ -102,22 +114,82 @@ public class ReportIssuePane extends StackPane {
 
         contentPane.getChildren().add(setAttributesBox());
 
+        contentPane.getChildren().add(addImagesText);
+
+        contentPane.getChildren().add(setImagesChooserBox());
+
         return contentPane;
+    }
+
+    private Node setImagesChooserBox() {
+        for(int i = 0; i < NUM_OF_IMAGES; i++) {
+            StackPane imageStackPane = new StackPane();
+            imagesStackPane.add(setImagesStackPane(imageStackPane, i));
+        }
+
+        addImagesBox.setAlignment(Pos.CENTER);
+        addImagesBox.setSpacing(30);
+
+        addImagesBox.getChildren().addAll(imagesStackPane);
+        return addImagesBox;
+    }
+
+    private StackPane setImagesStackPane(StackPane imageStackPane, int index) {
+        Button imageButton = new Button("Choose an image");
+        imageButton.getStyleClass().add("file-chooser-button");
+        ImageView imageChoosen  = new ImageView();
+
+        imageButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
+
+            File initialDirectory = new File(System.getProperty("user.home"));
+            if(initialDirectory.exists()){
+               fileChooser.setInitialDirectory(initialDirectory);
+           }
+
+           imageChoosen.setFitHeight(200);
+           imageChoosen.setFitWidth(200);
+           imageChoosen.setPreserveRatio(true);
+           imageChoosen.setVisible(false);
+           imageChoosen.setOnMouseClicked(event -> {
+              imageButton.fire();
+           });
+
+           File choosenFile = fileChooser.showOpenDialog(this.getScene().getWindow());
+
+           if(choosenFile != null){
+               try {
+                   binaryFiles[index] = Files.readAllBytes(choosenFile.toPath());
+               } catch (IOException ex) {
+                   throw new RuntimeException(ex);
+               }
+               Image image = new Image(choosenFile.toURI().toString());
+               imageChoosen.setImage(image);
+               imageChoosen.setVisible(true);
+               imageButton.setVisible(false);
+           }
+        });
+
+        imageStackPane.getChildren().addAll(imageButton, imageChoosen);
+
+        return imageStackPane;
     }
 
     private Node setAttributesBox() {
         issueAttributesBox.setAlignment(Pos.CENTER);
         issueAttributesBox.getChildren().add(setTitleAndDescriptionBox());
-        issueAttributesBox.getChildren().add(setPriorityBox());
+        issueAttributesBox.getChildren().add(setPriorityAndLabelsBox());
 
         HBox.setHgrow(titleAndDescriptionBox, Priority.ALWAYS);
-        HBox.setHgrow(priorityBox, Priority.ALWAYS);
+        HBox.setHgrow(priorityAndLabelsBox, Priority.ALWAYS);
 
         return issueAttributesBox;
     }
 
-    private Node setPriorityBox() {
-        priorityBox.setAlignment(Pos.TOP_RIGHT);
+    private Node setPriorityAndLabelsBox() {
+        priorityAndLabelsBox.setAlignment(Pos.TOP_RIGHT);
         String highPriority = new String("High");
         String mediumPriority = new String("Medium");
         String lowPriority = new String("Low");
@@ -134,11 +206,17 @@ public class ReportIssuePane extends StackPane {
         priorityComboBox.setMaxWidth(300);
         priorityComboBox.getSelectionModel().select("Don't specify");
 
-        priorityBox.getChildren().add(priorityComboBox);
+        priorityAndLabelsBox.getChildren().add(priorityComboBox);
 
-        priorityBox.setPadding(new Insets(0, 0, 0, 50));
-        return priorityBox;
+        priorityAndLabelsBox.setPadding(new Insets(0, 0, 0, 50));
+
+//        priorityAndLabelsBox.getChildren().add(setLabelPopup());
+        return priorityAndLabelsBox;
     }
+
+//    private Node setLabelPopup() {
+//        return null;
+//    }
 
     private Node setTitleAndDescriptionBox() {
         UnaryOperator<TextFormatter.Change> titleFilter = change -> {
@@ -163,10 +241,10 @@ public class ReportIssuePane extends StackPane {
 
         descriptionTextArea.setTextFormatter(new TextFormatter<>(descriptionFilter));
 
-        StackPane textFieldWrapper = FloatingLabel.createFloatingLabelField(titleTextField, "Title (max "+MAX_TITLE_CHARS+"  characters)");
+        StackPane textFieldWrapper = FloatingLabel.createFloatingLabelField(titleTextField, "Title (max "+MAX_TITLE_CHARS+" characters)");
         VBox.setMargin(textFieldWrapper, new Insets(0, 0, 20, 0));
 
-        StackPane textAreaWrapper = FloatingLabel.createFloatingLabelField(descriptionTextArea, "Title (max "+MAX_DESCRIPTION_CHARS+" characters)");
+        StackPane textAreaWrapper = FloatingLabel.createFloatingLabelField(descriptionTextArea, "Description (max "+MAX_DESCRIPTION_CHARS+" characters)");
         VBox.setMargin(textAreaWrapper, new Insets(20, 0, 20, 0));
 
         titleAndDescriptionBox.getChildren().addAll(textFieldWrapper, textAreaWrapper);
@@ -223,7 +301,7 @@ public class ReportIssuePane extends StackPane {
 
     private void setStyle() {
         contentPane.getStyleClass().add("overlay-pane");
-        contentPane.setStyle("-fx-max-height: 750px; -fx-min-height: 750px; -fx-min-width: 1000px; -fx-max-width: 1000px");
+        contentPane.setStyle("-fx-max-height: 1000px; -fx-min-height: 1000px; -fx-min-width: 1000px; -fx-max-width: 1000px");
     }
 
     public void close() {

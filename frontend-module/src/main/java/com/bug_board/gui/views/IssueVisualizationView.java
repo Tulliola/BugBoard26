@@ -123,7 +123,7 @@ public class IssueVisualizationView extends MyStage {
                 heading,
                 this.createIssueContainer(issueSummaryDTOList),
                 spacer,
-                this.createPaginationNumbersContainer(issueSummaryDTOList),
+                this.createPaginationNumbersContainer(),
                 spacer2
         );
 
@@ -146,7 +146,7 @@ public class IssueVisualizationView extends MyStage {
         return issueContainer;
     }
 
-    private HBox createPaginationNumbersContainer(List<IssueSummaryDTO> issueList) {
+    private HBox createPaginationNumbersContainer() {
         paginationNumberContainer = new HBox();
         paginationNumberContainer.setAlignment(Pos.CENTER);
 

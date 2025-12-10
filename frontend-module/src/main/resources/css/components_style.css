@@ -434,6 +434,10 @@
     -fx-text-fill: black;
 }
 
+.combo-box .list-cell{
+    -fx-alignment: center;
+}
+
 .combo-box:focused {
     -fx-border-color: -color-primary;
     -fx-border-width: 2px;
@@ -455,6 +459,11 @@
     -fx-border-width: 1px;
     -fx-border-color: -color-primary;
     -fx-alignment: center;
+}
+
+.combo-box-popup .list-cell {
+    -fx-alignment: center;
+    -fx-text-fill: black;
 }
 
 .issue-summary-card-label {
@@ -529,6 +538,18 @@
     -fx-border-color: -color-primary;
 }
 
-.normal-radio:selected .dot{
+.normal-radio:selected .dot {
     -fx-border-color: -color-primary;
+}
+.file-chooser-button{
+    -fx-min-width: 200px;
+    -fx-min-height: 200px;
+    -fx-max-width: 200px;
+    -fx-max-height: 200px;
+    -fx-background-color: transparent;
+    -fx-text-fill: -color-primary;
+    -fx-effect: none;
+    -fx-border-color: -color-primary;
+    -fx-border-radius: 0px;
+    -fx-border-width: 1px
 }

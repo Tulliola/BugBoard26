@@ -65,10 +65,6 @@ public class IssueVisualizationPC {
         int start = currentPage * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, issueList.size());
 
-        if (start >= issueList.size()) {
-            return new ArrayList<>();
-        }
-
         return issueList.subList(start, end);
     }
 
