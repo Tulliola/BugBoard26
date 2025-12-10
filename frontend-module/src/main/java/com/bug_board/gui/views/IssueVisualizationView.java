@@ -8,14 +8,10 @@ import com.bug_board.utilities.TitleBar;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.util.List;
 
@@ -99,8 +95,8 @@ public class IssueVisualizationView extends MyStage {
     private BorderPane createContainerUnderTitleBar() {
         containerUnderTitleBar = new BorderPane();
 
+        containerUnderTitleBar.setLeft(this.createSideFilterBar());
         containerUnderTitleBar.setCenter(this.createCentralPane());
-        containerUnderTitleBar.setLeft(this.createLateralPane());
         containerUnderTitleBar.setRight(this.createLateralPane());
 
         return containerUnderTitleBar;
@@ -109,7 +105,7 @@ public class IssueVisualizationView extends MyStage {
     private VBox createCentralPane() {
         VBox centralPane = new VBox();
         centralPane.setAlignment(Pos.TOP_CENTER);
-        centralPane.setStyle("-fx-background-color: green; -fx-spacing: 20px");
+        centralPane.setStyle("-fx-background-color: white; -fx-spacing: 20px");
 
         Label heading = new Label(this.headingText);
         heading.setStyle("-fx-font-size: 30px");
@@ -118,10 +114,17 @@ public class IssueVisualizationView extends MyStage {
 
         List<IssueSummaryDTO> issueSummaryDTOList = issuePC.getIssuesOfAPage(0);
 
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+        Region spacer2 = new Region();
+        VBox.setVgrow(spacer2, Priority.ALWAYS);
+
         centralPane.getChildren().addAll(
                 heading,
                 this.createIssueContainer(issueSummaryDTOList),
-                this.createPaginationNumbersContainer(issueSummaryDTOList)
+                spacer,
+                this.createPaginationNumbersContainer(issueSummaryDTOList),
+                spacer2
         );
 
         return centralPane;
@@ -129,7 +132,7 @@ public class IssueVisualizationView extends MyStage {
 
     private VBox createIssueContainer(List<IssueSummaryDTO> issueSummaryDTOList) {
         issueContainer = new VBox();
-        issueContainer.setStyle("-fx-background-color: blue");
+        issueContainer.setStyle("-fx-background-color: white");
         issueContainer.setAlignment(Pos.TOP_CENTER);
 
         if(issueSummaryDTOList.isEmpty()){
@@ -145,12 +148,18 @@ public class IssueVisualizationView extends MyStage {
 
     private HBox createPaginationNumbersContainer(List<IssueSummaryDTO> issueList) {
         paginationNumberContainer = new HBox();
+        paginationNumberContainer.setAlignment(Pos.CENTER);
 
         int numberOfPages = this.issuePC.getTotalNumberOfPages();
 
+        ToggleGroup buttonsGroup = new ToggleGroup();
+
         for(int i = 0; i < numberOfPages; i++){
             final int page = i;
-            Button currentPageButton = new Button(String.valueOf(i+1));
+            ToggleButton currentPageButton = new ToggleButton(String.valueOf(i+1));
+            currentPageButton.getStyleClass().add("pagination-button");
+            currentPageButton.setPrefSize(100, 100);
+            currentPageButton.setPadding(new Insets(10, 10, 10, 10));
 
             currentPageButton.setOnMouseClicked(mouseEvent -> {
                 List<IssueSummaryDTO> issuesInPage = issuePC.getIssuesOfAPage(page);
@@ -158,8 +167,13 @@ public class IssueVisualizationView extends MyStage {
                 this.updateCarousel(issuesInPage);
             });
 
+            currentPageButton.setToggleGroup(buttonsGroup);
+
             paginationNumberContainer.getChildren().add(currentPageButton);
         }
+
+        if(!paginationNumberContainer.getChildren().isEmpty())
+           buttonsGroup.getToggles().getFirst().setSelected(true);
 
         return paginationNumberContainer;
     }
@@ -180,6 +194,82 @@ public class IssueVisualizationView extends MyStage {
         Label noIssuesFound = new Label("No issues found");
 
         return noIssuesFound;
+    }
+
+    private VBox createSideFilterBar() {
+        VBox filterBar = new VBox();
+        filterBar.setPrefWidth(200);
+        filterBar.setMinWidth(200);
+        filterBar.setMaxWidth(200);
+
+        Label filterLabel = new Label("Filter by");
+        filterLabel.setPadding(new Insets(10, 10, 10, 10));
+        filterLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: white; -fx-background-color: -color-primary");
+
+        ImageView filterPic = new ImageView(new Image(getClass().getResourceAsStream("/icons/filter.png")));
+        filterPic.setFitWidth(50);
+        filterPic.setFitHeight(50);
+        filterLabel.setGraphic(filterPic);
+
+        filterBar.getChildren().addAll(
+                filterLabel,
+                this.createTipologyFilterBox(),
+                this.createPriorityFilterBox(),
+                this.createStateFilterBox()
+        );
+
+        return filterBar;
+    }
+
+    private VBox createTipologyFilterBox() {
+        VBox tipologyFilterBar = new VBox();
+        tipologyFilterBar.getChildren().add(this.createFilterLabel("Tipology"));
+
+        List<String> tipologies = issuePC.getTipologyStrings();
+
+        for(String tipology: tipologies)
+            tipologyFilterBar.getChildren().add(this.createRadioButton(tipology));
+
+        return tipologyFilterBar;
+    }
+
+    private VBox createPriorityFilterBox() {
+        VBox priorityFilterBar = new VBox();
+        priorityFilterBar.getChildren().add(this.createFilterLabel("Priority"));
+
+        List<String> priorities = issuePC.getPriorityStrings();
+
+        for(String priority: priorities)
+            priorityFilterBar.getChildren().add(this.createRadioButton(priority));
+
+        return priorityFilterBar;
+    }
+
+    private VBox createStateFilterBox() {
+        VBox stateFilterBox = new VBox();
+        stateFilterBox.getChildren().add(this.createFilterLabel("State"));
+
+        List<String> states = issuePC.getStateStrings();
+
+        for(String state: states)
+            stateFilterBox.getChildren().add(this.createRadioButton(state));
+
+        return stateFilterBox;
+    }
+
+    private Label createFilterLabel(String labelText) {
+        Label filterLabel = new Label(labelText);
+        filterLabel.setPadding(new Insets(10, 10, 10, 10));
+        filterLabel.setStyle("-fx-font-size: 16px");
+
+        return filterLabel;
+    }
+
+    private RadioButton createRadioButton(String text) {
+        RadioButton radioButton = new RadioButton(text);
+        radioButton.getStyleClass().add("normal-radio");
+
+        return radioButton;
     }
 
     private void updateCarousel(List<IssueSummaryDTO> newIssuesToShow) {

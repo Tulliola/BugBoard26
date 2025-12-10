@@ -348,7 +348,7 @@
     -fx-alignment: top-center;
 }
 
-.radio-button{
+.radio-button:not(.normal-radio){
     -fx-padding: 8px;
     -fx-border-radius: 50px;
     -fx-background-radius: 50px;
@@ -362,18 +362,18 @@
     -fx-border-width: 2px;
 }
 
-.radio-button:selected{
+.radio-button:not(.normal-radio):selected{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0 , 0, 0);
 }
 
-.radio-button .radio-mark{
+.radio-button:not(.normal-radio) .radio-mark{
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-padding: 0;
     -fx-shape: null;
 }
 
-.radio-button .radio {
+.radio-button:not(.normal-radio) .radio {
     -fx-opacity: 0;
     -fx-padding: 0;
     -fx-min-width: 0;
@@ -459,4 +459,76 @@
 
 .issue-summary-card-label {
     -fx-font-size: 12px;
+}
+
+.pagination-button{
+    -fx-background-color: transparent;
+    -fx-border-radius: none;
+    -fx-background-radius: none;
+    -fx-text-fill: black;
+    -fx-effect: none;
+}
+
+.pagination-button:selected{
+    -fx-text-fill: -color-primary;
+    -fx-border-color: -color-primary;
+    -fx-border-width: 0px 0px 2px 0px;
+}
+
+.pagination-button:hover{
+    -fx-text-fill: -color-primary;
+    -fx-border-color: -color-primary;
+    -fx-border-width: 0px 0px 2px 0px;
+}
+
+.normal-radio{
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-padding: 10px;
+}
+
+.normal-radio:selected{
+    -fx-font-weight: bold;
+}
+
+.normal-radio .radio {
+    -fx-min-width: 22px;
+    -fx-min-height: 22px;
+    -fx-max-width: 22px;
+    -fx-max-height: 22px;
+
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 50%;
+
+    -fx-border-color: #2D2D2D;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+
+    -fx-padding: 3px;
+}
+
+.normal-radio .dot {
+    -fx-shape: null;
+    -fx-scale-shape: false;
+
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 50%;
+
+    -fx-min-width: 100%;
+    -fx-min-height: 100%;
+    -fx-max-width: 100%;
+    -fx-max-height: 100%;
+}
+
+.normal-radio:selected .radio{
+    -fx-border-color: -color-primary;
+}
+
+.normal-radio:selected .dot{
+    -fx-border-color: -color-primary;
 }

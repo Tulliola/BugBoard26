@@ -23,6 +23,7 @@ public class IssueMapper {
         mappedIssue.setCreatorBioPic(issueToMap.getCreator().getBioPic());
         mappedIssue.setCreationDate(issueToMap.getCreationDate());
         mappedIssue.setResolutionDate(issueToMap.getResolutionDate());
+        mappedIssue.setPriority(issueToMap.getPriority());
         mappedIssue.setLabels(LabelMapper.toLabelSummaryDTOS(issueToMap.getAttachedLabels()));
 
         return mappedIssue;

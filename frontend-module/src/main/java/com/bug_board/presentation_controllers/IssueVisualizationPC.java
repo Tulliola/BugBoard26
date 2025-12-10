@@ -4,12 +4,16 @@ import com.bug_board.architectural_controllers.ProjectIssueController;
 import com.bug_board.architectural_controllers.UserIssueController;
 import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.dto.ProjectSummaryDTO;
+import com.bug_board.enum_classes.IssuePriority;
+import com.bug_board.enum_classes.IssueState;
+import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.gui.views.IssueVisualizationView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class IssueVisualizationPC {
@@ -20,7 +24,7 @@ public class IssueVisualizationPC {
 
     private List<IssueSummaryDTO> issueList;
 
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 3;
 
     public IssueVisualizationPC(UserIssueController userIssueController,
                                 INavigationManager navigationManager) {
@@ -44,7 +48,7 @@ public class IssueVisualizationPC {
             navigationManager.navigateToHomePage();
         }
         catch (RetrieveProjectException e) {
-
+            showIssuesRetrievalError();
         }
     }
 
@@ -76,6 +80,17 @@ public class IssueVisualizationPC {
         return Math.ceilDiv(this.issueList.size(), PAGE_SIZE);
     }
 
+    public List<String> getTipologyStrings() {
+        return Arrays.stream(IssueTipology.values()).map(IssueTipology::toString).toList();
+    }
+
+    public List<String> getPriorityStrings() {
+        return Arrays.stream(IssuePriority.values()).map(IssuePriority::toString).toList();
+    }
+
+    public List<String> getStateStrings() {
+        return Arrays.stream(IssueState.values()).map(IssueState::toString).toList();
+    }
 
     public void setIssueList(List<IssueSummaryDTO> issueList) {
         this.issueList = issueList;
