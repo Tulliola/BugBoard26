@@ -261,8 +261,4 @@ public class ProjectCard extends StackPane {
     }
 
     private void clickViewIssueButton() { this.homePagePC.openVisualizationIssueView(projectToShow.getIdProject(), projectToShow.getTitle());}
-
-    private ProjectSummaryDTO getProject() {
-        return this.projectToShow;
-    }
 }

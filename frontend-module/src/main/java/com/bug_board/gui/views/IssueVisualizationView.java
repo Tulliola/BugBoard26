@@ -16,24 +16,23 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.util.List;
 
 public class IssueVisualizationView extends MyStage {
 
-    private List<IssueSummaryDTO> issueList;
     private final IssueVisualizationPC issuePC;
 
     private final VBox root = new VBox();
     private final Scene scene = new Scene(root);
     private TitleBar titleBar;
     private BorderPane containerUnderTitleBar;
+    private VBox issueContainer;
+    private HBox paginationNumberContainer;
     private final String headingText;
 
-    public IssueVisualizationView(IssueVisualizationPC issuePC, List<IssueSummaryDTO> issueList, String headingText) {
+    public IssueVisualizationView(IssueVisualizationPC issuePC, String headingText) {
         this.issuePC = issuePC;
-        this.issueList = issueList;
         this.headingText = headingText;
 
         issuePC.setView(this);
@@ -117,25 +116,52 @@ public class IssueVisualizationView extends MyStage {
         heading.setPadding(new Insets(10, 10, 10, 10));
         heading.setWrapText(true);
 
+        List<IssueSummaryDTO> issueSummaryDTOList = issuePC.getIssuesOfAPage(0);
+
         centralPane.getChildren().addAll(
                 heading,
-                this.createIssueContainer()
+                this.createIssueContainer(issueSummaryDTOList),
+                this.createPaginationNumbersContainer(issueSummaryDTOList)
         );
 
         return centralPane;
     }
 
-    private VBox createIssueContainer() {
-        VBox issueContainer = new VBox();
+    private VBox createIssueContainer(List<IssueSummaryDTO> issueSummaryDTOList) {
+        issueContainer = new VBox();
         issueContainer.setStyle("-fx-background-color: blue");
         issueContainer.setAlignment(Pos.TOP_CENTER);
 
-        issueContainer.getChildren().addAll(
-                new IssueSummaryCard(this.issueList.getLast()),
-                new IssueSummaryCard(this.issueList.getFirst())
-        );
+        if(issueSummaryDTOList.isEmpty()){
+            Label noIssuesFound = new Label("No issues found");
+            issueContainer.getChildren().add(noIssuesFound);
+        }
+        else
+            for(IssueSummaryDTO issueDTO: issueSummaryDTOList)
+                issueContainer.getChildren().add(new IssueSummaryCard(issueDTO));
 
         return issueContainer;
+    }
+
+    private HBox createPaginationNumbersContainer(List<IssueSummaryDTO> issueList) {
+        paginationNumberContainer = new HBox();
+
+        int numberOfPages = this.issuePC.getTotalNumberOfPages();
+
+        for(int i = 0; i < numberOfPages; i++){
+            final int page = i;
+            Button currentPageButton = new Button(String.valueOf(i+1));
+
+            currentPageButton.setOnMouseClicked(mouseEvent -> {
+                List<IssueSummaryDTO> issuesInPage = issuePC.getIssuesOfAPage(page);
+
+                this.updateCarousel(issuesInPage);
+            });
+
+            paginationNumberContainer.getChildren().add(currentPageButton);
+        }
+
+        return paginationNumberContainer;
     }
 
     private VBox createLateralPane() {
@@ -148,5 +174,25 @@ public class IssueVisualizationView extends MyStage {
         lateralPane.setId("background-gradient");
 
         return lateralPane;
+    }
+
+    private Label createNoIssuesFoundLabel() {
+        Label noIssuesFound = new Label("No issues found");
+
+        return noIssuesFound;
+    }
+
+    private void updateCarousel(List<IssueSummaryDTO> newIssuesToShow) {
+        updateIssueListInCarousel(newIssuesToShow);
+    }
+
+    private void updateIssueListInCarousel(List<IssueSummaryDTO> newIssuesToShow) {
+        this.issueContainer.getChildren().clear();
+
+        if(newIssuesToShow.isEmpty())
+            this.issueContainer.getChildren().add(this.createNoIssuesFoundLabel());
+        else
+            for(IssueSummaryDTO newIssueToShow: newIssuesToShow)
+                this.issueContainer.getChildren().add(new IssueSummaryCard(newIssueToShow));
     }
 }

@@ -2,7 +2,6 @@ package com.bug_board.architectural_controllers;
 
 import com.bug_board.dao.implementations.EmailSenderDAO_REST;
 import com.bug_board.dao.implementations.UserDAO_REST;
-import com.bug_board.dto.EmailToSendDTO;
 import com.bug_board.dto.UserCreationDTO;
 import com.bug_board.exceptions.architectural_controllers.UserRegistrationException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;

@@ -2,7 +2,7 @@ package com.bug_board.dao.implementations;
 
 import com.bug_board.dao.httphandler.MyHTTPClient;
 import com.bug_board.dao.interfaces.IEmailSenderDAO;
-import com.bug_board.dto.EmailToSendDTO;
+import com.bug_board.dto.email.EmailToSendDTO;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
 import com.bug_board.exceptions.dao.ErrorHTTPResponseException;

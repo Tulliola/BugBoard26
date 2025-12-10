@@ -1,7 +1,6 @@
 package com.bug_board.backendmodule.services.interfaces;
 
 import com.bug_board.backendmodule.entity.User;
-import com.bug_board.dto.EmailToSendDTO;
 import com.bug_board.dto.UserCreationDTO;
 import com.bug_board.dto.UserSummaryDTO;
 

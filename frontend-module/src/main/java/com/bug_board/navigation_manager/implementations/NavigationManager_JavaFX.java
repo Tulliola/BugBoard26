@@ -64,7 +64,7 @@ public class NavigationManager_JavaFX implements INavigationManager {
         UserIssueController issueController = new UserIssueController(new UserIssueDAO_REST(new MyHTTPClient()));
         IssueVisualizationPC issuePC = new IssueVisualizationPC(issueController, this);
 
-        List<IssueSummaryDTO> personalIssues;
+        List<IssueSummaryDTO> personalIssues = null;
 
         try {
             personalIssues = issueController.getPersonalIssues();
@@ -73,10 +73,12 @@ public class NavigationManager_JavaFX implements INavigationManager {
             issuePC.showIssuesRetrievalError();
             personalIssues = new ArrayList<>();
         }
+        finally {
+            issuePC.setIssueList(personalIssues);
+        }
 
         IssueVisualizationView issueView = new IssueVisualizationView(
                 issuePC,
-                personalIssues,
                 "Issues reported by you"
         );
 
@@ -88,7 +90,7 @@ public class NavigationManager_JavaFX implements INavigationManager {
         ProjectIssueController projectIssueController = new ProjectIssueController(new ProjectIssueDAO_REST(new MyHTTPClient()));
         IssueVisualizationPC issuePC = new IssueVisualizationPC(projectIssueController, this);
 
-        List<IssueSummaryDTO> projectIssues;
+        List<IssueSummaryDTO> projectIssues = null;
 
         try {
              projectIssues = projectIssueController.getProjectIssues(idProject);
@@ -97,10 +99,12 @@ public class NavigationManager_JavaFX implements INavigationManager {
             issuePC.showIssuesRetrievalError();
             projectIssues = new ArrayList<>();
         }
+        finally{
+            issuePC.setIssueList(projectIssues);
+        }
 
         IssueVisualizationView issueView = new IssueVisualizationView(
                 issuePC,
-                projectIssues,
                 "Project \"" + projectName + "\" \'s issues"
         );
 

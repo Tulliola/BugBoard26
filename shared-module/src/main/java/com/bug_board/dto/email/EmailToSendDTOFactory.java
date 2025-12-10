@@ -1,6 +1,5 @@
 package com.bug_board.dto.email;
 
-import com.bug_board.dto.EmailToSendDTO;
 import com.bug_board.properties.PropertiesManager;
 
 public class EmailToSendDTOFactory {
