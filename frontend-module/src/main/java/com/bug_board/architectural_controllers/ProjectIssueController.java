@@ -1,6 +1,6 @@
 package com.bug_board.architectural_controllers;
 
-import com.bug_board.dao.interfaces.IUserIssueDAO;
+import com.bug_board.dao.interfaces.IProjectIssueDAO;
 import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.exceptions.architectural_controllers.RetrieveIssuesException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
@@ -9,20 +9,18 @@ import com.bug_board.exceptions.dao.HTTPSendException;
 
 import java.util.List;
 
-public class UserIssueController {
-    private final IUserIssueDAO userIssueDAO;
+public class ProjectIssueController {
+    private final IProjectIssueDAO projectIssueDAO;
 
-    public UserIssueController(IUserIssueDAO userIssueDAO){
-        this.userIssueDAO = userIssueDAO;
-    }
+    public ProjectIssueController(IProjectIssueDAO projectIssueDAO) {this.projectIssueDAO = projectIssueDAO;}
 
-    public List<IssueSummaryDTO> getPersonalIssues()
+    public List<IssueSummaryDTO> getProjectIssues(Integer idProject)
             throws RetrieveIssuesException {
         try {
-            return userIssueDAO.getPersonalIssues();
+            return projectIssueDAO.getAllProjectIssues(idProject);
         }
         catch (HTTPSendException | BadConversionToDTOException | ErrorHTTPResponseException throwables) {
-            throw new RetrieveIssuesException("There has been an error in retrieving your personal issues. Try later");
+            throw new RetrieveIssuesException("There has been an error in retrieving the issues. Try later");
         }
     }
 }

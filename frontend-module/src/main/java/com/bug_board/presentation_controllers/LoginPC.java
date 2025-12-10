@@ -3,6 +3,7 @@ package com.bug_board.presentation_controllers;
 import com.bug_board.architectural_controllers.AuthenticationController;
 import com.bug_board.dto.LoginResponseDTO;
 import com.bug_board.exceptions.architectural_controllers.AuthenticationException;
+import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.gui.views.LoginView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import com.bug_board.session_manager.SessionManager;
@@ -18,9 +19,7 @@ public class LoginPC {
     }
 
     public void onLoginButtonClicked()
-            throws AuthenticationException {
-        if(this.loginView == null)
-            throw new RuntimeException("Login view has not been set");
+            throws AuthenticationException, RetrieveProjectException {
 
         String username = loginView.getUsernameField().getText();
         String password = loginView.getPasswordField().getText();

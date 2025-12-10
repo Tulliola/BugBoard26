@@ -143,6 +143,15 @@
     -fx-mouse-transparent: true;
 }
 
+/* Tooltip */
+.tooltip {
+    -fx-border-radius: 35px;
+    -fx-background-radius: 35px;
+    -fx-border-color: -color-primary;
+    -fx-border-width: 1px;
+    -fx-font-size: 12px;
+}
+
 #title-bar{
     -fx-background-color: white;
     -fx-padding: 5 10 0 10;
@@ -397,9 +406,6 @@
 
 
 .issue-summary-card {
-    -fx-pref-height: 300px;
-    -fx-max-height: 300px;
-
     -fx-background-color: white;
 }
 
@@ -445,4 +451,12 @@
 .combo-box-popup .list-cell:filled:selected:hover {
     -fx-background-color: -color-primary;
     -fx-text-fill: white;
+
+    -fx-border-width: 1px;
+    -fx-border-color: -color-primary;
+    -fx-alignment: center;
+}
+
+.issue-summary-card-label {
+    -fx-font-size: 12px;
 }

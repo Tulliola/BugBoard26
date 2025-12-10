@@ -50,6 +50,10 @@ public class TitleBar extends StackPane {
         centralButtonsWrapper.getChildren().add(button);
     }
 
+    public void addGoBackButton(Button goBackButton) {
+        firstLayerTitleBar.getChildren().addFirst(goBackButton);
+    }
+
     private void setButtons() {
         Image minimizeIcon = new Image(getClass().getResource("/images/hideImage.png").toExternalForm());
         Image closeIcon = new Image(getClass().getResource("/images/closeImage.png").toExternalForm());

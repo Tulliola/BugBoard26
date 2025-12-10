@@ -3,21 +3,23 @@ package com.bug_board.utilities;
 import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.enum_classes.IssueTipology;
+import com.bug_board.navigation_manager.implementations.NavigationManager_JavaFX;
+import com.bug_board.utilities.animations.OnMouseEnteredHoverEffect;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class IssueSummaryCard extends HBox {
@@ -36,12 +38,16 @@ public class IssueSummaryCard extends HBox {
                 this.createIssueSummaryBox(),
                 this.createIssueTypeBox()
         );
+
+        OnMouseEnteredHoverEffect.addHoverEffect(this);
+        this.setMaxWidth(Region.USE_PREF_SIZE);
     }
 
     private VBox createIssueTypeBox() {
         VBox issueTypeBox = new VBox();
         issueTypeBox.setAlignment(Pos.CENTER);
         issueTypeBox.setStyle("-fx-background-color: -color-primary");
+        issueTypeBox.setPrefSize(200, 200);
         issueTypeBox.getChildren().add(this.getIssueTypeImageView());
 
         return issueTypeBox;
@@ -52,8 +58,8 @@ public class IssueSummaryCard extends HBox {
         issueSummaryBox.setPadding(new Insets(10, 10, 10, 10));
 
         issueSummaryBox.getChildren().addAll(
-                this.createCreatorSummaryPane(),
-                this.createStateAndNamePane(),
+                this.createStateAndCreatorSummaryPane(),
+                this.createNamePane(),
                 this.createLabelsPane(),
                 this.createDescriptionPane(),
                 this.createCreationAndResolutionDatePane()
@@ -71,7 +77,7 @@ public class IssueSummaryCard extends HBox {
         return image;
     }
 
-    private HBox createCreatorSummaryPane() {
+    private HBox createStateAndCreatorSummaryPane() {
         HBox creatorSummaryPane = new HBox();
         creatorSummaryPane.setAlignment(Pos.CENTER_LEFT);
 
@@ -85,29 +91,40 @@ public class IssueSummaryCard extends HBox {
 
         Label creatorLabel = new Label("Created by " + issueToShow.getCreatorName());
         creatorLabel.setPadding(new Insets(10, 10, 10, 10));
+        creatorLabel.getStyleClass().add("issue-summary-card-label");
+
+        Circle stateCircle = new Circle();
+        stateCircle.setRadius(15);
+        stateCircle.setFill(Color.web(issueToShow.getState().getColor()));
+        Tooltip tooltip = new Tooltip(issueToShow.getState().toString());
+        tooltip.setStyle("-fx-text-fill: " + issueToShow.getState().getColor());
+        tooltip.setShowDelay(Duration.millis(100));
+        Tooltip.install(stateCircle, tooltip);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         creatorSummaryPane.getChildren().addAll(
                 bioPic,
-                creatorLabel
+                creatorLabel,
+                spacer,
+                stateCircle
         );
 
         return creatorSummaryPane;
     }
 
 
-    private HBox createStateAndNamePane() {
+    private HBox createNamePane() {
         HBox stateAndNamePane = new HBox();
         stateAndNamePane.setAlignment(Pos.CENTER_LEFT);
         stateAndNamePane.setPadding(new Insets(0, 0, 0, 10));
 
-        Circle stateCircle = new Circle();
-        stateCircle.setRadius(15);
-        stateCircle.setFill(Color.web(issueToShow.getState().getColor()));
-
         Label nameLabel = new Label(issueToShow.getTitle());
         nameLabel.setPadding(new Insets(10, 10, 10, 10));
+        nameLabel.getStyleClass().add("issue-summary-card-label");
+
         stateAndNamePane.getChildren().addAll(
-                stateCircle,
                 nameLabel
         );
 
@@ -120,6 +137,7 @@ public class IssueSummaryCard extends HBox {
 
         Label descriptionLabel = new Label(issueToShow.getDescription());
         descriptionLabel.setPadding(new Insets(10, 10, 10, 10));
+        descriptionLabel.getStyleClass().add("issue-summary-card-label");
 
         descriptionPane.getChildren().addAll(
                 descriptionLabel
@@ -129,13 +147,24 @@ public class IssueSummaryCard extends HBox {
     }
 
 
-    private HBox createLabelsPane() {
-        HBox labelsPane = new HBox();
+    private FlowPane createLabelsPane() {
+        FlowPane labelsPane = new FlowPane();
+
         labelsPane.setPadding(new Insets(10, 10, 10, 10));
         labelsPane.setAlignment(Pos.CENTER_LEFT);
+        labelsPane.setVgap(10);
+        labelsPane.setHgap(10);
+        labelsPane.setPrefWrapLength(800);
 
-        for(LabelSummaryDTO label: this.issueToShow.getLabels())
-            labelsPane.getChildren().add(new BugBoardLabel(label.getName(), label.getColor()));
+        for(LabelSummaryDTO label: this.issueToShow.getLabels()) {
+            BugBoardLabel bugBoardLabel = new BugBoardLabel(label.getName(), label.getColor());
+            bugBoardLabel.setScaleX(0.75);
+            bugBoardLabel.setScaleY(0.75);
+
+            Group labelContainer = new Group(bugBoardLabel);
+
+            labelsPane.getChildren().add(labelContainer);
+        }
 
         return labelsPane;
     }
@@ -150,7 +179,7 @@ public class IssueSummaryCard extends HBox {
         datePane.getChildren().add(creationDateLabel);
 
         if(this.issueToShow.getResolutionDate() != null)
-            creationDateLabel.setText(creationDateLabel.getText() + " - " + getDateFormatted(this.issueToShow.getResolutionDate()));
+            creationDateLabel.setText(creationDateLabel.getText() + " - Solved on " + getDateFormatted(this.issueToShow.getResolutionDate()));
 
         return datePane;
     }

@@ -21,8 +21,6 @@ public class Main extends Application {
         LoginPC loginPC = new LoginPC(authenticationController, new NavigationManager_JavaFX());
         LoginView loginView = new LoginView(loginPC);
 
-        loginPC.setView(loginView);
-
         loginView.show();
 
     }

@@ -1,6 +1,7 @@
 package com.bug_board.gui.views;
 
 import com.bug_board.exceptions.architectural_controllers.AuthenticationException;
+import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.exceptions.views.CredentialsNotProvidedException;
 import com.bug_board.presentation_controllers.LoginPC;
 import com.bug_board.utilities.*;
@@ -35,6 +36,7 @@ public class LoginView extends MyStage {
 
     public LoginView(LoginPC loginPC) {
         this.loginPC = loginPC;
+        loginPC.setView(this);
 
         this.initialize(this);
     }
@@ -224,7 +226,7 @@ public class LoginView extends MyStage {
             checkMandatoryFields();
             loginPC.onLoginButtonClicked();
         }
-        catch (AuthenticationException | CredentialsNotProvidedException throwables) {
+        catch (AuthenticationException | CredentialsNotProvidedException | RetrieveProjectException throwables) {
             errorLabel.setText(throwables.getMessage());
             errorLabel.setTextFill(Color.RED);
             errorLabel.setManaged(true);

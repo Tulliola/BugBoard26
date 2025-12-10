@@ -9,7 +9,7 @@ import com.bug_board.exceptions.dao.HTTPSendException;
 
 import java.util.List;
 
-public interface IIssueDAO {
+public interface IProjectIssueDAO {
     public abstract List<IssueSummaryDTO> getAllProjectIssues(Integer idProject) throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException;
     public abstract IssueSummaryDTO createNewIssue(Integer idProject, IssueCreationDTO issueToCreate) throws BadConversionToJSONException, HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException;
 }

@@ -1,14 +1,22 @@
 package com.bug_board.navigation_manager.implementations;
 
+<<<<<<< HEAD
 import com.bug_board.architectural_controllers.UserIssueController;
 import com.bug_board.architectural_controllers.ReportIssueController;
 import com.bug_board.architectural_controllers.UserLabelController;
 import com.bug_board.architectural_controllers.UserProjectController;
 import com.bug_board.architectural_controllers.UserRegistrationController;
+=======
+import com.bug_board.architectural_controllers.*;
+>>>>>>> 29a043b (Rivista gestione delle eccezioni: affidata maggiore responsabilità al Navigation Manager e soprattutto ai vari Presentation Controllers, che ora hanno un metodo per visualizzare un Alert di errore (ad esempio, quando l'applicazione frontend è in esecuzione e il backend viene buttato giù, anzichè sollevare RuntimeException vengono ora visualizzati questi alert)
 import com.bug_board.dao.httphandler.MyHTTPClient;
 import com.bug_board.dao.implementations.*;
+import com.bug_board.dao.interfaces.IProjectIssueDAO;
 import com.bug_board.dao.interfaces.IUserIssueDAO;
-import com.bug_board.exceptions.architectural_controllers.RetrievePersonalIssuesException;
+import com.bug_board.dto.IssueSummaryDTO;
+import com.bug_board.dto.ProjectSummaryDTO;
+import com.bug_board.exceptions.architectural_controllers.RetrieveIssuesException;
+import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.HTTPSendException;
@@ -29,48 +37,82 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NavigationManager_JavaFX implements INavigationManager {
 
     @Override
-    public void navigateToHomePage(){
+    public void navigateToHomePage() throws RetrieveProjectException {
         UserProjectController projectController = new UserProjectController(new UserProjectDAO_REST(new MyHTTPClient()));
         HomePagePC homePagePC = new HomePagePC(projectController, this);
 
-        try {
-            HomePageView homePageView = new HomePageView(
-                    homePagePC,
-                    ProjectFactory.getInstance()
-                            .setProjectController(projectController)
-                            .getProjectsOnBoardByRole(SessionManager.getInstance().getRole())
-            );
-            homePagePC.setView(homePageView);
+        List<ProjectSummaryDTO> projectsList;
 
-            homePageView.show();
+        try {
+            projectsList = ProjectFactory.getInstance()
+                    .setProjectController(projectController)
+                    .getProjectsOnBoardByRole(SessionManager.getInstance().getRole());
         }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e.getMessage());
+        catch (RetrieveProjectException exc) {
+            homePagePC.showProjectsRetrievalError();
+            projectsList = new ArrayList<>();
         }
+
+        HomePageView homePageView = new HomePageView(
+                homePagePC,
+                projectsList
+        );
+
+        homePageView.show();
     }
 
     @Override
-    public void navigateToViewIssues()
-            throws RetrievePersonalIssuesException {
-        IUserIssueDAO userIssueDAO = new UserIssueDAO_REST(new MyHTTPClient());
-        UserIssueController issueController = new UserIssueController(userIssueDAO);
+    public void navigateToViewPersonalIssues() {
+        UserIssueController issueController = new UserIssueController(new UserIssueDAO_REST(new MyHTTPClient()));
         IssueVisualizationPC issuePC = new IssueVisualizationPC(issueController, this);
 
-        try {
-            IssueVisualizationView issueView = new IssueVisualizationView(
-                    userIssueDAO.getPersonalIssues()
-            );
-            issuePC.setView(issueView);
+        List<IssueSummaryDTO> personalIssues;
 
-            issueView.show();
+        try {
+            personalIssues = issueController.getPersonalIssues();
         }
-        catch (ErrorHTTPResponseException | HTTPSendException | BadConversionToDTOException throwables) {
-            throw new RetrievePersonalIssuesException(throwables.getMessage());
+        catch (RetrieveIssuesException e) {
+            issuePC.showIssuesRetrievalError();
+            personalIssues = new ArrayList<>();
         }
+
+        IssueVisualizationView issueView = new IssueVisualizationView(
+                issuePC,
+                personalIssues,
+                "Issues reported by you"
+        );
+
+        issueView.show();
+    }
+
+    @Override
+    public void navigateToViewProjectIssues(Integer idProject, String projectName) {
+        ProjectIssueController projectIssueController = new ProjectIssueController(new ProjectIssueDAO_REST(new MyHTTPClient()));
+        IssueVisualizationPC issuePC = new IssueVisualizationPC(projectIssueController, this);
+
+        List<IssueSummaryDTO> projectIssues;
+
+        try {
+             projectIssues = projectIssueController.getProjectIssues(idProject);
+        }
+        catch (RetrieveIssuesException e) {
+            issuePC.showIssuesRetrievalError();
+            projectIssues = new ArrayList<>();
+        }
+
+        IssueVisualizationView issueView = new IssueVisualizationView(
+                issuePC,
+                projectIssues,
+                "Project \"" + projectName + "\" \'s issues"
+        );
+
+        issueView.show();
     }
 
     @Override

@@ -223,7 +223,7 @@ public class HomePagePane extends VBox {
             projectsRetrieved = homePagePC.onSearchProjectButtonClick(barText);
         }
         catch (RetrieveProjectException e) {
-            throw new RuntimeException(e);
+            noProjectsFoundText.setText(e.getMessage());
         }
 
         activeCarouselButton = null;

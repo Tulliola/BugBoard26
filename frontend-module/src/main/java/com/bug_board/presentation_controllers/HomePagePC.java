@@ -2,13 +2,14 @@ package com.bug_board.presentation_controllers;
 
 import com.bug_board.architectural_controllers.UserProjectController;
 import com.bug_board.dto.ProjectSummaryDTO;
-import com.bug_board.exceptions.architectural_controllers.RetrievePersonalIssuesException;
+import com.bug_board.exceptions.architectural_controllers.RetrieveIssuesException;
 import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
+import com.bug_board.gui.panes.TransactionPane;
 import com.bug_board.gui.views.HomePageView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import com.bug_board.session_manager.SessionManager;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import java.util.List;
 
@@ -47,15 +48,24 @@ public class HomePagePC {
     public void onViewPersonalIssuesButtonClicked() {
         navigationManager.closeWindow(this.homePageView);
         try {
-            navigationManager.navigateToViewIssues();
-        } catch (RetrievePersonalIssuesException e) {
-            throw new RuntimeException(e);
+            navigationManager.navigateToViewPersonalIssues();
+        }
+        catch (RetrieveIssuesException e) {
+            TransactionPane errorPane = new TransactionPane("/gifs/generic_error.gif", e.getMessage());
+            errorPane.setErrorGradient();
+
+            homePageView.displayOverlayedContent(errorPane);
         }
     }
 
-    public void closeOverlay(Region layerToRemove) {
-        homePageView.getContainerUnderTitleBar().getChildren().remove(layerToRemove);
+    public void showProjectsRetrievalError() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Server error");
+        alert.setHeaderText("Couldn't retrieve the projects.");
+        alert.setContentText("Server's not responding. You can visualize the home page, but it will be empty.");
+        alert.showAndWait();
     }
+
 
     public void setView(HomePageView homePageView) {
         this.homePageView = homePageView;

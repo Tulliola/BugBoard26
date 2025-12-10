@@ -1,7 +1,7 @@
 package com.bug_board.dao.implementations;
 
 import com.bug_board.dao.httphandler.MyHTTPClient;
-import com.bug_board.dao.interfaces.IIssueDAO;
+import com.bug_board.dao.interfaces.IProjectIssueDAO;
 import com.bug_board.dto.IssueCreationDTO;
 import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
@@ -17,12 +17,12 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.util.List;
 
-public class IssueDAO_REST implements IIssueDAO {
+public class ProjectIssueDAO_REST implements IProjectIssueDAO {
     private final String baseUrl = "http://localhost:8080/api/projects";
     private final MyHTTPClient httpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    IssueDAO_REST(MyHTTPClient httpClient) {
+    public ProjectIssueDAO_REST(MyHTTPClient httpClient) {
         this.httpClient = httpClient;
     }
 
