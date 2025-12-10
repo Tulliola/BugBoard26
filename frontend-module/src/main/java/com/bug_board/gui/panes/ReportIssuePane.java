@@ -2,6 +2,7 @@ package com.bug_board.gui.panes;
 
 import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.presentation_controllers.HomePagePC;
+import com.bug_board.presentation_controllers.ReportIssuePC;
 import com.bug_board.utilities.animations.FloatingLabel;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -24,7 +25,7 @@ import java.util.function.UnaryOperator;
 
 public class ReportIssuePane extends StackPane {
     private StackPane parentContainer;
-    private HomePagePC homePagePC;
+    private final ReportIssuePC reportIssuePC;
 
     private VBox contentPane = new VBox();
 
@@ -51,9 +52,11 @@ public class ReportIssuePane extends StackPane {
     private static final int MAX_TITLE_CHARS = 50;
     private static final int MAX_DESCRIPTION_CHARS = 300;
 
-    public ReportIssuePane(StackPane parentContainer, HomePagePC homePagePC) {
+    public ReportIssuePane(StackPane parentContainer, ReportIssuePC reportIssuePC) {
         this.parentContainer = parentContainer;
-        this.homePagePC = homePagePC;
+        this.reportIssuePC = reportIssuePC;
+        reportIssuePC.setPane(this);
+
         this.initialize();
     }
 

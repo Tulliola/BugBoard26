@@ -1,25 +1,17 @@
 package com.bug_board.navigation_manager.implementations;
 
-<<<<<<< HEAD
 import com.bug_board.architectural_controllers.UserIssueController;
 import com.bug_board.architectural_controllers.ReportIssueController;
 import com.bug_board.architectural_controllers.UserLabelController;
 import com.bug_board.architectural_controllers.UserProjectController;
 import com.bug_board.architectural_controllers.UserRegistrationController;
-=======
 import com.bug_board.architectural_controllers.*;
->>>>>>> 29a043b (Rivista gestione delle eccezioni: affidata maggiore responsabilità al Navigation Manager e soprattutto ai vari Presentation Controllers, che ora hanno un metodo per visualizzare un Alert di errore (ad esempio, quando l'applicazione frontend è in esecuzione e il backend viene buttato giù, anzichè sollevare RuntimeException vengono ora visualizzati questi alert)
 import com.bug_board.dao.httphandler.MyHTTPClient;
 import com.bug_board.dao.implementations.*;
-import com.bug_board.dao.interfaces.IProjectIssueDAO;
-import com.bug_board.dao.interfaces.IUserIssueDAO;
 import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.exceptions.architectural_controllers.RetrieveIssuesException;
 import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
-import com.bug_board.exceptions.dao.BadConversionToDTOException;
-import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
-import com.bug_board.exceptions.dao.HTTPSendException;
 import com.bug_board.factories.ProjectFactory;
 import com.bug_board.gui.panes.LabelCreationFormPane;
 import com.bug_board.gui.panes.ReportIssuePane;
@@ -129,8 +121,6 @@ public class NavigationManager_JavaFX implements INavigationManager {
 
         LabelCreationFormPane labelCreationFormPane = new LabelCreationFormPane(labelPC, parentContainer);
 
-        labelPC.setPane(labelCreationFormPane);
-
         return labelCreationFormPane;
     }
 
@@ -154,9 +144,7 @@ public class NavigationManager_JavaFX implements INavigationManager {
 
         ReportIssuePC reportIssuePC = new ReportIssuePC(reportIssueController);
 
-        ReportIssuePane reportIssuePane = new ReportIssuePane(parentContainer, homePagePC);
-
-        reportIssuePC.setPane(reportIssuePane);
+        ReportIssuePane reportIssuePane = new ReportIssuePane(parentContainer, reportIssuePC);
 
         return reportIssuePane;
     }

@@ -36,6 +36,7 @@ public class LabelCreationFormPane extends StackPane {
     public LabelCreationFormPane(LabelManagementPC labelPC, StackPane parentContainer) {
         this.parentContainer = parentContainer;
         this.labelPC = labelPC;
+        labelPC.setPane(this);
 
         this.initalize();
     }

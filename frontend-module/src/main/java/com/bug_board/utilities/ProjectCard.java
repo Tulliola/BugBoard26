@@ -2,6 +2,7 @@ package com.bug_board.utilities;
 
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.presentation_controllers.HomePagePC;
+import com.bug_board.presentation_controllers.IssueVisualizationPC;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.animations.CardFlipEffect;
 import com.bug_board.utilities.animations.OnMouseEnteredHoverEffect;
@@ -27,18 +28,20 @@ import java.io.ByteArrayInputStream;
 
 public class ProjectCard extends StackPane {
     final ProjectSummaryDTO projectToShow;
+    private Integer idProject;
+    private final HomePagePC  homePagePC;
     private final StackPane cardPane;
     private final Pane frontCard;
     private final Pane backCard;
     private Button flipButton;
     private final CardFlipEffect cardAnimation;
-    private Integer idProject;
-    private final HomePagePC  homePagePC;
 
-    public ProjectCard(ProjectSummaryDTO projectSummaryDTO, HomePagePC homePagePC) {
+    public ProjectCard(ProjectSummaryDTO projectSummaryDTO,
+                       HomePagePC homePagePC) {
         projectToShow = projectSummaryDTO;
         this.homePagePC = homePagePC;
         idProject = projectToShow.getIdProject();
+
 
         frontCard = createFrontCard();
         backCard = createBackCard();
@@ -257,8 +260,7 @@ public class ProjectCard extends StackPane {
         this.homePagePC.showReportIssueOverlay(homePagePC.getContainer());
     }
 
-    private void clickViewIssueButton() {
-    }
+    private void clickViewIssueButton() { this.homePagePC.openVisualizationIssueView(projectToShow.getIdProject(), projectToShow.getTitle());}
 
     private ProjectSummaryDTO getProject() {
         return this.projectToShow;

@@ -80,4 +80,9 @@ public class HomePagePC {
     public StackPane getContainer() {
         return homePageView.getContainerUnderTitleBar();
     }
+
+    public void openVisualizationIssueView(Integer idProject, String projectName) {
+        this.navigationManager.closeWindow(this.homePageView);
+        this.navigationManager.navigateToViewProjectIssues(idProject, projectName);
+    }
 }

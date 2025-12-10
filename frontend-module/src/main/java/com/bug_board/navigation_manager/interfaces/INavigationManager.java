@@ -11,7 +11,7 @@ public interface INavigationManager {
 
     void navigateToViewPersonalIssues() throws RetrieveIssuesException;
 
-    void navigateToViewProjectIssues(Integer idProject, String projectName) throws RetrieveIssuesException;
+    void navigateToViewProjectIssues(Integer idProject, String projectName);
 
     void closeWindow(Object windowToClose);
 

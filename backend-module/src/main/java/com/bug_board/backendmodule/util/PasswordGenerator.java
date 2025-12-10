@@ -1,9 +1,4 @@
 package com.bug_board.backendmodule.util;
-<<<<<<< HEAD
-=======
-
-import com.bug_board.backendmodule.REST_controllers.AuthenticationController;
->>>>>>> 321cea5 (iniziato sviluppo del form per il report di un'issue)
 
 import java.security.SecureRandom;
 
