@@ -3,8 +3,10 @@ package com.bug_board.backendmodule.entity;
 
 
 import com.bug_board.backendmodule.exception.entity.MaximumLabelsException;
+import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueState;
 import com.bug_board.enum_classes.IssueTipology;
+import com.bug_board.enum_classes.converters.IssuePriorityConverter;
 import com.bug_board.enum_classes.converters.IssueStateConverter;
 import com.bug_board.enum_classes.converters.IssueTipologyConverter;
 import jakarta.persistence.*;
@@ -42,6 +44,10 @@ public class Issue {
     @Column(name = "tipologia", columnDefinition = "issueenum not null")
     @Convert(converter = IssueTipologyConverter.class)
     private IssueTipology tipology;
+
+    @Column(name = "priorita", columnDefinition = "issuepriorityenum not null DEFAULT 'No priority'")
+    @Convert(converter = IssuePriorityConverter.class)
+    private IssuePriority priority;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(

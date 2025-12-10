@@ -1,5 +1,6 @@
 package com.bug_board.dto;
 
+import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueState;
 import com.bug_board.enum_classes.IssueTipology;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,6 +22,7 @@ public class IssueSummaryDTO {
     private String description;
     private IssueState state;
     private IssueTipology tipology;
+    private IssuePriority priority;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private Date creationDate;
