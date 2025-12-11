@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public abstract class IEmailToSendDTO {
     protected String addressee;
-    protected String subject;
-    protected String body;
+    protected String username;
+    protected String password;
 }

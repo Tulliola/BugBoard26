@@ -21,24 +21,18 @@ public class JavaEmailSenderEmailService implements IEmailService {
 
     @Override
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
-    public void sendEmail(IEmailToSendDTO email) {
+    public void sendWelcomeEmail(IEmailToSendDTO email) {
         if(email == null)
             throw new MalformedMailException("Email is null.");
-
-        if(email.getAddressee() == null || email.getAddressee().isEmpty())
-            throw new MalformedMailException("Must specify the addressee.");
-
-        if(email.getSubject() == null || email.getSubject().isEmpty())
-            throw new MalformedMailException("Must specify the subject.");
-
-        if(email.getBody() == null || email.getBody().isEmpty())
-            throw new MalformedMailException("Must specify the body.");
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(sender);
         message.setTo(email.getAddressee());
-        message.setSubject(email.getSubject());
-        message.setText(email.getBody());
+        message.setSubject("Your BugBoard26 Credentials");
+        message.setText("Your BugBoard26 Credentials are:\nUsername: "+ email.getUsername() +"\nPassword: "+ email.getPassword());
+
+        if(email.getAddressee() == null || email.getAddressee().isEmpty())
+            throw new MalformedMailException("Must specify the addressee.");
 
         mailSender.send(message);
     }

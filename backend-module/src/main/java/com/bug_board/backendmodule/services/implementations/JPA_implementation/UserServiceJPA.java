@@ -2,6 +2,7 @@ package com.bug_board.backendmodule.services.implementations.JPA_implementation;
 
 import com.bug_board.backendmodule.entity.User;
 import com.bug_board.backendmodule.entity.factories.UserFactory;
+import com.bug_board.backendmodule.mappers.EmailMapper;
 import com.bug_board.backendmodule.repositories.interfaces.IProjectRepository;
 import com.bug_board.backendmodule.repositories.interfaces.IUserRepository;
 import com.bug_board.backendmodule.services.interfaces.IEmailService;
@@ -56,14 +57,11 @@ public class UserServiceJPA implements IUserService {
         newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(generatedPassword));
 
-        IEmailToSendDTO emailToSendDTO = EmailToSendDTOFactory.getInstance().getEmailDTO();
-        emailToSendDTO.setAddressee(user.getEmail());
-        emailToSendDTO.setSubject("Your BugBoard26 Credentials");
-        emailToSendDTO.setBody("Your BugBoard26 Credentials are:\nUsername: "+ newUser.getUsername()+"\nPassword: "+generatedPassword);
+        IEmailToSendDTO emailToSendDTO = EmailMapper.mapToWelcomingMail(newUser, generatedPassword);
 
         User createdUser = userRepository.registerNewUser(newUser);
-        emailService.sendEmail(emailToSendDTO);
-
+        emailService.sendWelcomeEmail(emailToSendDTO);
+        
         return UserMapper.toUserSummaryDTO(createdUser);
     }
 
