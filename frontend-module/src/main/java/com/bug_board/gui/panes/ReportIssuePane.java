@@ -1,7 +1,9 @@
 package com.bug_board.gui.panes;
 
+import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.presentation_controllers.ReportIssuePC;
+import com.bug_board.utilities.BugBoardLabel;
 import com.bug_board.utilities.DropdownMenu;
 import com.bug_board.utilities.animations.FloatingLabel;
 import javafx.collections.FXCollections;
@@ -9,7 +11,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -89,6 +90,11 @@ public class ReportIssuePane extends StackPane {
         questionRadioButton.setToggleGroup(typeIssueToggleGroup);
         documentationRadioButton.setToggleGroup(typeIssueToggleGroup);
         newFeatureRadioButton.setToggleGroup(typeIssueToggleGroup);
+
+        bugRadioButton.getStyleClass().add("icon-radio");
+        questionRadioButton.getStyleClass().add("icon-radio");
+        documentationRadioButton.getStyleClass().add("icon-radio");
+        newFeatureRadioButton.getStyleClass().add("icon-radio");
 
         typeIssueRadioButtonBox.getChildren().add(setRadioButton(
                 bugRadioButton,
@@ -195,6 +201,8 @@ public class ReportIssuePane extends StackPane {
     }
 
     private Node setPriorityAndLabelsBox() {
+        priorityAndLabelsBox.setSpacing(70);
+
         priorityAndLabelsBox.setAlignment(Pos.TOP_RIGHT);
         String highPriority = new String("High");
         String mediumPriority = new String("Medium");
@@ -211,20 +219,29 @@ public class ReportIssuePane extends StackPane {
         priorityComboBox.setMinWidth(300);
         priorityComboBox.setMaxWidth(300);
         priorityComboBox.getSelectionModel().select("Don't specify");
-        priorityAndLabelsBox.getChildren().add(priorityComboBox);
+
+        VBox priorityBox = new VBox();
+        priorityBox.getChildren().addAll(new Text("Priority"), priorityComboBox);
+        priorityAndLabelsBox.getChildren().addAll(priorityBox);
 
         priorityAndLabelsBox.setPadding(new Insets(0, 0, 0, 50));
 
-        DropdownMenu dropdownMenu = new DropdownMenu(List.of("ciao", "bellissima"));
+        List<LabelSummaryDTO> usersLabels = reportIssuePC.getUsersLabels();
+        List<BugBoardLabel> usersBugBoardLabels = new ArrayList<>();
+        for(LabelSummaryDTO usersLabel : usersLabels){
+            usersBugBoardLabels.add(new BugBoardLabel(usersLabel.getName(), usersLabel.getColor()));
+        }
+
+        DropdownMenu dropdownMenu = new DropdownMenu(usersBugBoardLabels);
         dropdownMenu.setPadding(new Insets(15, 0, 0, 0));
-        priorityAndLabelsBox.getChildren().add(dropdownMenu);
-//        priorityAndLabelsBox.getChildren().add(setLabelPopup());
+
+
+        VBox labelsBox = new VBox();
+        labelsBox.getChildren().addAll(new Text("Labels"), dropdownMenu);
+        priorityAndLabelsBox.getChildren().addAll(labelsBox);
         return priorityAndLabelsBox;
     }
 
-//    private Node setLabelPopup() {
-//        return null;
-//    }
 
     private Node setTitleAndDescriptionBox() {
         UnaryOperator<TextFormatter.Change> titleFilter = change -> {

@@ -1,12 +1,12 @@
 package com.bug_board.utilities;
 
+import com.bug_board.dto.LabelSummaryDTO;
+import javafx.css.PseudoClass;
+import javafx.event.ActionEvent;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -22,11 +22,11 @@ public class DropdownMenu extends VBox {
     private Popup popup = new Popup();
     private VBox itemsPane = new VBox();
     private List<CheckBox> checkBoxes = new ArrayList<>();
-
-    public DropdownMenu(List<String> options) {
-        this.checkBoxes = new ArrayList<>();
-
+    private List<CheckBox> checkedBoxes = new ArrayList<>();
+    private static final int MAX_NUM_OF_LABELS = 3;
+    public DropdownMenu(List<BugBoardLabel> options) {
         triggerButton = new Button("Seleziona etichette");
+        triggerButton.setId("popup-button");
         triggerButton.setMaxWidth(Double.MAX_VALUE);
         triggerButton.setAlignment(Pos.CENTER_LEFT);
 
@@ -48,16 +48,33 @@ public class DropdownMenu extends VBox {
 
         itemsPane = new VBox(5);
         itemsPane.setPadding(new Insets(10));
-        itemsPane.getStyleClass().add("custom-dropdown-popup");
+        itemsPane.setStyle("-fx-background-color: white; -fx-border-color: -color-primary; -fx-border-width: 2px; -fx-min-width: 350px");
 
-        for (String option : options) {
-            CheckBox cb = new CheckBox(option);
-            cb.setStyle("-fx-font-size: 14px; -fx-text-fill: black;");
+        for (BugBoardLabel option : options) {
+            option.setPadding(new Insets(0, 0, 0, 10));
+            CheckBox labelCheckBox = new CheckBox();
 
-            cb.setOnAction(e -> {});
+            labelCheckBox.setGraphic(option);
+            labelCheckBox.getStyleClass().add("bugboard-checkbox");
+            labelCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                this.setLabelsCeiling(labelCheckBox, newValue);
+            });
 
-            checkBoxes.add(cb);
-            itemsPane.getChildren().add(cb);
+            HBox row = new HBox();
+            row.getStyleClass().add("dropdown-row");
+            labelCheckBox.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+                row.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), isSelected);
+            });
+            row.setOnMouseClicked(e -> {
+                if (e.getTarget() != labelCheckBox && e.getTarget() != labelCheckBox.lookup(".box")) {
+                    labelCheckBox.setSelected(!labelCheckBox.isSelected());
+                    labelCheckBox.fire();
+                }
+            });
+
+            checkBoxes.add(labelCheckBox);
+            row.getChildren().add(labelCheckBox);
+            itemsPane.getChildren().add(row);
         }
 
         ScrollPane scrollPane = new ScrollPane(itemsPane);
@@ -79,5 +96,20 @@ public class DropdownMenu extends VBox {
         });
 
         this.getChildren().add(triggerButton);
+    }
+
+    private void setLabelsCeiling(CheckBox labelCheckBox, Boolean isSelected) {
+        if(isSelected) {
+            long count = 0;
+            for(CheckBox checkBox : checkBoxes) {
+                if(checkBox.isSelected())
+                    count++;
+            }
+
+            if(count > MAX_NUM_OF_LABELS)
+                labelCheckBox.setSelected(false);
+        }
+        else
+            labelCheckBox.setSelected(false);
     }
 }

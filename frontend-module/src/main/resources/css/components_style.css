@@ -348,7 +348,7 @@
     -fx-alignment: top-center;
 }
 
-.radio-button:not(.normal-radio){
+.radio-button.icon-radio{
     -fx-padding: 8px;
     -fx-border-radius: 50px;
     -fx-background-radius: 50px;
@@ -362,18 +362,18 @@
     -fx-border-width: 2px;
 }
 
-.radio-button:not(.normal-radio):selected{
+.radio-button.icon-radio:selected{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0 , 0, 0);
 }
 
-.radio-button:not(.normal-radio) .radio-mark{
+.radio-button.icon-radio .radio-mark{
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-padding: 0;
     -fx-shape: null;
 }
 
-.radio-button:not(.normal-radio) .radio {
+.radio-button.icon-radio .radio {
     -fx-opacity: 0;
     -fx-padding: 0;
     -fx-min-width: 0;
@@ -552,4 +552,103 @@
     -fx-border-color: -color-primary;
     -fx-border-radius: 0px;
     -fx-border-width: 1px
+}
+
+.dropdown-row {
+    -fx-background-color: transparent;
+    -fx-padding: 8px 10px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+}
+
+.dropdown-row:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+.dropdown-row:selected {/
+    -fx-background-color: #eaf9f7;
+
+    -fx-border-color: -color-primary;
+}
+
+.bugboard-checkbox {
+    -fx-padding: 5px;
+    -fx-cursor: hand;
+}
+
+.bugboard-checkbox .box {
+    -fx-background-color: white;
+    -fx-border-color: #A3A3A3;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 5px;
+
+    -fx-min-width: 18px;
+    -fx-min-height: 18px;
+    -fx-max-width: 18px;
+    -fx-max-height: 18px;
+}
+
+.bugboard-checkbox:selected .box {
+    -fx-background-color: -color-primary;
+    -fx-border-color: -color-primary;
+}
+
+.bugboard-checkbox:selected .mark {
+    -fx-background-color: white;
+    -fx-shape: "M0.5,3.5 L3.5,6.5 L8.5,1.5 L9.5,2.5 L3.5,8.5 L-0.5,4.5 Z";
+    -fx-scale-shape: true;
+}
+
+.bugboard-checkbox:focused {
+    -fx-background-insets: 0;
+}
+
+.custom-dropdown-scroll .scroll-bar:vertical {
+    -fx-pref-width: 0;
+    -fx-opacity: 0;
+}
+
+.custom-dropdown-scroll .scroll-bar:horizontal {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+}
+
+.custom-dropdown-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.custom-dropdown-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+#popup-button{
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+
+    -fx-border-color: #A3A3A3;
+    -fx-border-width: 1px;
+
+    -fx-pref-height: 40px;
+    -fx-min-width: 200px;
+
+    -fx-text-fill: #2D2D2D;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 15px 0 15px;
+
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(0, 0, 0, 0.1),
+            5,
+            0,
+            0,
+            2
+    );
+
+    -fx-alignment: center;
 }
