@@ -229,7 +229,10 @@ public class ReportIssuePane extends StackPane {
         List<LabelSummaryDTO> usersLabels = reportIssuePC.getUsersLabels();
         List<BugBoardLabel> usersBugBoardLabels = new ArrayList<>();
         for(LabelSummaryDTO usersLabel : usersLabels){
-            usersBugBoardLabels.add(new BugBoardLabel(usersLabel.getName(), usersLabel.getColor()));
+            BugBoardLabel bugBoardLabelFromLabel = new BugBoardLabel(usersLabel.getName(), usersLabel.getColor());
+            bugBoardLabelFromLabel.setToolTipDescription(usersLabel.getDescription());
+
+            usersBugBoardLabels.add(bugBoardLabelFromLabel);
         }
 
         DropdownMenu dropdownMenu = new DropdownMenu(usersBugBoardLabels);

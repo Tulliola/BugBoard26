@@ -1,12 +1,14 @@
 package com.bug_board.utilities;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.awt.*;
 
@@ -54,6 +56,13 @@ public class BugBoardLabel extends StackPane {
         );
     }
 
+    public void setToolTipDescription(String description) {
+        Tooltip descriptionToolTip = new Tooltip();
+        descriptionToolTip.setText(description);
+        descriptionToolTip.setShowDelay(Duration.millis(200));
+        Tooltip.install(this, descriptionToolTip);
+    }
+
     public void setText(String newText) {
         textInShape.setText(newText);
     }
@@ -62,7 +71,6 @@ public class BugBoardLabel extends StackPane {
         shape.setStyle("-fx-fill: " + newColor + "; -fx-stroke: " + calculateBorderColorFromFillColor(newColor));
         color = newColor;
     }
-
     public Text getTextField() {
         return this.textInShape;
     }

@@ -1,13 +1,9 @@
 package com.bug_board.presentation_controllers;
 
-import com.bug_board.architectural_controllers.ProjectIssueController;
-import com.bug_board.architectural_controllers.UserIssueController;
-import com.bug_board.dto.IssueFiltersDTO;
 import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueState;
 import com.bug_board.enum_classes.IssueTipology;
-import com.bug_board.exceptions.architectural_controllers.RetrieveIssuesException;
 import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.gui.views.IssueVisualizationView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
@@ -17,28 +13,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class IssueVisualizationPC {
-    private UserIssueController userIssueController;
-    private ProjectIssueController projectIssueController;
-    private final INavigationManager navigationManager;
-    private IssueVisualizationView issueView;
+public abstract class IssueVisualizationPC {
 
-    private List<IssueSummaryDTO> issueList;
-    private static final int PAGE_SIZE = 3;
+    protected final INavigationManager navigationManager;
+    protected IssueVisualizationView issueView;
 
-    private List<String> tipologyFilters = new ArrayList<>();
-    private List<String> priorityFilters = new ArrayList<>();
-    private List<String> stateFilters = new ArrayList<>();
+    protected List<IssueSummaryDTO> issueList;
+    protected static final int PAGE_SIZE = 3;
 
-    public IssueVisualizationPC(UserIssueController userIssueController,
-                                INavigationManager navigationManager) {
-        this.userIssueController = userIssueController;
-        this.navigationManager = navigationManager;
-    }
+    protected List<String> tipologyFilters = new ArrayList<>();
+    protected List<String> priorityFilters = new ArrayList<>();
+    protected List<String> stateFilters = new ArrayList<>();
 
-    public IssueVisualizationPC(ProjectIssueController projectIssueController,
-                                INavigationManager navigationManager) {
-        this.projectIssueController = projectIssueController;
+    public IssueVisualizationPC(INavigationManager navigationManager) {
         this.navigationManager = navigationManager;
     }
 
@@ -76,32 +63,11 @@ public class IssueVisualizationPC {
         return initialList.subList(0, Math.min(PAGE_SIZE, initialList.size()));
     }
 
-    public int getNumberOfPagesOfAGivenSublist(List<IssueSummaryDTO> list) {
-        return Math.ceilDiv(list.size(), PAGE_SIZE);
-    }
-
-    public int getTotalNumberOfPages() {
+    public int getNumberOfPages() {
         return Math.ceilDiv(this.issueList.size(), PAGE_SIZE);
     }
 
-    public List<IssueSummaryDTO> getFilteredIssueList() {
-        IssueFiltersDTO filters = new IssueFiltersDTO();
-        filters.setIssueStates(this.stateFilters);
-        filters.setIssueTipologies(this.tipologyFilters);
-        filters.setIssuePriorities(this.priorityFilters);
-
-        try {
-            if (issueView.getIdProject() != null)
-                issueList = projectIssueController.getProjectIssues(issueView.getIdProject(), filters);
-            else
-                issueList = userIssueController.getPersonalIssues(filters);
-            return issueList;
-        }
-        catch(RetrieveIssuesException exc) {
-            this.showIssuesRetrievalError();
-            return null;
-        }
-    }
+    public abstract List<IssueSummaryDTO> getFilteredIssueList();
 
     public List<IssueTipology> getTipologies() {
         return Arrays.asList(IssueTipology.values());

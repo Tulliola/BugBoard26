@@ -2,7 +2,6 @@ package com.bug_board.utilities;
 
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.presentation_controllers.HomePagePC;
-import com.bug_board.presentation_controllers.IssueVisualizationPC;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.animations.CardFlipEffect;
 import com.bug_board.utilities.animations.OnMouseEnteredHoverEffect;

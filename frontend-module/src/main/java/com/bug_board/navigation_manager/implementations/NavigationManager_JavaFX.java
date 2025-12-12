@@ -18,11 +18,7 @@ import com.bug_board.gui.panes.ReportIssuePane;
 import com.bug_board.gui.panes.UserRegistrationFormPane;
 import com.bug_board.gui.views.IssueVisualizationView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
-import com.bug_board.presentation_controllers.HomePagePC;
-import com.bug_board.presentation_controllers.IssueVisualizationPC;
-import com.bug_board.presentation_controllers.LabelManagementPC;
-import com.bug_board.presentation_controllers.ReportIssuePC;
-import com.bug_board.presentation_controllers.UserRegistrationPC;
+import com.bug_board.presentation_controllers.*;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.gui.views.HomePageView;
 import javafx.scene.layout.Pane;
@@ -62,7 +58,7 @@ public class NavigationManager_JavaFX implements INavigationManager {
     @Override
     public void navigateToViewPersonalIssues() {
         UserIssueController issueController = new UserIssueController(new UserIssueDAO_REST(new MyHTTPClient()));
-        IssueVisualizationPC issuePC = new IssueVisualizationPC(issueController, this);
+        IssueVisualizationPC issuePC = new PersonalIssueVisualizationPC(this, issueController);
 
         List<IssueSummaryDTO> personalIssues = null;
 
@@ -88,7 +84,7 @@ public class NavigationManager_JavaFX implements INavigationManager {
     @Override
     public void navigateToViewProjectIssues(Integer idProject, String projectName) {
         ProjectIssueController projectIssueController = new ProjectIssueController(new ProjectIssueDAO_REST(new MyHTTPClient()));
-        IssueVisualizationPC issuePC = new IssueVisualizationPC(projectIssueController, this);
+        IssueVisualizationPC issuePC = new ProjectIssueVisualizationPC(this, projectIssueController);
 
         List<IssueSummaryDTO> projectIssues = null;
 
@@ -131,7 +127,6 @@ public class NavigationManager_JavaFX implements INavigationManager {
 
     @Override
     public Pane buildRegisterUserComponent(StackPane parentContainer, HomePagePC parentPC) {
-        //TODO creiamo un oggetto MyHTTPClient per riutilizzo?
         UserRegistrationController userRegistrationController = new UserRegistrationController(new UserDAO_REST(new MyHTTPClient()), new EmailSenderDAO_REST(new MyHTTPClient()));
 
         UserRegistrationPC userRegistrationPC = new UserRegistrationPC(userRegistrationController);

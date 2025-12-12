@@ -497,6 +497,8 @@
     -fx-alignment: CENTER_LEFT;
     -fx-cursor: hand;
     -fx-padding: 10px;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
 }
 
 .normal-radio:selected{
@@ -528,8 +530,8 @@
 }
 
 .normal-radio:selected .radio{
-    -fx-border-color: #273B7A;
-    -fx-background-color: #273B7A;
+    -fx-border-color: black;
+    -fx-background-color: black;
 }
 
 .normal-radio:selected .dot {

@@ -167,7 +167,7 @@ public class IssueVisualizationView extends MyStage {
         paginationNumberContainer = new HBox();
         paginationNumberContainer.setAlignment(Pos.CENTER);
 
-        int numberOfPages = this.issuePC.getTotalNumberOfPages();
+        int numberOfPages = this.issuePC.getNumberOfPages();
 
         paginationButtonGroup = new ToggleGroup();
 
@@ -358,10 +358,35 @@ public class IssueVisualizationView extends MyStage {
             filterToReset.setSelected(false);
     }
 
+    private Button createClearAllFiltersButton() {
+        Button clearAllButton = new Button("Clear all");
+        clearAllButton.setStyle("-fx-background-color: transparent");
+        clearAllButton.setPadding(new Insets(10, 10, 10, 10));
+
+        ImageView clearImageView = new ImageView(new Image(getClass().getResourceAsStream("/icons/clear_filters.png")));
+        clearImageView.setFitWidth(15);
+        clearImageView.setFitHeight(15);
+        clearAllButton.setGraphic(clearImageView);
+
+        clearAllButton.setOnMouseClicked(mouseEvent -> {
+            resetStateFilters(this.tipologyFilterRadioButtons);
+            resetStateFilters(this.priorityFilterRadioButtons);
+            resetStateFilters(this.stateFilterRadioButtons);
+            filterIssues();
+        });
+
+        return clearAllButton;
+    }
+
     private HBox createFilterButtonBox() {
         HBox filterBox = new HBox();
 
-        Button filterButton = new Button("Filter");
+        Button filterButton = new Button();
+        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/icons/filter_2.png")));
+        imageView.setFitHeight(40);
+        imageView.setFitWidth(40);
+        filterButton.setGraphic(imageView);
+
         filterButton.setOnMouseClicked(mouseEvent -> {
             filterIssues();
         });
@@ -375,6 +400,7 @@ public class IssueVisualizationView extends MyStage {
         filterBox.getChildren().addAll(
                 leftSpacer,
                 filterButton,
+                this.createClearAllFiltersButton(),
                 rightSpacer
         );
 
@@ -404,7 +430,7 @@ public class IssueVisualizationView extends MyStage {
         List<IssueSummaryDTO> allFilteredIssues = issuePC.getFilteredIssueList();
 
         updateIssueListInCarousel(issuePC.extractFirstPageIssues(allFilteredIssues));
-        updatePaginationNumbers(allFilteredIssues);
+        updatePaginationNumbers();
     }
 
     private void updateIssueListInCarousel(List<IssueSummaryDTO> newIssuesToShow) {
@@ -417,15 +443,16 @@ public class IssueVisualizationView extends MyStage {
                 this.issueContainer.getChildren().add(new IssueSummaryCard(newIssueToShow));
     }
 
-    private void updatePaginationNumbers(List<IssueSummaryDTO> newIssuesToShow) {
-        this.paginationNumberContainer.getChildren().clear();
-
-        int numberOfPages = this.issuePC.getNumberOfPagesOfAGivenSublist(newIssuesToShow);
+    private void updatePaginationNumbers() {
+        int numberOfPages = this.issuePC.getNumberOfPages();
 
         this.setPaginationButtons(numberOfPages);
     }
 
     private void setPaginationButtons(int numberOfPages) {
+        this.paginationNumberContainer.getChildren().clear();
+        this.paginationButtonGroup.getToggles().clear();
+
         for(int i = 0; i < numberOfPages; i++){
             final int page = i;
             ToggleButton currentPageButton = new ToggleButton(String.valueOf(i+1));
