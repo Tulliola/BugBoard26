@@ -3,6 +3,7 @@ package com.bug_board.backendmodule.REST_controllers;
 import com.bug_board.backendmodule.security.UserPrincipal;
 import com.bug_board.backendmodule.services.interfaces.IIssueService;
 import com.bug_board.dto.IssueCreationDTO;
+import com.bug_board.dto.IssueFiltersDTO;
 import com.bug_board.dto.IssueSummaryDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,10 @@ public class IssueController {
     }
 
 
-    @GetMapping("")
-    public ResponseEntity<List<IssueSummaryDTO>> getAllProjectsIssues(@PathVariable ("project-id") Integer projectId){
-        List<IssueSummaryDTO> issueSummaryDTOS = issueService.getIssuesOfAProject(projectId);
+    @PostMapping("/search")
+    public ResponseEntity<List<IssueSummaryDTO>> getAllProjectsIssues(@PathVariable ("project-id") Integer projectId,
+                                                                      @RequestBody IssueFiltersDTO filters){
+        List<IssueSummaryDTO> issueSummaryDTOS = issueService.getIssuesOfAProject(projectId, filters);
         return new ResponseEntity<>(issueSummaryDTOS, HttpStatus.OK);
     }
 

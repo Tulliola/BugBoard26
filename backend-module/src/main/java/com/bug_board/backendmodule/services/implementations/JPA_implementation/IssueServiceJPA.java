@@ -10,6 +10,7 @@ import com.bug_board.backendmodule.mappers.IssueMapper;
 import com.bug_board.backendmodule.exception.backend.BadRequestException;
 import com.bug_board.backendmodule.exception.backend.ResourceNotFoundException;
 import com.bug_board.dto.IssueCreationDTO;
+import com.bug_board.dto.IssueFiltersDTO;
 import com.bug_board.dto.IssueSummaryDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.AccessDeniedException;
@@ -69,20 +70,16 @@ public class IssueServiceJPA implements IIssueService {
     @Override
     @PreAuthorize("hasRole('ROLE_USER')")
     @Transactional
-    public List<IssueSummaryDTO> getIssuesOfAUser(String username) {
-        List<Issue> issuesRetrieved = issueRepository.retrieveAllUsersIssues(username);
+    public List<IssueSummaryDTO> getIssuesOfAUser(String username, IssueFiltersDTO filters) {
+        List<Issue> issuesRetrieved = issueRepository.retrieveAllUsersIssues(username, filters);
         return IssueMapper.toIssueSummaryDTOS(issuesRetrieved);
     }
 
     @Transactional
     @Override
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPERADMIN')")
-    public List<IssueSummaryDTO> getIssuesOfAProject(Integer idProject) {
-        Project project = projectService.getProject(idProject);
-
-        if(project.getIssues() == null || project.getIssues().isEmpty())
-            throw new ResourceNotFoundException("This project doesn't have any issues.");
-
-        return IssueMapper.toIssueSummaryDTOS(project.getIssues());
+    public List<IssueSummaryDTO> getIssuesOfAProject(Integer idProject, IssueFiltersDTO filters) {
+        List<Issue> issuesRetrieved = issueRepository.retrieveAllProjectsIssues(idProject, filters);
+        return IssueMapper.toIssueSummaryDTOS(issuesRetrieved);
     }
 }

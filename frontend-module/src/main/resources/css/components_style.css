@@ -517,30 +517,26 @@
     -fx-border-width: 2px;
     -fx-border-radius: 50%;
 
-    -fx-padding: 3px;
+    -fx-padding: 0px;
 }
 
 .normal-radio .dot {
-    -fx-shape: null;
-    -fx-scale-shape: false;
-
     -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-background-radius: 50%;
-
     -fx-min-width: 100%;
     -fx-min-height: 100%;
-    -fx-max-width: 100%;
-    -fx-max-height: 100%;
+    -fx-shape: null;
 }
 
 .normal-radio:selected .radio{
-    -fx-border-color: -color-primary;
+    -fx-border-color: #273B7A;
+    -fx-background-color: #273B7A;
 }
 
 .normal-radio:selected .dot {
-    -fx-border-color: -color-primary;
+    -fx-background-color: transparent;
 }
+
+
 .file-chooser-button{
     -fx-min-width: 200px;
     -fx-min-height: 200px;

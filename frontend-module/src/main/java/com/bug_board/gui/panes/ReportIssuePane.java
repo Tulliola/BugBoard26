@@ -235,7 +235,6 @@ public class ReportIssuePane extends StackPane {
         DropdownMenu dropdownMenu = new DropdownMenu(usersBugBoardLabels);
         dropdownMenu.setPadding(new Insets(15, 0, 0, 0));
 
-
         VBox labelsBox = new VBox();
         labelsBox.getChildren().addAll(new Text("Labels"), dropdownMenu);
         priorityAndLabelsBox.getChildren().addAll(labelsBox);

@@ -1,6 +1,9 @@
 package com.bug_board.gui.views;
 
 import com.bug_board.dto.IssueSummaryDTO;
+import com.bug_board.enum_classes.IssuePriority;
+import com.bug_board.enum_classes.IssueState;
+import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.presentation_controllers.IssueVisualizationPC;
 import com.bug_board.utilities.IssueSummaryCard;
 import com.bug_board.utilities.MyStage;
@@ -13,11 +16,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class IssueVisualizationView extends MyStage {
 
-    private final IssueVisualizationPC issuePC;
+    private IssueVisualizationPC issuePC;
 
     private final VBox root = new VBox();
     private final Scene scene = new Scene(root);
@@ -25,7 +30,13 @@ public class IssueVisualizationView extends MyStage {
     private BorderPane containerUnderTitleBar;
     private VBox issueContainer;
     private HBox paginationNumberContainer;
-    private final String headingText;
+    private ToggleGroup paginationButtonGroup;
+    private String headingText;
+    private Integer idProject;
+
+    private List<RadioButton> tipologyFilterRadioButtons = new ArrayList<>();
+    private List<RadioButton> priorityFilterRadioButtons = new ArrayList<>();
+    private List<RadioButton> stateFilterRadioButtons = new ArrayList<>();
 
     public IssueVisualizationView(IssueVisualizationPC issuePC, String headingText) {
         this.issuePC = issuePC;
@@ -34,6 +45,12 @@ public class IssueVisualizationView extends MyStage {
         issuePC.setView(this);
 
         this.initialize();
+    }
+
+    public IssueVisualizationView(IssueVisualizationPC issuePC, String headingText, Integer idProject) {
+        this(issuePC, headingText);
+
+        this.idProject = idProject;
     }
 
     private void initialize() {
@@ -152,28 +169,9 @@ public class IssueVisualizationView extends MyStage {
 
         int numberOfPages = this.issuePC.getTotalNumberOfPages();
 
-        ToggleGroup buttonsGroup = new ToggleGroup();
+        paginationButtonGroup = new ToggleGroup();
 
-        for(int i = 0; i < numberOfPages; i++){
-            final int page = i;
-            ToggleButton currentPageButton = new ToggleButton(String.valueOf(i+1));
-            currentPageButton.getStyleClass().add("pagination-button");
-            currentPageButton.setPrefSize(100, 100);
-            currentPageButton.setPadding(new Insets(10, 10, 10, 10));
-
-            currentPageButton.setOnMouseClicked(mouseEvent -> {
-                List<IssueSummaryDTO> issuesInPage = issuePC.getIssuesOfAPage(page);
-
-                this.updateCarousel(issuesInPage);
-            });
-
-            currentPageButton.setToggleGroup(buttonsGroup);
-
-            paginationNumberContainer.getChildren().add(currentPageButton);
-        }
-
-        if(!paginationNumberContainer.getChildren().isEmpty())
-           buttonsGroup.getToggles().getFirst().setSelected(true);
+        this.setPaginationButtons(numberOfPages);
 
         return paginationNumberContainer;
     }
@@ -198,6 +196,7 @@ public class IssueVisualizationView extends MyStage {
 
     private VBox createSideFilterBar() {
         VBox filterBar = new VBox();
+        filterBar.setStyle("-fx-background-color: linear-gradient(to bottom, -color-primary, white)");
         filterBar.setPrefWidth(200);
         filterBar.setMinWidth(200);
         filterBar.setMaxWidth(200);
@@ -205,17 +204,20 @@ public class IssueVisualizationView extends MyStage {
         Label filterLabel = new Label("Filter by");
         filterLabel.setPadding(new Insets(10, 10, 10, 10));
         filterLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: white; -fx-background-color: -color-primary");
+        filterLabel.setPrefWidth(filterBar.getPrefWidth());
 
         ImageView filterPic = new ImageView(new Image(getClass().getResourceAsStream("/icons/filter.png")));
         filterPic.setFitWidth(50);
         filterPic.setFitHeight(50);
         filterLabel.setGraphic(filterPic);
 
+
         filterBar.getChildren().addAll(
                 filterLabel,
                 this.createTipologyFilterBox(),
                 this.createPriorityFilterBox(),
-                this.createStateFilterBox()
+                this.createStateFilterBox(),
+                this.createFilterButtonBox()
         );
 
         return filterBar;
@@ -223,36 +225,60 @@ public class IssueVisualizationView extends MyStage {
 
     private VBox createTipologyFilterBox() {
         VBox tipologyFilterBar = new VBox();
-        tipologyFilterBar.getChildren().add(this.createFilterLabel("Tipology"));
+        HBox titleAndClearButtonBox = new HBox();
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        titleAndClearButtonBox.getChildren().addAll(
+                this.createFilterLabel("Tipology"),
+                spacer,
+                this.createClearFiltersButton(this.tipologyFilterRadioButtons)
+        );
+        tipologyFilterBar.getChildren().add(titleAndClearButtonBox);
 
-        List<String> tipologies = issuePC.getTipologyStrings();
+        List<IssueTipology> tipologies = issuePC.getTipologies();
 
-        for(String tipology: tipologies)
-            tipologyFilterBar.getChildren().add(this.createRadioButton(tipology));
+        for(IssueTipology tipology: tipologies)
+            tipologyFilterBar.getChildren().add(this.createTipologyRadioButton(tipology.toString(), tipology.getAssociatedImage()));
 
         return tipologyFilterBar;
     }
 
     private VBox createPriorityFilterBox() {
         VBox priorityFilterBar = new VBox();
-        priorityFilterBar.getChildren().add(this.createFilterLabel("Priority"));
+        HBox titleAndClearButtonBox = new HBox();
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        titleAndClearButtonBox.getChildren().addAll(
+                this.createFilterLabel("Priority"),
+                spacer,
+                this.createClearFiltersButton(this.priorityFilterRadioButtons)
+        );
+        priorityFilterBar.getChildren().add(titleAndClearButtonBox);
 
-        List<String> priorities = issuePC.getPriorityStrings();
+        List<IssuePriority> priorities = issuePC.getPriorities();
 
-        for(String priority: priorities)
-            priorityFilterBar.getChildren().add(this.createRadioButton(priority));
+        for(IssuePriority priority: priorities)
+            priorityFilterBar.getChildren().add(this.createPriorityRadioButton(priority.toString()));
 
         return priorityFilterBar;
     }
 
     private VBox createStateFilterBox() {
         VBox stateFilterBox = new VBox();
-        stateFilterBox.getChildren().add(this.createFilterLabel("State"));
+        HBox titleAndClearButtonBox = new HBox();
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        titleAndClearButtonBox.getChildren().addAll(
+                this.createFilterLabel("State"),
+                spacer,
+                this.createClearFiltersButton(this.stateFilterRadioButtons)
+        );
+        stateFilterBox.getChildren().add(titleAndClearButtonBox);
 
-        List<String> states = issuePC.getStateStrings();
+        List<IssueState> states = issuePC.getStates();
 
-        for(String state: states)
-            stateFilterBox.getChildren().add(this.createRadioButton(state));
+        for(IssueState state: states)
+            stateFilterBox.getChildren().add(this.createStateRadioButton(state.toString()));
 
         return stateFilterBox;
     }
@@ -265,6 +291,108 @@ public class IssueVisualizationView extends MyStage {
         return filterLabel;
     }
 
+    private RadioButton createTipologyRadioButton(String text, byte[] image) {
+        RadioButton radioButton = this.createRadioButton(text, image);
+
+        this.tipologyFilterRadioButtons.add(radioButton);
+
+        radioButton.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            if(isSelected)
+                issuePC.addTipologyFilter(text);
+            else
+                issuePC.removeTipologyFilter(text);
+        });
+
+        return radioButton;
+    }
+
+    private RadioButton createPriorityRadioButton(String text) {
+        RadioButton radioButton = this.createRadioButton(text);
+
+        this.priorityFilterRadioButtons.add(radioButton);
+
+        radioButton.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            if(isSelected)
+                issuePC.addPriorityFilter(text);
+            else
+                issuePC.removePriorityFilter(text);
+        });
+
+        return radioButton;
+    }
+
+    private RadioButton createStateRadioButton(String text) {
+        RadioButton radioButton = this.createRadioButton(text);
+
+        this.stateFilterRadioButtons.add(radioButton);
+
+        radioButton.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            if(isSelected)
+                issuePC.addStateFilter(text);
+            else
+                issuePC.removeStateFilter(text);
+        });
+
+        return radioButton;
+    }
+
+    private Button createClearFiltersButton(List<RadioButton> filtersToBeCleared) {
+        Button clearFiltersButton = new Button("Clear ");
+        clearFiltersButton.setStyle("-fx-background-color: transparent");
+        clearFiltersButton.setPadding(new Insets(10, 10, 10, 10));
+
+        ImageView clearImageView = new ImageView(new Image(getClass().getResourceAsStream("/icons/clear_filters.png")));
+        clearImageView.setFitWidth(15);
+        clearImageView.setFitHeight(15);
+        clearFiltersButton.setGraphic(clearImageView);
+
+        clearFiltersButton.setOnMouseClicked(mouseEvent -> {
+            resetStateFilters(filtersToBeCleared);
+        });
+
+        return clearFiltersButton;
+    }
+
+    private void resetStateFilters(List<RadioButton> filtersToReset) {
+        for(RadioButton filterToReset: filtersToReset)
+            filterToReset.setSelected(false);
+    }
+
+    private HBox createFilterButtonBox() {
+        HBox filterBox = new HBox();
+
+        Button filterButton = new Button("Filter");
+        filterButton.setOnMouseClicked(mouseEvent -> {
+            filterIssues();
+        });
+
+        Region leftSpacer = new Region();
+        Region rightSpacer = new Region();
+
+        HBox.setHgrow(leftSpacer, Priority.ALWAYS);
+        HBox.setHgrow(rightSpacer, Priority.ALWAYS);
+
+        filterBox.getChildren().addAll(
+                leftSpacer,
+                filterButton,
+                rightSpacer
+        );
+
+        return filterBox;
+    }
+
+    private RadioButton createRadioButton(String text, byte[] image) {
+        RadioButton radioButton = this.createRadioButton(text);
+
+        ImageView imageView = new ImageView(new Image(new ByteArrayInputStream(image)));
+        imageView.setFitHeight(25);
+        imageView.setFitWidth(25);
+
+        radioButton.setGraphic(imageView);
+
+        return radioButton;
+    }
+
     private RadioButton createRadioButton(String text) {
         RadioButton radioButton = new RadioButton(text);
         radioButton.getStyleClass().add("normal-radio");
@@ -272,17 +400,55 @@ public class IssueVisualizationView extends MyStage {
         return radioButton;
     }
 
-    private void updateCarousel(List<IssueSummaryDTO> newIssuesToShow) {
-        updateIssueListInCarousel(newIssuesToShow);
+    private void filterIssues() {
+        List<IssueSummaryDTO> allFilteredIssues = issuePC.getFilteredIssueList();
+
+        updateIssueListInCarousel(issuePC.extractFirstPageIssues(allFilteredIssues));
+        updatePaginationNumbers(allFilteredIssues);
     }
 
     private void updateIssueListInCarousel(List<IssueSummaryDTO> newIssuesToShow) {
         this.issueContainer.getChildren().clear();
 
-        if(newIssuesToShow.isEmpty())
+        if(newIssuesToShow == null || newIssuesToShow.isEmpty())
             this.issueContainer.getChildren().add(this.createNoIssuesFoundLabel());
         else
             for(IssueSummaryDTO newIssueToShow: newIssuesToShow)
                 this.issueContainer.getChildren().add(new IssueSummaryCard(newIssueToShow));
+    }
+
+    private void updatePaginationNumbers(List<IssueSummaryDTO> newIssuesToShow) {
+        this.paginationNumberContainer.getChildren().clear();
+
+        int numberOfPages = this.issuePC.getNumberOfPagesOfAGivenSublist(newIssuesToShow);
+
+        this.setPaginationButtons(numberOfPages);
+    }
+
+    private void setPaginationButtons(int numberOfPages) {
+        for(int i = 0; i < numberOfPages; i++){
+            final int page = i;
+            ToggleButton currentPageButton = new ToggleButton(String.valueOf(i+1));
+            currentPageButton.getStyleClass().add("pagination-button");
+            currentPageButton.setPrefSize(100, 100);
+            currentPageButton.setPadding(new Insets(10, 10, 10, 10));
+
+            currentPageButton.setOnMouseClicked(mouseEvent -> {
+                List<IssueSummaryDTO> issuesInPage = issuePC.getIssuesOfAPage(page);
+
+                this.updateIssueListInCarousel(issuesInPage);
+            });
+
+            currentPageButton.setToggleGroup(paginationButtonGroup);
+
+            paginationNumberContainer.getChildren().add(currentPageButton);
+        }
+
+        if(!paginationNumberContainer.getChildren().isEmpty())
+            paginationButtonGroup.getToggles().getFirst().setSelected(true);
+    }
+
+    public Integer getIdProject() {
+        return this.idProject;
     }
 }

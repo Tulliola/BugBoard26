@@ -24,8 +24,9 @@ public class DropdownMenu extends VBox {
     private List<CheckBox> checkBoxes = new ArrayList<>();
     private List<CheckBox> checkedBoxes = new ArrayList<>();
     private static final int MAX_NUM_OF_LABELS = 3;
+
     public DropdownMenu(List<BugBoardLabel> options) {
-        triggerButton = new Button("Seleziona etichette");
+        triggerButton = new Button("Select up to 3 labels");
         triggerButton.setId("popup-button");
         triggerButton.setMaxWidth(Double.MAX_VALUE);
         triggerButton.setAlignment(Pos.CENTER_LEFT);

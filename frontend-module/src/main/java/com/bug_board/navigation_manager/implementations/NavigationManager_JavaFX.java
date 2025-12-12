@@ -67,7 +67,7 @@ public class NavigationManager_JavaFX implements INavigationManager {
         List<IssueSummaryDTO> personalIssues = null;
 
         try {
-            personalIssues = issueController.getPersonalIssues();
+            personalIssues = issueController.getPersonalIssues(null);
         }
         catch (RetrieveIssuesException e) {
             issuePC.showIssuesRetrievalError();
@@ -93,7 +93,7 @@ public class NavigationManager_JavaFX implements INavigationManager {
         List<IssueSummaryDTO> projectIssues = null;
 
         try {
-             projectIssues = projectIssueController.getProjectIssues(idProject);
+             projectIssues = projectIssueController.getProjectIssues(idProject, null);
         }
         catch (RetrieveIssuesException e) {
             issuePC.showIssuesRetrievalError();
@@ -105,7 +105,8 @@ public class NavigationManager_JavaFX implements INavigationManager {
 
         IssueVisualizationView issueView = new IssueVisualizationView(
                 issuePC,
-                "Project \"" + projectName + "\" \'s issues"
+                "Project \"" + projectName + "\" \'s issues",
+                idProject
         );
 
         issueView.show();
