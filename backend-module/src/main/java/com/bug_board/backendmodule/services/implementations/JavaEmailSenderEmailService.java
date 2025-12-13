@@ -16,8 +16,11 @@ public class JavaEmailSenderEmailService implements IEmailService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    @Autowired
-    JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
+
+    public JavaEmailSenderEmailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
     @Override
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")

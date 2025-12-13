@@ -2,10 +2,16 @@ package com.bug_board.backendmodule.mappers;
 
 import com.bug_board.backendmodule.entity.Project;
 import com.bug_board.dto.ProjectSummaryDTO;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class ProjectMapper {
+    private ProjectMapper() {
+
+    }
+
     public static ProjectSummaryDTO toProjectSummaryDTO(Project projectToMap) {
         ProjectSummaryDTO projectSummaryDTO = new ProjectSummaryDTO();
 

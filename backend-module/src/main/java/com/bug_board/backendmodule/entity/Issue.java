@@ -23,7 +23,7 @@ import java.util.List;
 @Table(name = "issue")
 public class Issue {
     /* Issue specific attributes */
-    private static int maxAttachableLabels = 3;
+    private final static int maxAttachableLabels = 3;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -99,7 +99,7 @@ public class Issue {
 
     public void addLabelAttachedToIssue(Label newLabel) {
         if(this.attachedLabels != null) {
-            if (this.maxAttachableLabels == this.attachedLabels.size())
+            if (maxAttachableLabels == this.attachedLabels.size())
                 throw new MaximumLabelsException("You have reached the limit of attachable labels.");
 
             if (newLabel == null)

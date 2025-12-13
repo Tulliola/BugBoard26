@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 
 @Component
 public class IssueMapper {
+    private IssueMapper() {
+
+    }
+
     public static IssueSummaryDTO toIssueSummaryDTO(Issue issueToMap) {
         IssueSummaryDTO mappedIssue = new IssueSummaryDTO();
 
@@ -44,6 +48,6 @@ public class IssueMapper {
     public static List<IssueSummaryDTO> toIssueSummaryDTOS(List<Issue> issues){
         return issues.stream()
                 .map(IssueMapper::toIssueSummaryDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

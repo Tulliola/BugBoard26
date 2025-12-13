@@ -19,7 +19,7 @@ public class IssueCreationDTO {
     private String description;
     private IssueTipology tipology;
     private IssuePriority priority;
-    private IssueState state = IssueState.Todo;
+    private IssueState state = IssueState.TODO;
     private List<byte[]> images;
 
     private Integer idProject;

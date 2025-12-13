@@ -74,7 +74,6 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(MailException.class)
     public ResponseEntity<ErrorResponseDTO> handleMailException(MailException exc) {
-        // 1. Caso: L'utente ha inserito un'email non valida (che è sfuggita alla validazione DTO)
         ErrorResponseDTO error = new ErrorResponseDTO();
         int status;
         String phrase;

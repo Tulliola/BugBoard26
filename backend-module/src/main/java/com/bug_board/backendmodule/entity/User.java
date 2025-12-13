@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
@@ -19,7 +21,11 @@ import java.util.Collection;
         name = "ruolo",
         discriminatorType = DiscriminatorType.STRING
 )
-public abstract class User {
+public abstract class User implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     /* User specific attributes */
     @Id
     @Column(name = "username", nullable = false, length = 50)

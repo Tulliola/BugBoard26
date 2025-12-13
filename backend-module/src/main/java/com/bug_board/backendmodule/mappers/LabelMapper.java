@@ -4,10 +4,16 @@ import com.bug_board.backendmodule.entity.Label;
 import com.bug_board.dto.LabelCreationDTO;
 import com.bug_board.dto.LabelModifyingDTO;
 import com.bug_board.dto.LabelSummaryDTO;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class LabelMapper {
+    private LabelMapper() {
+
+    }
+
     public static LabelSummaryDTO toDTO(Label labelToMap) {
         LabelSummaryDTO mappedLabel = new LabelSummaryDTO();
 

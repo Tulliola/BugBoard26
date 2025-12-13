@@ -1,4 +1,4 @@
-package com.bug_board.backendmodule.services.implementations.JPA_implementation;
+package com.bug_board.backendmodule.services.implementations.jpa_implementations;
 
 import com.bug_board.backendmodule.entity.User;
 import com.bug_board.backendmodule.entity.factories.UserFactory;
@@ -12,7 +12,6 @@ import com.bug_board.dto.UserCreationDTO;
 import com.bug_board.dto.UserSummaryDTO;
 import com.bug_board.backendmodule.exception.backend.ResourceAlreadyExistsException;
 import com.bug_board.backendmodule.exception.backend.ResourceNotFoundException;
-import com.bug_board.dto.email.EmailToSendDTOFactory;
 import com.bug_board.dto.email.IEmailToSendDTO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -90,7 +89,7 @@ public class UserServiceJPA implements IUserService {
                 .filter(user -> !currentCollaboratorsUsernames.contains(user.getUsername()))
                 .toList();
 
-        return addableUser.stream().map(UserMapper::toUserSummaryDTO).collect(Collectors.toList());
+        return addableUser.stream().map(UserMapper::toUserSummaryDTO).toList();
     }
 
     @Override

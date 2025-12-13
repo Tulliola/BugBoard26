@@ -8,6 +8,10 @@ public class PasswordGenerator {
     private static final String DIGITS = "0123456789";
     private static final String SPECIAL = "._%+-";
 
+    private PasswordGenerator() {
+
+    }
+
     public static String generatePassword(int length) {
         String allSets = LOWERCASE + UPPERCASE + DIGITS + SPECIAL;
         SecureRandom random = new SecureRandom();

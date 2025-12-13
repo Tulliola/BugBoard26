@@ -1,4 +1,4 @@
-package com.bug_board.backendmodule.services.implementations.JPA_implementation;
+package com.bug_board.backendmodule.services.implementations.jpa_implementations;
 
 import com.bug_board.backendmodule.repositories.interfaces.IUserRepository;
 import com.bug_board.backendmodule.security.JWTService;
@@ -16,13 +16,14 @@ public class AuthenticationServiceJPA implements IAuthenticationService {
 
     private final JWTService jwtService;
     private final IUserRepository  userRepository;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    public AuthenticationServiceJPA(JWTService jwtService, IUserRepository userRepository) {
+    public AuthenticationServiceJPA(JWTService jwtService,
+                                    IUserRepository userRepository,
+                                    AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
     @Override

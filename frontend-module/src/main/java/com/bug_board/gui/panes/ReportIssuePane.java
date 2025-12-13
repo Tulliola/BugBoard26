@@ -98,21 +98,21 @@ public class ReportIssuePane extends StackPane {
 
         typeIssueRadioButtonBox.getChildren().add(setRadioButton(
                 bugRadioButton,
-                new Image(new ByteArrayInputStream(IssueTipology.Bug.getAssociatedImage())),
+                new Image(new ByteArrayInputStream(IssueTipology.BUG.getAssociatedImage())),
                 "Report malfunctioning"));
         typeIssueRadioButtonBox.getChildren().add(setRadioButton(
                 questionRadioButton,
-                new Image(new ByteArrayInputStream(IssueTipology.Question.getAssociatedImage())),
+                new Image(new ByteArrayInputStream(IssueTipology.QUESTION.getAssociatedImage())),
                 "Request for clarity"
         ));
         typeIssueRadioButtonBox.getChildren().add(setRadioButton(
                 documentationRadioButton,
-                new Image(new ByteArrayInputStream(IssueTipology.Documentation.getAssociatedImage())),
+                new Image(new ByteArrayInputStream(IssueTipology.DOCUMENTATION.getAssociatedImage())),
                 "Report issues regarding documentation"
         ));
         typeIssueRadioButtonBox.getChildren().add(setRadioButton(
                 newFeatureRadioButton,
-                new Image(new ByteArrayInputStream(IssueTipology.NewFeature.getAssociatedImage())),
+                new Image(new ByteArrayInputStream(IssueTipology.NEW_FEATURE.getAssociatedImage())),
                 "Request or suggest new feature"
         ));
 

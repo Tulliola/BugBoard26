@@ -1,4 +1,4 @@
-package com.bug_board.backendmodule.services.implementations.JPA_implementation;
+package com.bug_board.backendmodule.services.implementations.jpa_implementations;
 
 import com.bug_board.backendmodule.entity.*;
 import com.bug_board.backendmodule.repositories.interfaces.IIssueRepository;
@@ -8,7 +8,6 @@ import com.bug_board.backendmodule.services.interfaces.IProjectService;
 import com.bug_board.backendmodule.services.interfaces.IUserService;
 import com.bug_board.backendmodule.mappers.IssueMapper;
 import com.bug_board.backendmodule.exception.backend.BadRequestException;
-import com.bug_board.backendmodule.exception.backend.ResourceNotFoundException;
 import com.bug_board.dto.IssueCreationDTO;
 import com.bug_board.dto.IssueFiltersDTO;
 import com.bug_board.dto.IssueSummaryDTO;

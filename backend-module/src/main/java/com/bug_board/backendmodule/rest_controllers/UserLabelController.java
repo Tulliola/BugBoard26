@@ -1,4 +1,4 @@
-package com.bug_board.backendmodule.REST_controllers;
+package com.bug_board.backendmodule.rest_controllers;
 
 import com.bug_board.backendmodule.security.UserPrincipal;
 import com.bug_board.backendmodule.services.interfaces.ILabelService;

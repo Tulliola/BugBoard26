@@ -7,6 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EmailMapper {
+    private EmailMapper() {
+
+    }
+
     public static IEmailToSendDTO mapToWelcomingMail(User addressee, String clearPassword) {
         IEmailToSendDTO emailToSendDTO = EmailToSendDTOFactory.getInstance().getEmailDTO();
         emailToSendDTO.setUsername(addressee.getUsername());

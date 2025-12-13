@@ -1,6 +1,6 @@
 package com.bug_board.backendmodule.services.implementations.factories;
 
-import com.bug_board.backendmodule.services.implementations.JPA_implementation.IssueServiceJPA;
+import com.bug_board.backendmodule.services.implementations.jpa_implementations.IssueServiceJPA;
 import com.bug_board.backendmodule.services.interfaces.IIssueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

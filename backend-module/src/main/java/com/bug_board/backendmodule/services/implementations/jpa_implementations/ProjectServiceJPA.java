@@ -1,4 +1,4 @@
-package com.bug_board.backendmodule.services.implementations.JPA_implementation;
+package com.bug_board.backendmodule.services.implementations.jpa_implementations;
 
 import com.bug_board.backendmodule.entity.Project;
 import com.bug_board.backendmodule.entity.User;

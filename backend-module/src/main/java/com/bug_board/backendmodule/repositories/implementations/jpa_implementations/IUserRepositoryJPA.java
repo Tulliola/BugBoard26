@@ -1,4 +1,4 @@
-package com.bug_board.backendmodule.repositories.implementations.JPA_implementations;
+package com.bug_board.backendmodule.repositories.implementations.jpa_implementations;
 
 import com.bug_board.backendmodule.entity.User;
 import com.bug_board.enum_classes.UserRole;

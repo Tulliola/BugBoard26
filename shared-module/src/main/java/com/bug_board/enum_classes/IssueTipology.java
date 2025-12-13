@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.io.IOException;
 
 public enum IssueTipology {
-    Bug("Bug", "/shared_module/images/bug.png"),
-    NewFeature("NewFeature", "/shared_module/images/new_feature.png"),
-    Question("Question", "/shared_module/images/question.png"),
-    Documentation("Documentation", "/shared_module/images/documentation.png");
+    BUG("Bug", "/shared_module/images/bug.png"),
+    NEW_FEATURE("NewFeature", "/shared_module/images/new_feature.png"),
+    QUESTION("Question", "/shared_module/images/question.png"),
+    DOCUMENTATION("Documentation", "/shared_module/images/documentation.png");
 
     private final String tipology;
     private final String imageURL;

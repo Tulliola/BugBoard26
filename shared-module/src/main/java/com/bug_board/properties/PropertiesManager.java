@@ -1,10 +1,5 @@
 package com.bug_board.properties;
 
-import com.bug_board.dto.email.EmailToSendDTOFactory;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -25,8 +20,9 @@ public class PropertiesManager {
         Properties properties = new Properties();
         try {
             properties.load(PropertiesManager.class.getClassLoader().getResourceAsStream(dtoProperties));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }
+        catch (IOException e) {
+            throw new PropertiesNotFoundException("Couldn't retrieve any property you have specified.");
         }
 
         return properties.getProperty("app.mock-email-addressee");
@@ -37,10 +33,9 @@ public class PropertiesManager {
 
         try{
             properties.load(PropertiesManager.class.getClassLoader().getResourceAsStream(dtoProperties));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }
+        catch (IOException exc) {
+            throw new RuntimeException("Couldn't retrieve any property you have specified.");
         }
 
         return properties.getProperty("app.email-dto-implementation");

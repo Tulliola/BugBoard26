@@ -1,6 +1,6 @@
 package com.bug_board.backendmodule.repositories.implementations.factories;
 
-import com.bug_board.backendmodule.repositories.implementations.JPA_implementations.IssueRepositoryJpaAdapter;
+import com.bug_board.backendmodule.repositories.implementations.jpa_implementations.IssueRepositoryJpaAdapter;
 import com.bug_board.backendmodule.repositories.interfaces.IIssueRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
