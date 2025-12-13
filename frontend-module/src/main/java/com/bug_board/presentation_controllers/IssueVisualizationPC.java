@@ -8,6 +8,8 @@ import com.bug_board.exceptions.architectural_controllers.RetrieveProjectExcepti
 import com.bug_board.gui.views.IssueVisualizationView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -109,7 +111,9 @@ public abstract class IssueVisualizationPC {
         this.issueList = issueList;
     }
 
-    public List<IssueSummaryDTO> getAllIssues() {
-        return this.issueList;
+    public void showIssueSummaryPane(StackPane containerUnderTitleBar, IssueSummaryDTO issueToShow) {
+        Pane issueSummaryOverlay = navigationManager.buildIssueSummaryComponent(containerUnderTitleBar, issueToShow);
+
+        issueView.displayOverlayedContent(issueSummaryOverlay);
     }
 }

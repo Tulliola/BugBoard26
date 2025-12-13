@@ -27,7 +27,8 @@ public class IssueVisualizationView extends MyStage {
     private final VBox root = new VBox();
     private final Scene scene = new Scene(root);
     private TitleBar titleBar;
-    private BorderPane containerUnderTitleBar;
+    private StackPane containerUnderTitleBar;
+    private BorderPane centralPane;
     private VBox issueContainer;
     private HBox paginationNumberContainer;
     private ToggleGroup paginationButtonGroup;
@@ -63,17 +64,14 @@ public class IssueVisualizationView extends MyStage {
 
         root.setAlignment(Pos.TOP_CENTER);
 
+        setContainerUnderTitleBar();
 
         titleBar = new TitleBar(this, 80);
         this.setGoBackButton();
 
-        BorderPane containerUnderTitleBar = this.createContainerUnderTitleBar();
-        containerUnderTitleBar.setPadding(new Insets(10, 0, 0, 0));
-        VBox.setVgrow(containerUnderTitleBar, Priority.ALWAYS);
-
         root.getChildren().addAll(
                 titleBar,
-                containerUnderTitleBar
+                this.containerUnderTitleBar
         );
 
         this.setScene(scene);
@@ -109,14 +107,18 @@ public class IssueVisualizationView extends MyStage {
         titleBar.addGoBackButton(goBackBtn);
     }
 
-    private BorderPane createContainerUnderTitleBar() {
-        containerUnderTitleBar = new BorderPane();
+    private void setContainerUnderTitleBar() {
+        containerUnderTitleBar = new StackPane();
+        VBox.setVgrow(containerUnderTitleBar, Priority.ALWAYS);
 
-        containerUnderTitleBar.setLeft(this.createSideFilterBar());
-        containerUnderTitleBar.setCenter(this.createCentralPane());
-        containerUnderTitleBar.setRight(this.createLateralPane());
+        centralPane = new BorderPane();
+        centralPane.setPadding(new Insets(10, 0, 0, 0));
 
-        return containerUnderTitleBar;
+        centralPane.setLeft(this.createSideFilterBar());
+        centralPane.setCenter(this.createCentralPane());
+        centralPane.setRight(this.createLateralPane());
+
+        containerUnderTitleBar.getChildren().add(centralPane);
     }
 
     private VBox createCentralPane() {
@@ -157,8 +159,13 @@ public class IssueVisualizationView extends MyStage {
             issueContainer.getChildren().add(noIssuesFound);
         }
         else
-            for(IssueSummaryDTO issueDTO: issueSummaryDTOList)
-                issueContainer.getChildren().add(new IssueSummaryCard(issueDTO));
+            for(IssueSummaryDTO issueDTO: issueSummaryDTOList){
+                IssueSummaryCard issueCard = new IssueSummaryCard(issueDTO);
+                issueCard.setOnMouseClicked(mouseEvent -> {
+                    this.clickOnAIssueToViewItsSummary(issueDTO);
+                });
+                issueContainer.getChildren().add(issueCard);
+            }
 
         return issueContainer;
     }
@@ -439,8 +446,13 @@ public class IssueVisualizationView extends MyStage {
         if(newIssuesToShow == null || newIssuesToShow.isEmpty())
             this.issueContainer.getChildren().add(this.createNoIssuesFoundLabel());
         else
-            for(IssueSummaryDTO newIssueToShow: newIssuesToShow)
-                this.issueContainer.getChildren().add(new IssueSummaryCard(newIssueToShow));
+            for(IssueSummaryDTO newIssueToShow: newIssuesToShow){
+                IssueSummaryCard issueCard = new IssueSummaryCard(newIssueToShow);
+                issueCard.setOnMouseClicked(mouseEvent -> {
+                    this.clickOnAIssueToViewItsSummary(newIssueToShow);
+                });
+                issueContainer.getChildren().add(issueCard);
+            }
     }
 
     private void updatePaginationNumbers() {
@@ -473,6 +485,19 @@ public class IssueVisualizationView extends MyStage {
 
         if(!paginationNumberContainer.getChildren().isEmpty())
             paginationButtonGroup.getToggles().getFirst().setSelected(true);
+    }
+
+    private void clickOnAIssueToViewItsSummary(IssueSummaryDTO issueToShow) {
+        if(containerUnderTitleBar.getChildren().getLast() == centralPane)
+            issuePC.showIssueSummaryPane(containerUnderTitleBar, issueToShow);
+    }
+
+    public void displayOverlayedContent(Pane newLayer) {
+        containerUnderTitleBar.getChildren().add(newLayer);
+    }
+
+    public StackPane getContainerUnderTitleBar() {
+        return containerUnderTitleBar;
     }
 
     public Integer getIdProject() {

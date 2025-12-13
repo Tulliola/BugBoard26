@@ -3,13 +3,12 @@ package com.bug_board.utilities;
 import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.enum_classes.IssueTipology;
-import com.bug_board.navigation_manager.implementations.NavigationManager_JavaFX;
 import com.bug_board.utilities.animations.OnMouseEnteredHoverEffect;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -56,6 +55,8 @@ public class IssueSummaryCard extends HBox {
     private VBox createIssueSummaryBox() {
         VBox issueSummaryBox = new VBox();
         issueSummaryBox.setPadding(new Insets(10, 10, 10, 10));
+        issueSummaryBox.setPrefWidth(850);
+        issueSummaryBox.setMaxWidth(850);
 
         issueSummaryBox.getChildren().addAll(
                 this.createStateAndCreatorSummaryPane(),
@@ -80,9 +81,7 @@ public class IssueSummaryCard extends HBox {
     private HBox createStateAndCreatorSummaryPane() {
         HBox creatorSummaryPane = new HBox();
         creatorSummaryPane.setAlignment(Pos.CENTER_LEFT);
-
-        Pane creatorBioPicPane = new Pane();
-        creatorBioPicPane.setStyle("-fx-background-radius: 35px; -fx-border-radius: 35px");
+        creatorSummaryPane.setSpacing(5);
 
         ImageView bioPic = new ImageView(new Image(new ByteArrayInputStream(issueToShow.getCreatorBioPic())));
         bioPic.setFitHeight(50);
@@ -96,10 +95,10 @@ public class IssueSummaryCard extends HBox {
         Circle stateCircle = new Circle();
         stateCircle.setRadius(15);
         stateCircle.setFill(Color.web(issueToShow.getState().getColor()));
-        Tooltip tooltip = new Tooltip(issueToShow.getState().toString());
-        tooltip.setStyle("-fx-text-fill: " + issueToShow.getState().getColor());
-        tooltip.setShowDelay(Duration.millis(100));
-        Tooltip.install(stateCircle, tooltip);
+        Tooltip issueStateToolTip = new Tooltip(issueToShow.getState().toString());
+        issueStateToolTip.setStyle("-fx-text-fill: " + issueToShow.getState().getColor());
+        issueStateToolTip.setShowDelay(Duration.millis(100));
+        Tooltip.install(stateCircle, issueStateToolTip);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -110,6 +109,17 @@ public class IssueSummaryCard extends HBox {
                 spacer,
                 stateCircle
         );
+
+        if(issueToShow.getPriority().getAssociatedImage() != null) {
+            ImageView issuePriorityImageView = new ImageView(new Image(new ByteArrayInputStream(issueToShow.getPriority().getAssociatedImage())));
+            issuePriorityImageView.setFitWidth(35);
+            issuePriorityImageView.setFitHeight(35);
+            Tooltip issuePriorityToolTip = new Tooltip(issueToShow.getPriority().toString());
+            issuePriorityToolTip.setShowDelay(Duration.millis(100));
+            Tooltip.install(issuePriorityImageView, issuePriorityToolTip);
+
+            creatorSummaryPane.getChildren().add(3, issuePriorityImageView);
+        }
 
         return creatorSummaryPane;
     }

@@ -52,7 +52,7 @@ public class LabelCreationFormPane extends StackPane {
     private VBox createCreationForm() {
         form = new VBox();
         form.setAlignment(Pos.TOP_CENTER);
-        form.setId("label-creation-form");
+        form.setId("form");
 
         ImageView painterGif = new ImageView(new Image(getClass().getResourceAsStream("/gifs/painter.gif")));
         painterGif.setFitHeight(100);
