@@ -1,6 +1,7 @@
 package com.bug_board.backendmodule.rest_controllers;
 
 import com.bug_board.backendmodule.security.UserPrincipal;
+import com.bug_board.backendmodule.services.implementations.jpa_implementations.IssueServiceJPA;
 import com.bug_board.backendmodule.services.interfaces.IIssueService;
 import com.bug_board.dto.IssueCreationDTO;
 import com.bug_board.dto.IssueFiltersDTO;
@@ -17,9 +18,11 @@ import java.util.List;
 public class IssueController {
 
     private final IIssueService issueService;
+    private final IssueServiceJPA issueServiceJPA;
 
-    public IssueController(IIssueService issueService) {
+    public IssueController(IIssueService issueService, IssueServiceJPA issueServiceJPA) {
         this.issueService = issueService;
+        this.issueServiceJPA = issueServiceJPA;
     }
 
 

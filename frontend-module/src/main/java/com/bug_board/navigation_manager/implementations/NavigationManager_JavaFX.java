@@ -140,10 +140,10 @@ public class NavigationManager_JavaFX implements INavigationManager {
     }
 
     @Override
-    public Pane buildReportIssueComponent(StackPane parentContainer, HomePagePC homePagePC) {
-        ReportIssueController reportIssueController = new ReportIssueController(new UserIssueDAO_REST(new MyHTTPClient()), new UserLabelDAO_REST(new MyHTTPClient()));
+    public Pane buildReportIssueComponent(StackPane parentContainer, int projectToReport, HomePagePC homePagePC) {
+        ReportIssueController reportIssueController = new ReportIssueController(new ProjectIssueDAO_REST(new MyHTTPClient()), new UserLabelDAO_REST(new MyHTTPClient()));
 
-        ReportIssuePC reportIssuePC = new ReportIssuePC(reportIssueController);
+        ReportIssuePC reportIssuePC = new ReportIssuePC(reportIssueController, projectToReport);
 
         ReportIssuePane reportIssuePane = new ReportIssuePane(parentContainer, reportIssuePC);
 

@@ -3,10 +3,9 @@ package com.bug_board.dto;
 import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueState;
 import com.bug_board.enum_classes.IssueTipology;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.*;
 
 import java.util.List;
 
@@ -19,8 +18,8 @@ public class IssueCreationDTO {
     private String description;
     private IssueTipology tipology;
     private IssuePriority priority;
-    private IssueState state = IssueState.TODO;
     private List<byte[]> images;
+    private final IssueState state = IssueState.TODO;
 
     private Integer idProject;
 

@@ -43,7 +43,7 @@ public class ProjectIssueDAO_REST implements IProjectIssueDAO {
                             objectMapper.writeValueAsString(filtersToMap))
                     ).build();
         } catch (IOException exc) {
-            throw new BadConversionToJSONException("There has been an error in the conversion to DTO of the issue DTO.");
+            throw new BadConversionToJSONException("There has been an error in the conversion to JSON of the issue DTO.");
         }
 
         TypeReference<List<IssueSummaryDTO>> typeRef = new TypeReference<>() {};
@@ -64,7 +64,7 @@ public class ProjectIssueDAO_REST implements IProjectIssueDAO {
                             objectMapper.writeValueAsString(issueToCreate)))
                     .build();
         } catch (IOException exc) {
-            throw new BadConversionToJSONException("There has been an error in the conversion to DTO of the issueSummary DTO.");
+            throw new BadConversionToJSONException("There has been an error in the conversion to JSON of the issueSummary DTO.");
         }
 
         return httpClient.sendAndHandle(request, IssueSummaryDTO.class);

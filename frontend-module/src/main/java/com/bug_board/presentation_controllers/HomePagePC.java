@@ -71,8 +71,8 @@ public class HomePagePC {
         this.homePageView = homePageView;
     }
 
-    public void showReportIssueOverlay(StackPane containerUnderTitleBar) {
-        Pane reportIssueOverlay = navigationManager.buildReportIssueComponent(containerUnderTitleBar, this);
+    public void showReportIssueOverlay(StackPane containerUnderTitleBar, int projectReported) {
+        Pane reportIssueOverlay = navigationManager.buildReportIssueComponent(containerUnderTitleBar, projectReported, this);
 
         homePageView.displayOverlayedContent(reportIssueOverlay);
     }

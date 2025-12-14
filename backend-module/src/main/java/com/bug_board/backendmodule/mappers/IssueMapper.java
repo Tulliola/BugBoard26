@@ -40,6 +40,7 @@ public class IssueMapper {
         mappedIssue.setDescription(issueDTOToMap.getDescription());
         mappedIssue.setTipology(issueDTOToMap.getTipology());
         mappedIssue.setImages(issueDTOToMap.getImages());
+        mappedIssue.setPriority(issueDTOToMap.getPriority());
         mappedIssue.setState(issueDTOToMap.getState());
 
         return mappedIssue;

@@ -1,5 +1,6 @@
 package com.bug_board.gui.panes;
 
+import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.exceptions.architectural_controllers.LabelCreationException;
 import com.bug_board.exceptions.views.TitleNotSpecifiedForLabelException;
 import com.bug_board.presentation_controllers.LabelManagementPC;
@@ -63,7 +64,7 @@ public class LabelCreationFormPane extends StackPane {
         Text createYourLabelText = new Text("Create your own label!");
         createYourLabelText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
 
-        sampleLabel = new BugBoardLabel("This is a label", "#FFFFFF");
+        sampleLabel = new BugBoardLabel("This is a Label", "#FFFFFF");
 
 
         form.getChildren().addAll(

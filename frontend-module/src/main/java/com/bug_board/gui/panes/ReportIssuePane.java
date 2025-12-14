@@ -1,6 +1,7 @@
 package com.bug_board.gui.panes;
 
 import com.bug_board.dto.LabelSummaryDTO;
+import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.presentation_controllers.ReportIssuePC;
 import com.bug_board.utilities.BugBoardLabel;
@@ -55,12 +56,15 @@ public class ReportIssuePane extends StackPane {
     private TextArea descriptionTextArea = new TextArea();
     private VBox priorityAndLabelsBox = new VBox();
     private ComboBox<String> priorityComboBox = new ComboBox<>();
+    private DropdownMenu dropdownMenu;
 
     private Text addImagesText = new  Text("Attach up to three images");
     private HBox addImagesBox = new HBox();
     private List<StackPane> imagesStackPane = new ArrayList<>(NUM_OF_IMAGES);
     private List<File> filesChoosen = new ArrayList<>(NUM_OF_IMAGES);
-    private byte[][] binaryFiles = new byte[NUM_OF_IMAGES][];
+    private ArrayList<byte[]> binaryFiles = new ArrayList<>(NUM_OF_IMAGES);
+
+    private Button confirmButton = new Button("Confirm");
 
     private static final int MAX_TITLE_CHARS = 50;
     private static final int MAX_DESCRIPTION_CHARS = 300;
@@ -126,7 +130,17 @@ public class ReportIssuePane extends StackPane {
 
         contentPane.getChildren().add(setImagesChooserBox());
 
+        contentPane.getChildren().add(setConfirmButton());
+
         return contentPane;
+    }
+
+    private Node setConfirmButton() {
+        confirmButton.setAlignment(Pos.CENTER);
+        confirmButton.setOnAction(event -> {
+            reportIssuePC.onConfirmButtonClicked();
+        });
+        return confirmButton;
     }
 
     private Node setImagesChooserBox() {
@@ -169,7 +183,7 @@ public class ReportIssuePane extends StackPane {
 
            if(choosenFile != null){
                try {
-                   binaryFiles[index] = Files.readAllBytes(choosenFile.toPath());
+                   binaryFiles.add(index, Files.readAllBytes(choosenFile.toPath()));
                } catch (IOException ex) {
                    throw new RuntimeException(ex);
                }
@@ -180,7 +194,7 @@ public class ReportIssuePane extends StackPane {
            }
            else {
                imageButton.setVisible(true);
-               binaryFiles[index] = null;
+               binaryFiles.add(index, null);
            }
         });
 
@@ -229,13 +243,13 @@ public class ReportIssuePane extends StackPane {
         List<LabelSummaryDTO> usersLabels = reportIssuePC.getUsersLabels();
         List<BugBoardLabel> usersBugBoardLabels = new ArrayList<>();
         for(LabelSummaryDTO usersLabel : usersLabels){
-            BugBoardLabel bugBoardLabelFromLabel = new BugBoardLabel(usersLabel.getName(), usersLabel.getColor());
+            BugBoardLabel bugBoardLabelFromLabel = new BugBoardLabel(usersLabel);
             bugBoardLabelFromLabel.setToolTipDescription(usersLabel.getDescription());
 
             usersBugBoardLabels.add(bugBoardLabelFromLabel);
         }
 
-        DropdownMenu dropdownMenu = new DropdownMenu(usersBugBoardLabels);
+        dropdownMenu = new DropdownMenu(usersBugBoardLabels);
         dropdownMenu.setPadding(new Insets(15, 0, 0, 0));
 
         VBox labelsBox = new VBox();
@@ -333,5 +347,55 @@ public class ReportIssuePane extends StackPane {
 
     public void close() {
         parentContainer.getChildren().remove(this);
+    }
+
+    public IssueTipology getChoosenIssueTipology() {
+        Toggle choosenButton = typeIssueToggleGroup.getSelectedToggle();
+        if(choosenButton == null)
+            return null;
+        else if(choosenButton == bugRadioButton)
+            return IssueTipology.BUG;
+        else if(choosenButton == questionRadioButton)
+            return IssueTipology.QUESTION;
+        else if(choosenButton == documentationRadioButton)
+            return IssueTipology.DOCUMENTATION;
+        else
+            return IssueTipology.NEW_FEATURE;
+    }
+
+    public String getTitle() {
+        return titleTextField.getText();
+    }
+
+    public String getDescription() {
+        return descriptionTextArea.getText();
+    }
+
+    public List<Integer> getChoosenLabels() {
+        return dropdownMenu.getSelectedLabels();
+    }
+
+    public List<byte[]> getIssueImages(){
+        List<byte[]> images = new ArrayList<>();
+
+        for(byte[] image: images)
+            if(image != null)
+                images.add(image);
+
+        return images;
+    }
+
+    public IssuePriority getIssuePriority(){
+
+        if(priorityComboBox.getValue() == null)
+            return null;
+        else if(priorityComboBox.getValue().equals("Don't specify"))
+            return IssuePriority.NO_PRIORITY;
+        else if (priorityComboBox.getValue().equals("Low"))
+            return IssuePriority.LOW_PRIORITY;
+        else if(priorityComboBox.getValue().equals("Medium"))
+            return IssuePriority.MEDIUM_PRIORITY;
+        else
+            return IssuePriority.HIGH_PRIORITY;
     }
 }

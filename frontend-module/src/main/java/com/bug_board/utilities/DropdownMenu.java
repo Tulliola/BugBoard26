@@ -2,7 +2,6 @@ package com.bug_board.utilities;
 
 import com.bug_board.dto.LabelSummaryDTO;
 import javafx.css.PseudoClass;
-import javafx.event.ActionEvent;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,9 +22,13 @@ public class DropdownMenu extends VBox {
     private VBox itemsPane = new VBox();
     private List<CheckBox> checkBoxes = new ArrayList<>();
     private List<CheckBox> checkedBoxes = new ArrayList<>();
+    private List<BugBoardLabel> options;
+    private List<Integer> labelsSelected = new ArrayList<>();
     private static final int MAX_NUM_OF_LABELS = 3;
 
     public DropdownMenu(List<BugBoardLabel> options) {
+        this.options = options;
+
         triggerButton = new Button("Select up to 3 labels");
         triggerButton.setId("popup-button");
         triggerButton.setMaxWidth(Double.MAX_VALUE);
@@ -55,16 +58,18 @@ public class DropdownMenu extends VBox {
             option.setPadding(new Insets(0, 0, 0, 10));
             CheckBox labelCheckBox = new CheckBox();
 
+
             labelCheckBox.setGraphic(option);
             labelCheckBox.getStyleClass().add("bugboard-checkbox");
             labelCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                this.setLabelsCeiling(labelCheckBox, newValue);
+                this.setAndCheckLabelsCeiling(labelCheckBox, newValue);
+                addSelectedLabelId(option, newValue);
             });
 
             HBox row = new HBox();
             row.getStyleClass().add("dropdown-row");
             labelCheckBox.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
-                row.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), isSelected);
+                 row.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), isSelected);
             });
             row.setOnMouseClicked(e -> {
                 if (e.getTarget() != labelCheckBox && e.getTarget() != labelCheckBox.lookup(".box")) {
@@ -99,7 +104,20 @@ public class DropdownMenu extends VBox {
         this.getChildren().add(triggerButton);
     }
 
-    private void setLabelsCeiling(CheckBox labelCheckBox, Boolean isSelected) {
+    private void addSelectedLabelId(BugBoardLabel option, Boolean newValue) {
+        if(newValue) {
+            if (labelsSelected.size() < MAX_NUM_OF_LABELS) {
+                labelsSelected.add(mapToLabelSummaryDTO(option).getIdLabel());
+            }
+        }
+        else {
+            if (labelsSelected.contains(option.getLabelId())) {
+                labelsSelected.remove(mapToLabelSummaryDTO(option).getIdLabel());
+            }
+        }
+    }
+
+    private void setAndCheckLabelsCeiling(CheckBox labelCheckBox, Boolean isSelected) {
         if(isSelected) {
             long count = 0;
             for(CheckBox checkBox : checkBoxes) {
@@ -112,5 +130,21 @@ public class DropdownMenu extends VBox {
         }
         else
             labelCheckBox.setSelected(false);
+
+    }
+
+    public List<Integer> getSelectedLabels() {
+        return labelsSelected;
+    }
+
+    //TODO dove fare il mapper???
+    private LabelSummaryDTO mapToLabelSummaryDTO(BugBoardLabel bugBoardLabel) {
+        LabelSummaryDTO labelSummaryDTO = new LabelSummaryDTO();
+        labelSummaryDTO.setIdLabel(bugBoardLabel.getLabelId());
+        labelSummaryDTO.setColor(bugBoardLabel.getColor());
+        labelSummaryDTO.setName(bugBoardLabel.getName());
+        labelSummaryDTO.setDescription(bugBoardLabel.getDescription());
+
+        return labelSummaryDTO;
     }
 }

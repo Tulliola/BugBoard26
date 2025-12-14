@@ -27,7 +27,6 @@ import java.io.ByteArrayInputStream;
 
 public class ProjectCard extends StackPane {
     final ProjectSummaryDTO projectToShow;
-    private Integer idProject;
     private final HomePagePC  homePagePC;
     private final StackPane cardPane;
     private final Pane frontCard;
@@ -39,7 +38,6 @@ public class ProjectCard extends StackPane {
                        HomePagePC homePagePC) {
         projectToShow = projectSummaryDTO;
         this.homePagePC = homePagePC;
-        idProject = projectToShow.getIdProject();
 
 
         frontCard = createFrontCard();
@@ -248,15 +246,17 @@ public class ProjectCard extends StackPane {
         switch (actionId) {
             case "VIEW_ISSUES":
                 clickViewIssueButton();
+                break;
             case "REPORT_ISSUE":
                 clickReportIssueButton();
+                break;
             default:
                 break;
         }
     }
 
     private void clickReportIssueButton() {
-        this.homePagePC.showReportIssueOverlay(homePagePC.getContainer());
+        this.homePagePC.showReportIssueOverlay(homePagePC.getContainer(), projectToShow.getIdProject());
     }
 
     private void clickViewIssueButton() { this.homePagePC.openVisualizationIssueView(projectToShow.getIdProject(), projectToShow.getTitle());}

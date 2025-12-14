@@ -167,7 +167,7 @@ public class IssueSummaryCard extends HBox {
         labelsPane.setPrefWrapLength(800);
 
         for(LabelSummaryDTO label: this.issueToShow.getLabels()) {
-            BugBoardLabel bugBoardLabel = new BugBoardLabel(label.getName(), label.getColor());
+            BugBoardLabel bugBoardLabel = new BugBoardLabel(label);
             bugBoardLabel.setToolTipDescription(label.getDescription());
             bugBoardLabel.setScaleX(0.75);
             bugBoardLabel.setScaleY(0.75);

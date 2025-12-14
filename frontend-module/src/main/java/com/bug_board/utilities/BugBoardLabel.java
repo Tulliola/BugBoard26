@@ -1,5 +1,6 @@
 package com.bug_board.utilities;
 
+import com.bug_board.dto.LabelSummaryDTO;
 import javafx.geometry.Pos;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
@@ -16,9 +17,14 @@ public class BugBoardLabel extends StackPane {
     private Text textInShape;
     private SVGPath shape;
     private String color;
+    private LabelSummaryDTO label;
+    public BugBoardLabel(LabelSummaryDTO labelSummaryDTO) {
+        this.label = labelSummaryDTO;
+        this.createBugBoardLabel(labelSummaryDTO.getName(), labelSummaryDTO.getColor());
+    }
 
-    public BugBoardLabel(String text, String fillColor) {
-        this.createBugBoardLabel(text, fillColor);
+    public BugBoardLabel(String name, String color) {
+        createBugBoardLabel(name, color);
     }
 
     private void createBugBoardLabel(String text, String fillColor) {
@@ -77,5 +83,17 @@ public class BugBoardLabel extends StackPane {
 
     public String getColor() {
         return color;
+    }
+
+    public String getName(){
+        return label.getName();
+    }
+
+    public String getDescription(){
+        return label.getDescription();
+    }
+
+    public Integer getLabelId() {
+        return label.getIdLabel();
     }
 }
