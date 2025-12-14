@@ -13,10 +13,7 @@ import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.exceptions.architectural_controllers.RetrieveIssuesException;
 import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.factories.ProjectFactory;
-import com.bug_board.gui.panes.IssueSummaryPane;
-import com.bug_board.gui.panes.LabelCreationFormPane;
-import com.bug_board.gui.panes.ReportIssuePane;
-import com.bug_board.gui.panes.UserRegistrationFormPane;
+import com.bug_board.gui.panes.*;
 import com.bug_board.gui.views.IssueVisualizationView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import com.bug_board.presentation_controllers.*;
@@ -151,9 +148,14 @@ public class NavigationManager_JavaFX implements INavigationManager {
     }
 
     @Override
-    public Pane buildIssueSummaryComponent(StackPane containerUnderTitleBar, IssueSummaryDTO issueToShow) {
-        IssueSummaryPane issueSummaryPane = new IssueSummaryPane(containerUnderTitleBar, issueToShow, null);
+    public Pane buildIssueSummaryComponent(StackPane containerUnderTitleBar, IssueSummaryDTO issueToShow, IssueVisualizationPC issuePC) {
+        IssueSummaryPane issueSummaryPane = new IssueSummaryPane(containerUnderTitleBar, issueToShow, issuePC);
 
         return issueSummaryPane;
+    }
+
+    @Override
+    public Pane buildImageViewComponent(StackPane containerUnderTitleBar, byte[] imageToView) {
+        return new ImageViewPane(containerUnderTitleBar, imageToView);
     }
 }

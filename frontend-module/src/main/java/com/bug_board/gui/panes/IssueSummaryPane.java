@@ -2,6 +2,7 @@ package com.bug_board.gui.panes;
 
 import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.dto.LabelSummaryDTO;
+import com.bug_board.presentation_controllers.IssueVisualizationPC;
 import com.bug_board.utilities.BugBoardLabel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class IssueSummaryPane extends StackPane {
 
-    private final List<byte[]> associatedImages;
+    private final IssueVisualizationPC issuePC;
     private final IssueSummaryDTO issueToShow;
     private final StackPane parentContainer;
 
@@ -28,10 +29,10 @@ public class IssueSummaryPane extends StackPane {
 
     public IssueSummaryPane(StackPane parentContainer,
                             IssueSummaryDTO issueToShow,
-                            List<byte[]> associatedImages) {
+                            IssueVisualizationPC issuePC) {
         this.parentContainer = parentContainer;
         this.issueToShow = issueToShow;
-        this.associatedImages = associatedImages;
+        this.issuePC = issuePC;
 
         this.initalize();
     }
@@ -49,6 +50,7 @@ public class IssueSummaryPane extends StackPane {
         setHeader();
         setDescriptionScrollPane();
         setLabelsBox();
+        setImageBoxes();
 
         this.getChildren().add(issueSummaryForm);
     }
@@ -142,6 +144,9 @@ public class IssueSummaryPane extends StackPane {
     private void setLabelsBox() {
         FlowPane labelsBox = new FlowPane();
         labelsBox.setPadding(new Insets(10, 10, 10, 10));
+        labelsBox.setVgap(10);
+        labelsBox.setHgap(10);
+        labelsBox.setAlignment(Pos.CENTER);
 
         if(issueToShow.getLabels() != null && !issueToShow.getLabels().isEmpty())
             for(LabelSummaryDTO labelToShow: issueToShow.getLabels()){
@@ -157,6 +162,39 @@ public class IssueSummaryPane extends StackPane {
         }
 
         issueSummaryForm.getChildren().add(labelsBox);
+    }
+
+    private void setImageBoxes() {
+        FlowPane imagesContainer = new FlowPane();
+        imagesContainer.setPadding(new Insets(10, 10, 10, 10));
+        imagesContainer.setAlignment(Pos.CENTER);
+        imagesContainer.setVgap(10);
+        imagesContainer.setHgap(10);
+
+        List<byte[]> associatedImages = issuePC.getAssociatedImagesOfAIssue(issueToShow.getIdIssue());
+
+        for(byte[] associatedImage: associatedImages)
+            imagesContainer.getChildren().add(this.createImageBox(associatedImage));
+
+        issueSummaryForm.getChildren().add(imagesContainer);
+    }
+
+    private Pane createImageBox(byte[] associatedImage) {
+        VBox imageBox = new VBox();
+        imageBox.setAlignment(Pos.CENTER);
+        imageBox.getStyleClass().add("file-chooser-button");
+
+        ImageView associatedImageView = new ImageView(new Image(new ByteArrayInputStream(associatedImage)));
+        associatedImageView.setFitWidth(200);
+        associatedImageView.setFitHeight(200);
+
+        imageBox.getChildren().add(associatedImageView);
+
+        imageBox.setOnMouseClicked(mouseEvent -> {
+            issuePC.showImageViewerPane(parentContainer, associatedImage);
+        });
+
+        return imageBox;
     }
 
     private void setBackground() {

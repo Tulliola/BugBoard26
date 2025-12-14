@@ -21,7 +21,9 @@ public interface INavigationManager {
 
     Pane buildRegisterUserComponent(StackPane containerUnderTitleBar, HomePagePC homePagePC);
 
-    Pane buildIssueSummaryComponent(StackPane containerUnderTitleBar, IssueSummaryDTO issueToShow);
+    Pane buildIssueSummaryComponent(StackPane containerUnderTitleBar, IssueSummaryDTO issueToShow, IssueVisualizationPC issuePC);
 
     Pane buildReportIssueComponent(StackPane containerUnderTitleBar, int projectToReport, HomePagePC homePagePC);
+
+    Pane buildImageViewComponent(StackPane containerUnderTitleBar, byte[] imageToView);
 }

@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +23,7 @@ public abstract class IssueVisualizationPC {
 
     protected List<IssueSummaryDTO> issueList;
     protected static final int PAGE_SIZE = 3;
+    protected static final int NUMBER_OF_IMAGES = 3;
 
     protected List<String> tipologyFilters = new ArrayList<>();
     protected List<String> priorityFilters = new ArrayList<>();
@@ -83,6 +85,10 @@ public abstract class IssueVisualizationPC {
         return Arrays.asList(IssueState.values());
     }
 
+    public List<byte[]> getAssociatedImagesOfAIssue(Integer idIssue) {
+        return new ArrayList<>();
+    }
+
     public void addTipologyFilter(String newTipologyFilter) {
         this.tipologyFilters.add(newTipologyFilter);
     }
@@ -112,8 +118,14 @@ public abstract class IssueVisualizationPC {
     }
 
     public void showIssueSummaryPane(StackPane containerUnderTitleBar, IssueSummaryDTO issueToShow) {
-        Pane issueSummaryOverlay = navigationManager.buildIssueSummaryComponent(containerUnderTitleBar, issueToShow);
+        Pane issueSummaryOverlay = navigationManager.buildIssueSummaryComponent(containerUnderTitleBar, issueToShow, this);
 
         issueView.displayOverlayedContent(issueSummaryOverlay);
+    }
+
+    public void showImageViewerPane(StackPane containerUnderTitleBar, byte[] imageToView) {
+        Pane imageViewOverlay = navigationManager.buildImageViewComponent(containerUnderTitleBar, imageToView);
+
+        issueView.displayOverlayedContent(imageViewOverlay);
     }
 }
