@@ -2,6 +2,7 @@ package com.bug_board.dao.interfaces;
 
 import com.bug_board.dto.IssueCreationDTO;
 import com.bug_board.dto.IssueFiltersDTO;
+import com.bug_board.dto.IssueImageDTO;
 import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
@@ -15,4 +16,7 @@ public interface IProjectIssueDAO {
             throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException, BadConversionToJSONException;
     public abstract IssueSummaryDTO createNewIssue(Integer idProject, IssueCreationDTO issueToCreate)
             throws BadConversionToJSONException, HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException;
+
+    List<IssueImageDTO> getAllIssueImages(Integer idProject, Integer idIssue)
+            throws ErrorHTTPResponseException, HTTPSendException, BadConversionToDTOException;
 }

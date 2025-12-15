@@ -1,5 +1,6 @@
 package com.bug_board.gui.panes;
 
+import com.bug_board.dto.IssueImageDTO;
 import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.presentation_controllers.IssueVisualizationPC;
@@ -171,10 +172,10 @@ public class IssueSummaryPane extends StackPane {
         imagesContainer.setVgap(10);
         imagesContainer.setHgap(10);
 
-        List<byte[]> associatedImages = issuePC.getAssociatedImagesOfAIssue(issueToShow.getIdIssue());
+        List<IssueImageDTO> associatedImages = issuePC.getAssociatedImagesOfAIssue(issueToShow.getIdProject(), issueToShow.getIdIssue());
 
-        for(byte[] associatedImage: associatedImages)
-            imagesContainer.getChildren().add(this.createImageBox(associatedImage));
+        for(IssueImageDTO associatedImage: associatedImages)
+            imagesContainer.getChildren().add(this.createImageBox(associatedImage.getBinaryFile()));
 
         issueSummaryForm.getChildren().add(imagesContainer);
     }

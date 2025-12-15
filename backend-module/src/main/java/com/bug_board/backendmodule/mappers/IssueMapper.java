@@ -29,6 +29,7 @@ public class IssueMapper {
         mappedIssue.setResolutionDate(issueToMap.getResolutionDate());
         mappedIssue.setPriority(issueToMap.getPriority());
         mappedIssue.setLabels(LabelMapper.toLabelSummaryDTOS(issueToMap.getAttachedLabels()));
+        mappedIssue.setIdProject(issueToMap.getProject().getIdProject());
 
         return mappedIssue;
     }

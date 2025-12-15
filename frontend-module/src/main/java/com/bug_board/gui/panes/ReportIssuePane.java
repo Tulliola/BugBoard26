@@ -143,7 +143,7 @@ public class ReportIssuePane extends StackPane {
     }
 
     private Node setHeaderGif() {
-        ImageView headerGif = new ImageView(new Image(getClass().getResourceAsStream("/gifs/painter.gif")));
+        ImageView headerGif = new ImageView(new Image(getClass().getResourceAsStream("/gifs/form.gif")));
         headerGif.setFitHeight(100);
         headerGif.setFitWidth(100);
 

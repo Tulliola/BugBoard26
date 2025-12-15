@@ -64,7 +64,7 @@ public class NavigationManager_JavaFX implements INavigationManager {
             personalIssues = issueController.getPersonalIssues(null);
         }
         catch (RetrieveIssuesException e) {
-            issuePC.showIssuesRetrievalError();
+            issuePC.showIssuesRetrievalError("Server's not responding. You can visualize the issue page, but it will be empty.");
             personalIssues = new ArrayList<>();
         }
         finally {
@@ -90,7 +90,7 @@ public class NavigationManager_JavaFX implements INavigationManager {
              projectIssues = projectIssueController.getProjectIssues(idProject, null);
         }
         catch (RetrieveIssuesException e) {
-            issuePC.showIssuesRetrievalError();
+            issuePC.showIssuesRetrievalError("Server's not responding. You can visualize the issue page, but it will be empty.");
             projectIssues = new ArrayList<>();
         }
         finally{
@@ -156,6 +156,6 @@ public class NavigationManager_JavaFX implements INavigationManager {
 
     @Override
     public Pane buildImageViewComponent(StackPane containerUnderTitleBar, byte[] imageToView) {
-        return new ImageViewPane(containerUnderTitleBar, imageToView);
+        return new ImageViewerPane(containerUnderTitleBar, imageToView);
     }
 }

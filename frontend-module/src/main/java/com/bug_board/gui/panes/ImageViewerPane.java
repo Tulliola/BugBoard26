@@ -8,13 +8,16 @@ import javafx.scene.layout.VBox;
 
 import java.io.ByteArrayInputStream;
 
-public class ImageViewPane extends StackPane {
+public class ImageViewerPane extends StackPane {
 
     private final byte[] imageToShow;
     private final StackPane parentContainer;
 
-    public ImageViewPane(StackPane parentContainer,
-                            byte[] imageToShow) {
+    private final static int IMAGE_BOX_WIDTH = 1200;
+    private final static int IMAGE_BOX_HEIGHT = 900;
+
+    public ImageViewerPane(StackPane parentContainer,
+                           byte[] imageToShow) {
         this.parentContainer = parentContainer;
         this.imageToShow = imageToShow;
 
@@ -28,14 +31,14 @@ public class ImageViewPane extends StackPane {
 
     private void setImageBox() {
         VBox imageBox = new VBox();
-        imageBox.setPrefSize(500, 500);
-        imageBox.setMaxSize(500, 500);
+        imageBox.setPrefSize(IMAGE_BOX_WIDTH, IMAGE_BOX_HEIGHT);
+        imageBox.setMaxSize(IMAGE_BOX_WIDTH, IMAGE_BOX_HEIGHT);
         imageBox.setAlignment(Pos.CENTER);
         imageBox.setStyle("-fx-background-color: white");
 
         ImageView imageView = new ImageView(new Image(new ByteArrayInputStream(imageToShow)));
-        imageView.setFitHeight(500);
-        imageView.setFitWidth(500);
+        imageView.setFitWidth(IMAGE_BOX_WIDTH);
+        imageView.setFitHeight(IMAGE_BOX_HEIGHT);
 
         imageBox.getChildren().add(imageView);
 

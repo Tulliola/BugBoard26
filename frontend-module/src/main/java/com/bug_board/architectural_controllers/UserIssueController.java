@@ -2,7 +2,9 @@ package com.bug_board.architectural_controllers;
 
 import com.bug_board.dao.interfaces.IUserIssueDAO;
 import com.bug_board.dto.IssueFiltersDTO;
+import com.bug_board.dto.IssueImageDTO;
 import com.bug_board.dto.IssueSummaryDTO;
+import com.bug_board.exceptions.architectural_controllers.RetrieveIssueImagesException;
 import com.bug_board.exceptions.architectural_controllers.RetrieveIssuesException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
 import com.bug_board.exceptions.dao.BadConversionToJSONException;
@@ -26,6 +28,17 @@ public class UserIssueController {
         catch (HTTPSendException | BadConversionToDTOException | ErrorHTTPResponseException |
                BadConversionToJSONException throwables) {
             throw new RetrieveIssuesException("There has been an error in retrieving your personal issues. Try later");
+        }
+    }
+
+    public List<IssueImageDTO> getAllIssueImages(Integer idIssue)
+            throws RetrieveIssueImagesException {
+        try {
+            return userIssueDAO.getAllIssueImages(idIssue);
+        }
+        catch (HTTPSendException | ErrorHTTPResponseException |
+               BadConversionToDTOException throwables) {
+            throw new RetrieveIssueImagesException("There has been an error in retrieving the images of the issue. Try later");
         }
     }
 }

@@ -9,4 +9,5 @@ public interface IIssueRepository {
     public List<Issue> retrieveAllUsersIssues(String username, IssueFiltersDTO filters);
     public Issue createANewIssueToProject(Issue issueToPublish);
     public List<Issue> retrieveAllProjectsIssues(Integer idProject, IssueFiltersDTO filters);
+    public Issue getIssue(Integer idIssue);
 }

@@ -37,6 +37,11 @@ public class IssueRepositoryJpaAdapter implements IIssueRepository {
     }
 
     @Override
+    public Issue getIssue(Integer idIssue) {
+        return issueRepositoryJPA.findById(idIssue).orElse(null);
+    }
+
+    @Override
     public Issue createANewIssueToProject(Issue issueToPublish) {
         return issueRepositoryJPA.save(issueToPublish);
     }

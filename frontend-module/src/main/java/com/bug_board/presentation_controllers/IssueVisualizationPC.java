@@ -1,5 +1,6 @@
 package com.bug_board.presentation_controllers;
 
+import com.bug_board.dto.IssueImageDTO;
 import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueState;
@@ -23,13 +24,12 @@ public abstract class IssueVisualizationPC {
 
     protected List<IssueSummaryDTO> issueList;
     protected static final int PAGE_SIZE = 3;
-    protected static final int NUMBER_OF_IMAGES = 3;
 
     protected List<String> tipologyFilters = new ArrayList<>();
     protected List<String> priorityFilters = new ArrayList<>();
     protected List<String> stateFilters = new ArrayList<>();
 
-    public IssueVisualizationPC(INavigationManager navigationManager) {
+    public IssueVisualizationPC(INavigationManager navigationManager){
         this.navigationManager = navigationManager;
     }
 
@@ -43,15 +43,14 @@ public abstract class IssueVisualizationPC {
             navigationManager.navigateToHomePage();
         }
         catch (RetrieveProjectException e) {
-            showIssuesRetrievalError();
+            showIssuesRetrievalError("Server's not responding. You can visualize the issue page, but it will be empty.");
         }
     }
 
-    public void showIssuesRetrievalError() {
+    public void showIssuesRetrievalError(String text) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Server error");
-        alert.setHeaderText("Couldn't retrieve the issues.");
-        alert.setContentText("Server's not responding. You can visualize the issue page, but it will be empty.");
+        alert.setContentText(text);
         alert.showAndWait();
     }
 
@@ -85,9 +84,7 @@ public abstract class IssueVisualizationPC {
         return Arrays.asList(IssueState.values());
     }
 
-    public List<byte[]> getAssociatedImagesOfAIssue(Integer idIssue) {
-        return new ArrayList<>();
-    }
+    public abstract List<IssueImageDTO> getAssociatedImagesOfAIssue(Integer idProject, Integer idIssue);
 
     public void addTipologyFilter(String newTipologyFilter) {
         this.tipologyFilters.add(newTipologyFilter);

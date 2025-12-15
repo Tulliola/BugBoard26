@@ -5,10 +5,12 @@ import com.bug_board.backendmodule.services.implementations.jpa_implementations.
 import com.bug_board.backendmodule.services.interfaces.IIssueService;
 import com.bug_board.dto.IssueCreationDTO;
 import com.bug_board.dto.IssueFiltersDTO;
+import com.bug_board.dto.IssueImageDTO;
 import com.bug_board.dto.IssueSummaryDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +20,9 @@ import java.util.List;
 public class IssueController {
 
     private final IIssueService issueService;
-    private final IssueServiceJPA issueServiceJPA;
 
-    public IssueController(IIssueService issueService, IssueServiceJPA issueServiceJPA) {
+    public IssueController(IIssueService issueService) {
         this.issueService = issueService;
-        this.issueServiceJPA = issueServiceJPA;
     }
 
 
@@ -39,5 +39,12 @@ public class IssueController {
                                                           @RequestBody IssueCreationDTO issue){
         IssueSummaryDTO issueCreated = issueService.publishNewIssueToProject(principal.getUsername(), projectId, issue);
         return new ResponseEntity<>(issueCreated, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{issue-id}/images")
+    public ResponseEntity<List<IssueImageDTO>> getAllIssueImages(@PathVariable("project-id") Integer projectId,
+                                                                  @PathVariable ("issue-id") Integer issueId){
+        List<IssueImageDTO> issueImageDTOS = issueService.getImagesOfAIssue(projectId, issueId);
+        return new ResponseEntity<>(issueImageDTOS, HttpStatus.CREATED);
     }
 }
