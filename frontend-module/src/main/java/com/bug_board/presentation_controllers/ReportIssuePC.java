@@ -4,14 +4,16 @@ import com.bug_board.architectural_controllers.ReportIssueController;
 import com.bug_board.dto.IssueCreationDTO;
 import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.enum_classes.IssuePriority;
-import com.bug_board.enum_classes.IssueState;
 import com.bug_board.enum_classes.IssueTipology;
+import com.bug_board.exceptions.architectural_controllers.IssueCreationException;
 import com.bug_board.exceptions.views.NoTipologySpecifiedException;
-import com.bug_board.exceptions.views.NoTitleDescriptionForIssueException;
+import com.bug_board.exceptions.views.NoDescriptionForIssueException;
 import com.bug_board.exceptions.views.NoTitleSpecifiedForIssueException;
 import com.bug_board.gui.panes.ReportIssuePane;
+import com.bug_board.gui.panes.TransactionPane;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class ReportIssuePC {
         return reportIssueController.getUsersLabels();
     }
 
-    public void onConfirmButtonClicked() {
+    public void onConfirmButtonClicked() throws IssueCreationException {
         IssueTipology chosenTiplogy = reportIssuePane.getChoosenIssueTipology();
         String issueTitle = reportIssuePane.getTitle();
         String issueDescription = reportIssuePane.getDescription();
@@ -50,21 +52,57 @@ public class ReportIssuePC {
         IssueCreationDTO issueToCreate = new IssueCreationDTO(issueTitle, issueDescription,
                 chosenTiplogy, issuePriority, issueImages, projectToReport, chosenLabels);
 
+        try {
+            reportIssueController.createNewIssue(issueToCreate);
+        }
+        catch (IssueCreationException exc){
+            this.addErrorCreatingIssuePane();
+            this.showConfirmationPane();
 
-        reportIssueController.createNewIssue(issueToCreate);
+            throw new IssueCreationException(exc.getMessage());
+        }
+
+        this.addConfirmationPane();
+        this.showConfirmationPane();
     }
 
-    private void checkDescription(String issueDescription) {
+    private void addErrorCreatingIssuePane() {
+        reportIssuePane.getChildren().removeLast();
+
+        TransactionPane errorTransaction = new TransactionPane("/gifs/generic_error.gif", "Issue could not be created");
+        errorTransaction.setErrorGradient();
+
+        reportIssuePane.getChildren().add(errorTransaction);
+
+    }
+
+    private void addConfirmationPane() {
+        reportIssuePane.getChildren().removeLast();
+
+        reportIssuePane.getChildren().add(new TransactionPane("/gifs/successful_transaction.gif", "Issue reported successfully!"));
+    }
+
+    private void showConfirmationPane(){
+        PauseTransition delay = new PauseTransition(Duration.seconds(5));
+
+        delay.setOnFinished(event -> {
+            reportIssuePane.close();
+        });
+
+        delay.play();
+    }
+
+    private void checkDescription(String issueDescription) throws NoDescriptionForIssueException{
         if(issueDescription == null || issueDescription.isBlank())
-            throw new NoTitleDescriptionForIssueException("Issue title is empty");
+            throw new NoDescriptionForIssueException("Issue's description is empty");
     }
 
-    private void checkIssueTitle(String issueTitle) {
+    private void checkIssueTitle(String issueTitle) throws NoTitleSpecifiedForIssueException{
         if(issueTitle == null || issueTitle.isBlank())
-            throw new NoTitleSpecifiedForIssueException("Issue title is empty");
+            throw new NoTitleSpecifiedForIssueException("Issue's title is empty");
     }
 
-    private void checkTipology(IssueTipology choosenTiplogy) {
+    private void checkTipology(IssueTipology choosenTiplogy) throws NoTipologySpecifiedException{
         if(choosenTiplogy == null)
             throw new NoTipologySpecifiedException("You must select exactly one tipology");
     }

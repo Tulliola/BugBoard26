@@ -3,6 +3,11 @@ package com.bug_board.gui.panes;
 import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueTipology;
+import com.bug_board.exceptions.architectural_controllers.IssueCreationException;
+import com.bug_board.exceptions.views.NoDescriptionForIssueException;
+import com.bug_board.exceptions.views.NoTipologySpecifiedException;
+import com.bug_board.exceptions.views.NoTitleSpecifiedForIssueException;
+import com.bug_board.exceptions.views.TitleNotSpecifiedForLabelException;
 import com.bug_board.presentation_controllers.ReportIssuePC;
 import com.bug_board.utilities.BugBoardLabel;
 import com.bug_board.utilities.DropdownMenu;
@@ -18,6 +23,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
@@ -61,8 +68,9 @@ public class ReportIssuePane extends StackPane {
     private Text addImagesText = new  Text("Attach up to three images");
     private HBox addImagesBox = new HBox();
     private List<StackPane> imagesStackPane = new ArrayList<>(NUM_OF_IMAGES);
-    private List<File> filesChoosen = new ArrayList<>(NUM_OF_IMAGES);
     private ArrayList<byte[]> binaryFiles = new ArrayList<>(NUM_OF_IMAGES);
+
+    private Label errorLabel = new Label();
 
     private Button confirmButton = new Button("Confirm");
 
@@ -87,8 +95,9 @@ public class ReportIssuePane extends StackPane {
     }
 
     private VBox setContentPane() {
+        contentPane.getChildren().add(setHeaderGif());
+        
         contentPane.getChildren().add(setTypeIssueBox());
-
 
         bugRadioButton.setToggleGroup(typeIssueToggleGroup);
         questionRadioButton.setToggleGroup(typeIssueToggleGroup);
@@ -120,6 +129,7 @@ public class ReportIssuePane extends StackPane {
                 "Request or suggest new feature"
         ));
 
+
         contentPane.getChildren().add(setIssueRadioButtonBox());
 
         contentPane.getChildren().add(setFillFormBox());
@@ -130,15 +140,37 @@ public class ReportIssuePane extends StackPane {
 
         contentPane.getChildren().add(setImagesChooserBox());
 
+        contentPane.getChildren().add(setErrorLabel());
+
         contentPane.getChildren().add(setConfirmButton());
 
         return contentPane;
     }
 
+    private Node setHeaderGif() {
+        ImageView headerGif = new ImageView(new Image(getClass().getResourceAsStream("/gifs/painter.gif")));
+        headerGif.setFitHeight(100);
+        headerGif.setFitWidth(100);
+
+        return headerGif;
+    }
+
+    private Node setErrorLabel() {
+        errorLabel.setTextFill(Color.RED);
+        errorLabel.setManaged(false);
+        return errorLabel;
+    }
+
     private Node setConfirmButton() {
         confirmButton.setAlignment(Pos.CENTER);
         confirmButton.setOnAction(event -> {
-            reportIssuePC.onConfirmButtonClicked();
+            try {
+                reportIssuePC.onConfirmButtonClicked();
+            }
+            catch (NoTitleSpecifiedForIssueException | NoDescriptionForIssueException | NoTipologySpecifiedException e) {
+                errorLabel.setText(e.getMessage());
+                errorLabel.setManaged(true);
+            }
         });
         return confirmButton;
     }

@@ -106,9 +106,8 @@ public class DropdownMenu extends VBox {
 
     private void addSelectedLabelId(BugBoardLabel option, Boolean newValue) {
         if(newValue) {
-            if (labelsSelected.size() < MAX_NUM_OF_LABELS) {
+            if (labelsSelected.size() < MAX_NUM_OF_LABELS)
                 labelsSelected.add(mapToLabelSummaryDTO(option).getIdLabel());
-            }
         }
         else {
             if (labelsSelected.contains(option.getLabelId())) {

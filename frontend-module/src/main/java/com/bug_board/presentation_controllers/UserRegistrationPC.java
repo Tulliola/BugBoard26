@@ -59,7 +59,7 @@ public class UserRegistrationPC {
     private void addConfirmationPane() {
         userRegistrationFormPane.getChildren().removeLast();
 
-        userRegistrationFormPane.getChildren().add(new TransactionPane("/gifs/added_user.gif", "User created successfully!"));
+        userRegistrationFormPane.getChildren().add(new TransactionPane("/gifs/successful_transaction.gif", "User created successfully!"));
     }
 
     private void showConfirmationPane(){
