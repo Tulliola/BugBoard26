@@ -47,8 +47,6 @@ public class ReportIssuePC {
         checkIssueTitle(issueTitle);
         checkDescription(issueDescription);
 
-        System.out.println(chosenLabels);
-
         IssueCreationDTO issueToCreate = new IssueCreationDTO(issueTitle, issueDescription,
                 chosenTiplogy, issuePriority, issueImages, projectToReport, chosenLabels);
 

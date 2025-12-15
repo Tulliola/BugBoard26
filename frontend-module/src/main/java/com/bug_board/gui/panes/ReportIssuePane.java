@@ -378,7 +378,7 @@ public class ReportIssuePane extends StackPane {
     public List<byte[]> getIssueImages(){
         List<byte[]> images = new ArrayList<>();
 
-        for(byte[] image: images)
+        for(byte[] image: binaryFiles)
             if(image != null)
                 images.add(image);
 

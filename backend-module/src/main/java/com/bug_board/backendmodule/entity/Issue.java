@@ -55,7 +55,7 @@ public class Issue {
             joinColumns = @JoinColumn(name = "idissue")
     )
     @Column(name = "file_immagine", columnDefinition = "bytea")
-    private List<byte[]> images = new ArrayList<byte[]>();
+    private List<byte[]> images = new ArrayList<>();
 
     @Column(name = "data_creazione",
             nullable = false,
@@ -73,7 +73,7 @@ public class Issue {
             joinColumns = @JoinColumn(name = "idissue"),
             inverseJoinColumns = @JoinColumn(name = "idlabel")
     )
-    private List<Label> attachedLabels = new ArrayList<Label>();
+    private List<Label> attachedLabels = new ArrayList<>();
 
     /* Relation Issue - RegularUser */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

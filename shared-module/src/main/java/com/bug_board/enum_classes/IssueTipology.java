@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public enum IssueTipology {
     BUG("Bug", "/shared_module/images/bug.png"),
-    NEW_FEATURE("NewFeature", "/shared_module/images/new_feature.png"),
+    NEW_FEATURE("New feature", "/shared_module/images/new_feature.png"),
     QUESTION("Question", "/shared_module/images/question.png"),
     DOCUMENTATION("Documentation", "/shared_module/images/documentation.png");
 
