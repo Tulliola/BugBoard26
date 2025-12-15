@@ -3,11 +3,7 @@ package com.bug_board.gui.panes;
 import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueTipology;
-import com.bug_board.exceptions.architectural_controllers.IssueCreationException;
-import com.bug_board.exceptions.views.NoDescriptionForIssueException;
-import com.bug_board.exceptions.views.NoTipologySpecifiedException;
-import com.bug_board.exceptions.views.NoTitleSpecifiedForIssueException;
-import com.bug_board.exceptions.views.TitleNotSpecifiedForLabelException;
+import com.bug_board.exceptions.views.*;
 import com.bug_board.presentation_controllers.ReportIssuePC;
 import com.bug_board.utilities.BugBoardLabel;
 import com.bug_board.utilities.DropdownMenu;
@@ -24,7 +20,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
@@ -96,7 +91,7 @@ public class ReportIssuePane extends StackPane {
 
     private VBox setContentPane() {
         contentPane.getChildren().add(setHeaderGif());
-        
+
         contentPane.getChildren().add(setTypeIssueBox());
 
         bugRadioButton.setToggleGroup(typeIssueToggleGroup);
@@ -167,7 +162,7 @@ public class ReportIssuePane extends StackPane {
             try {
                 reportIssuePC.onConfirmButtonClicked();
             }
-            catch (NoTitleSpecifiedForIssueException | NoDescriptionForIssueException | NoTipologySpecifiedException e) {
+            catch (NoTitleSpecifiedForIssueException | NoDescriptionForIssueException | NoTipologySpecifiedException | IssueImageTooLargeException e) {
                 errorLabel.setText(e.getMessage());
                 errorLabel.setManaged(true);
             }
@@ -178,6 +173,7 @@ public class ReportIssuePane extends StackPane {
     private Node setImagesChooserBox() {
         for(int i = 0; i < NUM_OF_IMAGES; i++) {
             StackPane imageStackPane = new StackPane();
+            binaryFiles.add(null);
             imagesStackPane.add(setImagesStackPane(imageStackPane, i));
         }
 
@@ -215,7 +211,7 @@ public class ReportIssuePane extends StackPane {
 
            if(choosenFile != null){
                try {
-                   binaryFiles.add(index, Files.readAllBytes(choosenFile.toPath()));
+                   binaryFiles.set(index, Files.readAllBytes(choosenFile.toPath()));
                } catch (IOException ex) {
                    throw new RuntimeException(ex);
                }
@@ -226,7 +222,7 @@ public class ReportIssuePane extends StackPane {
            }
            else {
                imageButton.setVisible(true);
-               binaryFiles.add(index, null);
+               binaryFiles.remove(index);
            }
         });
 

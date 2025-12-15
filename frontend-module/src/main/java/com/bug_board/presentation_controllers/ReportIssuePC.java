@@ -6,6 +6,7 @@ import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.exceptions.architectural_controllers.IssueCreationException;
+import com.bug_board.exceptions.views.IssueImageTooLargeException;
 import com.bug_board.exceptions.views.NoTipologySpecifiedException;
 import com.bug_board.exceptions.views.NoDescriptionForIssueException;
 import com.bug_board.exceptions.views.NoTitleSpecifiedForIssueException;
@@ -21,12 +22,11 @@ public class ReportIssuePC {
     private ReportIssuePane reportIssuePane;
     private ReportIssueController reportIssueController;
     private int projectToReport;
-    List<Integer> choosenLabels;
+    private final int ISSUE_IMAGES_MAX_LENGTH = 5 * 1024 * 1024;
 
     public ReportIssuePC(ReportIssueController reportIssueController, int projectToReport) {
         this.reportIssueController = reportIssueController;
         this.projectToReport = projectToReport;
-        this.choosenLabels = new ArrayList<>();
     }
 
     public void setPane(ReportIssuePane reportIssuePane) {
@@ -48,6 +48,7 @@ public class ReportIssuePC {
         checkTipology(chosenTiplogy);
         checkIssueTitle(issueTitle);
         checkDescription(issueDescription);
+        checkImagesLength(issueImages);
 
         IssueCreationDTO issueToCreate = new IssueCreationDTO(issueTitle, issueDescription,
                 chosenTiplogy, issuePriority, issueImages, projectToReport, chosenLabels);
@@ -64,6 +65,13 @@ public class ReportIssuePC {
 
         this.addConfirmationPane();
         this.showConfirmationPane();
+    }
+
+    private void checkImagesLength(List<byte[]> issueImages) {
+        for(byte[] image: issueImages){
+            if(image.length > ISSUE_IMAGES_MAX_LENGTH)
+                throw new IssueImageTooLargeException("The issue images' files are too large (max files length: " + ISSUE_IMAGES_MAX_LENGTH / (1024 * 1024) + "MB)");
+        }
     }
 
     private void addErrorCreatingIssuePane() {
