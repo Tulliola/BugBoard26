@@ -4,13 +4,13 @@ import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
+import com.bug_board.utilities.Carousel;
 import com.bug_board.utilities.JokesFooter;
 import com.bug_board.utilities.MySpacer;
 import com.bug_board.utilities.ProjectCard;
 import com.bug_board.utilities.animations.AnimatedSearchBar;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -29,15 +29,15 @@ public class HomePagePane extends VBox {
     private Text heading;
     private Text hintFiltering = new Text("But you can filter them by project name...");
     private HBox carouselsBox = new HBox();
-    private List<Button> carousel;
-    private Button activeCarouselButton = null;
-    List<ProjectCard> projectsCards = new ArrayList<>();
-    Text noProjectsFoundText = new Text();
+    private List<ProjectCard> projectsCards = new ArrayList<>();
+    private Text noProjectsFoundText = new Text("No Project Has Been Found");
+
+    private Carousel carousel;
 
     public HomePagePane(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
         this.homePagePC = homePagePC;
         this.projectsRetrieved = projectList;
-
+        this.setAlignment(Pos.CENTER);
         this.initialize();
     }
 
@@ -46,20 +46,15 @@ public class HomePagePane extends VBox {
         setHintFiltering();
         setNoProjectsFoundText();
         setSearchProjectBar();
-        addCarousel();
         setCarousel();
+        addCarousel();
     }
 
     private void setCarousel() {
         int carouselsIndexes = (projectsRetrieved.size() + PROJECTS_TO_SHOW - 1) / PROJECTS_TO_SHOW;
 
-        if(activeCarouselButton != null){
-            activeCarouselButton.getStyleClass().remove("active-carousel-button");
-        }
+        carousel = new Carousel(carouselsIndexes);
 
-        carousel = new ArrayList<>(PROJECTS_TO_SHOW);
-        setCarouselsButtons(carouselsIndexes);
-        
         carouselsBox.setPadding(new Insets(5));
         carouselsBox.setSpacing(5);
         carouselsBox.setAlignment(Pos.CENTER);
@@ -67,39 +62,10 @@ public class HomePagePane extends VBox {
         carouselsBox.getChildren().clear();
         carouselsBox.getChildren().addAll(carousel);
 
-        if(activeCarouselButton == null) {
-            if(carousel.size() > 0)
-                setActiveButton(carousel.get(0));
-        }
-
-    }
-
-    private void setActiveButton(Button button) {
-        button.getStyleClass().add("active-carousel-button");
-        activeCarouselButton = button;
-    }
-
-    private void setCarouselsButtons(int numOfButtons){
-        for (int i = 0; i < numOfButtons; i++) {
-            Button carouselButton = new Button(String.valueOf(i + 1));
-            carouselButton.getStyleClass().add("carousel-button");
-
+        for(int i = 0; i < carouselsIndexes; i++) {
             int finalI = i;
-            carouselButton.setOnAction(e -> {
-                setProjectCardsBox(finalI);
-                handleClickButtonGraphics(carouselButton);
-            });
-
-            carousel.add(carouselButton);
+            carousel.setButtonAction(i, () -> setProjectCardsBox(finalI));
         }
-    }
-
-    private void handleClickButtonGraphics(Button carouselButton) {
-        if(activeCarouselButton != null) {
-            activeCarouselButton.getStyleClass().remove("active-carousel-button");
-        }
-
-        setActiveButton(carouselButton);
     }
 
     private void setHintFiltering(){
@@ -109,16 +75,10 @@ public class HomePagePane extends VBox {
     }
 
     private void addCarousel(){
-
         if(!projectsRetrieved.isEmpty())
-            setProjectCardsBox(0);
-        else {
-            projectCardsBox.getChildren().removeAll(projectsCards);
-            projectCardsBox.setPrefHeight(550);
-            projectCardsBox.getChildren().add(noProjectsFoundText);
-            carouselsBox.getChildren().clear();
-        }
-
+            showLatestProjects();
+        else
+            showNoResults();
 
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
@@ -129,10 +89,7 @@ public class HomePagePane extends VBox {
                 spacer,
                 new JokesFooter(10)
         );
-
-        this.setAlignment(Pos.CENTER);
         VBox.setVgrow(this, Priority.ALWAYS);
-
     }
 
     private void setProjectCardsBox(int index) {
@@ -200,18 +157,14 @@ public class HomePagePane extends VBox {
         searchProject.setPrefWidth(300);
         searchProject.setMaxWidth(300);
 
-        setSearchButtonAction();
+        searchProject.setButtonAction(() -> {
+            this.filterProjects(searchProject.getBarText());
+        });
 
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(searchProject);
         searchProject.setStyle("-fx-padding: 0.5em 25px 0.5em 0.5em;");
         this.getChildren().addAll(MySpacer.createVSpacer(), searchProject);
-    }
-
-    private void setSearchButtonAction(){
-        searchProject.setButtonAction(() -> {
-            this.filterProjects(searchProject.getBarText());
-        });
     }
 
     private void filterProjects(String barText) {
@@ -226,20 +179,24 @@ public class HomePagePane extends VBox {
             noProjectsFoundText.setText(e.getMessage());
         }
 
-        activeCarouselButton = null;
-
         projectCardsBox.getChildren().clear();
 
-        if(!projectsRetrieved.isEmpty()) {
-            setProjectCardsBox(0);
-            setCarousel();
-        }
-        else{
-            projectCardsBox.getChildren().removeAll(projectsCards);
-            projectCardsBox.setPrefHeight(550);
-            projectCardsBox.getChildren().add(noProjectsFoundText);
-            carouselsBox.getChildren().clear();
-        }
+        if(!projectsRetrieved.isEmpty())
+            showLatestProjects();
+        else
+            showNoResults();
+    }
+
+    private void showLatestProjects() {
+        setProjectCardsBox(0);
+        setCarousel();
+    }
+
+    private void showNoResults() {
+        projectCardsBox.getChildren().removeAll(projectsCards);
+        projectCardsBox.setPrefHeight(550);
+        projectCardsBox.getChildren().add(noProjectsFoundText);
+        carouselsBox.getChildren().clear();
     }
 
     private void setNoProjectsFoundText() {

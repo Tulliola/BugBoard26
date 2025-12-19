@@ -46,17 +46,13 @@ public class ReportIssuePane extends StackPane {
     @Getter
     private final ToggleGroup typeIssueToggleGroup = new ToggleGroup();
     @Getter
-    private final RadioButton bugRadioButton = new RadioButton("Bug");
+    private final RadioButton bugRadioButton = new RadioButton();
     @Getter
-    private final RadioButton questionRadioButton = new RadioButton("Question");
+    private final RadioButton questionRadioButton = new RadioButton();
     @Getter
-    private final RadioButton documentationRadioButton = new RadioButton("Documentation");
+    private final RadioButton documentationRadioButton = new RadioButton();
     @Getter
-    private final RadioButton newFeatureRadioButton = new RadioButton("New Feature");
-
-
-    private final HBox fillFormTextBox = new HBox();
-    private final Text fillFormText = new Text("Fill out the following form to submit your report");
+    private final RadioButton newFeatureRadioButton = new RadioButton();
 
     private final HBox issueAttributesBox = new HBox();
     private final VBox titleAndDescriptionBox = new VBox();
@@ -69,14 +65,9 @@ public class ReportIssuePane extends StackPane {
     private final ComboBox<String> priorityComboBox = new ComboBox<>();
     private DropdownMenu dropdownMenu;
 
-    private final Text addImagesText = new  Text("Attach up to three images");
-    private final HBox addImagesBox = new HBox();
-    private final List<StackPane> imagesStackPane = new ArrayList<>(NUM_OF_IMAGES);
     private final ArrayList<byte[]> binaryFiles = new ArrayList<>(NUM_OF_IMAGES);
 
     private final Label errorLabel = new Label();
-
-    private final Button confirmButton = new Button("Confirm");
 
     private static final int MAX_TITLE_CHARS = 50;
     private static final int MAX_DESCRIPTION_CHARS = 300;
@@ -109,7 +100,7 @@ public class ReportIssuePane extends StackPane {
 
         contentPane.getChildren().add(setAttributesBox());
 
-        contentPane.getChildren().add(addImagesText);
+        contentPane.getChildren().add(new Text("Attach up to three images"));
 
         contentPane.getChildren().add(setImagesChooserBox());
 
@@ -136,6 +127,7 @@ public class ReportIssuePane extends StackPane {
     }
 
     private Node setConfirmButton() {
+        Button confirmButton = new Button("Confirm");
         confirmButton.setAlignment(Pos.CENTER);
         confirmButton.setOnAction(event -> {
             handleConfirmButtonClick();
@@ -154,16 +146,19 @@ public class ReportIssuePane extends StackPane {
     }
 
     private Node setImagesChooserBox() {
+        List<StackPane> imagesStackPanes = new ArrayList<>(NUM_OF_IMAGES);
+
         for(int i = 0; i < NUM_OF_IMAGES; i++) {
             StackPane imageStackPane = new StackPane();
             binaryFiles.add(null);
-            imagesStackPane.add(setImagesStackPane(imageStackPane, i));
+            imagesStackPanes.add(setImagesStackPane(imageStackPane, i));
         }
 
+        HBox addImagesBox = new HBox();
         addImagesBox.setAlignment(Pos.CENTER);
         addImagesBox.setSpacing(30);
 
-        addImagesBox.getChildren().addAll(imagesStackPane);
+        addImagesBox.getChildren().addAll(imagesStackPanes);
         return addImagesBox;
     }
 
@@ -324,8 +319,12 @@ public class ReportIssuePane extends StackPane {
     }
 
     private Node setFillFormBox() {
+        HBox fillFormTextBox = new HBox();
         fillFormTextBox.setAlignment(Pos.CENTER);
+
+        Text fillFormText = new Text("Fill out the following form to submit your report");
         fillFormText.setStyle("-fx-font-size: 24px");
+
         fillFormTextBox.getChildren().add(fillFormText);
         fillFormTextBox.setPadding(new Insets(20));
 

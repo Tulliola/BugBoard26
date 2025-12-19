@@ -5,6 +5,7 @@ import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueState;
 import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.presentation_controllers.IssueVisualizationPC;
+import com.bug_board.utilities.Carousel;
 import com.bug_board.utilities.IssueSummaryCard;
 import com.bug_board.utilities.MyStage;
 import com.bug_board.utilities.TitleBar;
@@ -30,8 +31,7 @@ public class IssueVisualizationView extends MyStage {
     private StackPane containerUnderTitleBar;
     private BorderPane centralPane;
     private VBox issueContainer;
-    private HBox paginationNumberContainer;
-    private ToggleGroup paginationButtonGroup;
+    private Carousel carousel;
     private String headingText;
     private Integer idProject;
 
@@ -171,16 +171,13 @@ public class IssueVisualizationView extends MyStage {
     }
 
     private HBox createPaginationNumbersContainer() {
-        paginationNumberContainer = new HBox();
-        paginationNumberContainer.setAlignment(Pos.CENTER);
-
         int numberOfPages = this.issuePC.getNumberOfPages();
 
-        paginationButtonGroup = new ToggleGroup();
+        carousel = new Carousel(numberOfPages);
 
         this.setPaginationButtons(numberOfPages);
 
-        return paginationNumberContainer;
+        return carousel;
     }
 
     private VBox createLateralPane() {
@@ -443,8 +440,9 @@ public class IssueVisualizationView extends MyStage {
     private void updateIssueListInCarousel(List<IssueSummaryDTO> newIssuesToShow) {
         this.issueContainer.getChildren().clear();
 
-        if(newIssuesToShow == null || newIssuesToShow.isEmpty())
+        if(newIssuesToShow == null || newIssuesToShow.isEmpty()) {
             this.issueContainer.getChildren().add(this.createNoIssuesFoundLabel());
+        }
         else
             for(IssueSummaryDTO newIssueToShow: newIssuesToShow){
                 IssueSummaryCard issueCard = new IssueSummaryCard(newIssueToShow);
@@ -462,29 +460,10 @@ public class IssueVisualizationView extends MyStage {
     }
 
     private void setPaginationButtons(int numberOfPages) {
-        this.paginationNumberContainer.getChildren().clear();
-        this.paginationButtonGroup.getToggles().clear();
-
         for(int i = 0; i < numberOfPages; i++){
-            final int page = i;
-            ToggleButton currentPageButton = new ToggleButton(String.valueOf(i+1));
-            currentPageButton.getStyleClass().add("pagination-button");
-            currentPageButton.setPrefSize(100, 100);
-            currentPageButton.setPadding(new Insets(10, 10, 10, 10));
-
-            currentPageButton.setOnMouseClicked(mouseEvent -> {
-                List<IssueSummaryDTO> issuesInPage = issuePC.getIssuesOfAPage(page);
-
-                this.updateIssueListInCarousel(issuesInPage);
-            });
-
-            currentPageButton.setToggleGroup(paginationButtonGroup);
-
-            paginationNumberContainer.getChildren().add(currentPageButton);
+            List<IssueSummaryDTO> issuesInPage = issuePC.getIssuesOfAPage(i);
+            carousel.setButtonAction(i, () -> this.updateIssueListInCarousel(issuesInPage));
         }
-
-        if(!paginationNumberContainer.getChildren().isEmpty())
-            paginationButtonGroup.getToggles().getFirst().setSelected(true);
     }
 
     private void clickOnAIssueToViewItsSummary(IssueSummaryDTO issueToShow) {

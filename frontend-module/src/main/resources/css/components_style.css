@@ -245,6 +245,16 @@
     -fx-font-size: 70px;
 }
 
+.toggle-button.carousel-button{
+    -fx-pref-height: 50px;
+    -fx-pref-width: 50px;
+    -fx-text-fill: black;
+    -fx-background-color: transparent;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-effect: none;
+}
+
 #search-field{
     -fx-background-radius: 30px;
     -fx-border-radius: 30px;
@@ -260,21 +270,13 @@
     -fx-effect: null
 }
 
-.carousel-button{
-    -fx-background-color: transparent;
-    -fx-border-radius: none;
-    -fx-background-radius: none;
-    -fx-text-fill: black;
-    -fx-effect: none;
-}
-
-.active-carousel-button{
+.toggle-button.carousel-button:selected{
     -fx-text-fill: -color-primary;
     -fx-border-color: -color-primary;
     -fx-border-width: 0px 0px 2px 0px;
 }
 
-.carousel-button:hover{
+.toggle-button.carousel-button:hover{
     -fx-text-fill: -color-primary;
     -fx-border-color: -color-primary;
     -fx-border-width: 0px 0px 2px 0px;
