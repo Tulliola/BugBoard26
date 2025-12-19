@@ -13,9 +13,9 @@ import com.bug_board.exceptions.views.NoTitleSpecifiedForIssueException;
 import com.bug_board.gui.panes.ReportIssuePane;
 import com.bug_board.gui.panes.TransactionPane;
 import javafx.animation.PauseTransition;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ReportIssuePC {
@@ -38,11 +38,11 @@ public class ReportIssuePC {
     }
 
     public void onConfirmButtonClicked() throws IssueCreationException {
-        IssueTipology chosenTiplogy = reportIssuePane.getChoosenIssueTipology();
-        String issueTitle = reportIssuePane.getTitle();
-        String issueDescription = reportIssuePane.getDescription();
+        IssueTipology chosenTiplogy = this.getSelectedIssueType();
+        String issueTitle = this.getIssueTitle();
+        String issueDescription = this.getIssueDescription();
         List<Integer> chosenLabels = reportIssuePane.getChoosenLabels();
-        IssuePriority issuePriority = reportIssuePane.getIssuePriority();
+        IssuePriority issuePriority = this.getIssuePriority();
         List<byte[]> issueImages =  reportIssuePane.getIssueImages();
 
         checkTipology(chosenTiplogy);
@@ -65,6 +65,42 @@ public class ReportIssuePC {
 
         this.addConfirmationPane();
         this.showConfirmationPane();
+    }
+
+    private IssuePriority getIssuePriority() {
+        if(reportIssuePane.getPriorityComboBox().getValue() == null)
+            return null;
+        else if(reportIssuePane.getPriorityComboBox().getValue().equals("Don't specify"))
+            return IssuePriority.NO_PRIORITY;
+        else if (reportIssuePane.getPriorityComboBox().getValue().equals("Low"))
+            return IssuePriority.LOW_PRIORITY;
+        else if(reportIssuePane.getPriorityComboBox().getValue().equals("Medium"))
+            return IssuePriority.MEDIUM_PRIORITY;
+        else
+            return IssuePriority.HIGH_PRIORITY;
+    }
+
+    private String getIssueTitle() {
+        return reportIssuePane.getTitleTextField().getText();
+    }
+
+    private String getIssueDescription(){
+        return reportIssuePane.getDescriptionTextArea().getText();
+    }
+
+    private IssueTipology getSelectedIssueType() {
+        if(reportIssuePane.getTypeIssueToggleGroup().getSelectedToggle() == null)
+            return null;
+        else if(reportIssuePane.getTypeIssueToggleGroup().getSelectedToggle() == reportIssuePane.getBugRadioButton())
+            return IssueTipology.BUG;
+        else if(reportIssuePane.getTypeIssueToggleGroup().getSelectedToggle() == reportIssuePane.getDocumentationRadioButton())
+            return IssueTipology.DOCUMENTATION;
+        else if(reportIssuePane.getTypeIssueToggleGroup().getSelectedToggle() == reportIssuePane.getQuestionRadioButton())
+            return IssueTipology.QUESTION;
+        else if(reportIssuePane.getTypeIssueToggleGroup().getSelectedToggle() == reportIssuePane.getNewFeatureRadioButton())
+            return IssueTipology.NEW_FEATURE;
+        else
+            return null;
     }
 
     private void checkImagesLength(List<byte[]> issueImages) {
@@ -94,7 +130,7 @@ public class ReportIssuePC {
         PauseTransition delay = new PauseTransition(Duration.seconds(5));
 
         delay.setOnFinished(event -> {
-            reportIssuePane.close();
+            reportIssuePane.getParentContainer().getChildren().remove(reportIssuePane);
         });
 
         delay.play();
@@ -113,5 +149,10 @@ public class ReportIssuePC {
     private void checkTipology(IssueTipology choosenTiplogy) throws NoTipologySpecifiedException{
         if(choosenTiplogy == null)
             throw new NoTipologySpecifiedException("You must select exactly one tipology");
+    }
+
+    public void closePane(MouseEvent event) {
+        if(event.getTarget() == reportIssuePane)
+            reportIssuePane.getParentContainer().getChildren().remove(reportIssuePane);
     }
 }

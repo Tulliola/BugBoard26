@@ -1,7 +1,6 @@
 package com.bug_board.gui.panes;
 
 import com.bug_board.dto.LabelSummaryDTO;
-import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.exceptions.views.*;
 import com.bug_board.presentation_controllers.ReportIssuePC;
@@ -24,6 +23,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+import lombok.Getter;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -34,40 +34,49 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 public class ReportIssuePane extends StackPane {
-    private StackPane parentContainer;
+    @Getter
+    private final StackPane parentContainer;
     private final ReportIssuePC reportIssuePC;
 
-    private VBox contentPane = new VBox();
+    private final VBox contentPane = new VBox();
+    private final HBox typeIssueBox = new HBox();
+    private final Text typeIssueText =  new Text("Which type of issue would you like to report?");
 
-    private HBox typeIssueBox = new HBox();
-    private Text typeIssueText =  new Text("Which type of issue would you like to report?");
+    private final HBox typeIssueRadioButtonBox = new HBox();
+    @Getter
+    private final ToggleGroup typeIssueToggleGroup = new ToggleGroup();
+    @Getter
+    private final RadioButton bugRadioButton = new RadioButton("Bug");
+    @Getter
+    private final RadioButton questionRadioButton = new RadioButton("Question");
+    @Getter
+    private final RadioButton documentationRadioButton = new RadioButton("Documentation");
+    @Getter
+    private final RadioButton newFeatureRadioButton = new RadioButton("New Feature");
 
-    private HBox typeIssueRadioButtonBox = new HBox();
-    private ToggleGroup typeIssueToggleGroup = new ToggleGroup();
-    private RadioButton bugRadioButton = new RadioButton("Bug");
-    private RadioButton questionRadioButton = new RadioButton("Question");
-    private RadioButton documentationRadioButton = new RadioButton("Documentation");
-    private RadioButton newFeatureRadioButton = new RadioButton("New Feature");
 
-    private HBox fillFormTextBox = new HBox();
-    private Text fillFormText = new Text("Fill out the following form to submit your report");
+    private final HBox fillFormTextBox = new HBox();
+    private final Text fillFormText = new Text("Fill out the following form to submit your report");
 
-    private HBox issueAttributesBox = new HBox();
-    private VBox titleAndDescriptionBox = new VBox();
-    private TextField titleTextField= new TextField();
-    private TextArea descriptionTextArea = new TextArea();
-    private VBox priorityAndLabelsBox = new VBox();
-    private ComboBox<String> priorityComboBox = new ComboBox<>();
+    private final HBox issueAttributesBox = new HBox();
+    private final VBox titleAndDescriptionBox = new VBox();
+    @Getter
+    private final TextField titleTextField= new TextField();
+    @Getter
+    private final TextArea descriptionTextArea = new TextArea();
+    private final VBox priorityAndLabelsBox = new VBox();
+    @Getter
+    private final ComboBox<String> priorityComboBox = new ComboBox<>();
     private DropdownMenu dropdownMenu;
 
-    private Text addImagesText = new  Text("Attach up to three images");
-    private HBox addImagesBox = new HBox();
-    private List<StackPane> imagesStackPane = new ArrayList<>(NUM_OF_IMAGES);
-    private ArrayList<byte[]> binaryFiles = new ArrayList<>(NUM_OF_IMAGES);
+    private final Text addImagesText = new  Text("Attach up to three images");
+    private final HBox addImagesBox = new HBox();
+    private final List<StackPane> imagesStackPane = new ArrayList<>(NUM_OF_IMAGES);
+    private final ArrayList<byte[]> binaryFiles = new ArrayList<>(NUM_OF_IMAGES);
 
-    private Label errorLabel = new Label();
+    private final Label errorLabel = new Label();
 
-    private Button confirmButton = new Button("Confirm");
+    private final Button confirmButton = new Button("Confirm");
 
     private static final int MAX_TITLE_CHARS = 50;
     private static final int MAX_DESCRIPTION_CHARS = 300;
@@ -86,44 +95,13 @@ public class ReportIssuePane extends StackPane {
     private void initialize() {
         this.setStyle();
         this.setBackground();
-        this.getChildren().add(setContentPane());
+        this.getChildren().add(this.setContentPane());
     }
 
     private VBox setContentPane() {
         contentPane.getChildren().add(setHeaderGif());
 
         contentPane.getChildren().add(setTypeIssueBox());
-
-        bugRadioButton.setToggleGroup(typeIssueToggleGroup);
-        questionRadioButton.setToggleGroup(typeIssueToggleGroup);
-        documentationRadioButton.setToggleGroup(typeIssueToggleGroup);
-        newFeatureRadioButton.setToggleGroup(typeIssueToggleGroup);
-
-        bugRadioButton.getStyleClass().add("icon-radio");
-        questionRadioButton.getStyleClass().add("icon-radio");
-        documentationRadioButton.getStyleClass().add("icon-radio");
-        newFeatureRadioButton.getStyleClass().add("icon-radio");
-
-        typeIssueRadioButtonBox.getChildren().add(setRadioButton(
-                bugRadioButton,
-                new Image(new ByteArrayInputStream(IssueTipology.BUG.getAssociatedImage())),
-                "Report malfunctioning"));
-        typeIssueRadioButtonBox.getChildren().add(setRadioButton(
-                questionRadioButton,
-                new Image(new ByteArrayInputStream(IssueTipology.QUESTION.getAssociatedImage())),
-                "Request for clarity"
-        ));
-        typeIssueRadioButtonBox.getChildren().add(setRadioButton(
-                documentationRadioButton,
-                new Image(new ByteArrayInputStream(IssueTipology.DOCUMENTATION.getAssociatedImage())),
-                "Report issues regarding documentation"
-        ));
-        typeIssueRadioButtonBox.getChildren().add(setRadioButton(
-                newFeatureRadioButton,
-                new Image(new ByteArrayInputStream(IssueTipology.NEW_FEATURE.getAssociatedImage())),
-                "Request or suggest new feature"
-        ));
-
 
         contentPane.getChildren().add(setIssueRadioButtonBox());
 
@@ -153,21 +131,26 @@ public class ReportIssuePane extends StackPane {
     private Node setErrorLabel() {
         errorLabel.setTextFill(Color.RED);
         errorLabel.setManaged(false);
+
         return errorLabel;
     }
 
     private Node setConfirmButton() {
         confirmButton.setAlignment(Pos.CENTER);
         confirmButton.setOnAction(event -> {
-            try {
-                reportIssuePC.onConfirmButtonClicked();
-            }
-            catch (NoTitleSpecifiedForIssueException | NoDescriptionForIssueException | NoTipologySpecifiedException | IssueImageTooLargeException e) {
-                errorLabel.setText(e.getMessage());
-                errorLabel.setManaged(true);
-            }
+            handleConfirmButtonClick();
         });
         return confirmButton;
+    }
+
+    private void handleConfirmButtonClick() {
+        try {
+            reportIssuePC.onConfirmButtonClicked();
+        }
+        catch (NoTitleSpecifiedForIssueException | NoDescriptionForIssueException | NoTipologySpecifiedException | IssueImageTooLargeException e) {
+            errorLabel.setText(e.getMessage());
+            errorLabel.setManaged(true);
+        }
     }
 
     private Node setImagesChooserBox() {
@@ -187,48 +170,67 @@ public class ReportIssuePane extends StackPane {
     private StackPane setImagesStackPane(StackPane imageStackPane, int index) {
         Button imageButton = new Button("Choose an image");
         imageButton.getStyleClass().add("file-chooser-button");
-        ImageView imageChoosen  = new ImageView();
+        ImageView imageChosen  = new ImageView();
 
         imageButton.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
+           FileChooser fileChooser = setFileChooser();
 
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
-
-            File initialDirectory = new File(System.getProperty("user.home"));
-            if(initialDirectory.exists()){
-               fileChooser.setInitialDirectory(initialDirectory);
-           }
-
-           imageChoosen.setFitHeight(200);
-           imageChoosen.setFitWidth(200);
-           imageChoosen.setPreserveRatio(true);
-           imageChoosen.setVisible(false);
-           imageChoosen.setOnMouseClicked(event -> {
-              imageButton.fire();
-           });
+           setImageChosenProperties(imageChosen, imageButton);
 
            File choosenFile = fileChooser.showOpenDialog(this.getScene().getWindow());
 
            if(choosenFile != null){
-               try {
-                   binaryFiles.set(index, Files.readAllBytes(choosenFile.toPath()));
-               } catch (IOException ex) {
-                   throw new RuntimeException(ex);
-               }
-               Image image = new Image(choosenFile.toURI().toString());
-               imageChoosen.setImage(image);
-               imageChoosen.setVisible(true);
-               imageButton.setVisible(false);
+               addFile(index, choosenFile, imageChosen, imageButton);
            }
            else {
-               imageButton.setVisible(true);
-               binaryFiles.remove(index);
+               removeFile(index, imageButton);
            }
         });
 
-        imageStackPane.getChildren().addAll(imageButton, imageChoosen);
+        imageStackPane.getChildren().addAll(imageButton, imageChosen);
 
         return imageStackPane;
+    }
+
+    private void removeFile(int index, Button imageButton) {
+        imageButton.setVisible(true);
+        binaryFiles.remove(index);
+    }
+
+    private void addFile(int index, File choosenFile, ImageView imageChosen, Button imageButton) {
+        try {
+            binaryFiles.set(index, Files.readAllBytes(choosenFile.toPath()));
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        Image image = new Image(choosenFile.toURI().toString());
+        imageChosen.setImage(image);
+        imageChosen.setVisible(true);
+        imageButton.setVisible(false);
+    }
+
+    private static void setImageChosenProperties(ImageView imageChosen, Button imageButton) {
+        imageChosen.setFitHeight(200);
+        imageChosen.setFitWidth(200);
+        imageChosen.setPreserveRatio(true);
+        imageChosen.setVisible(false);
+
+        imageChosen.setOnMouseClicked(event -> {
+           imageButton.fire();
+        });
+    }
+
+    private static FileChooser setFileChooser() {
+        FileChooser fileChooser = new FileChooser();
+
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
+
+        File initialDirectory = new File(System.getProperty("user.home"));
+        if(initialDirectory.exists()){
+           fileChooser.setInitialDirectory(initialDirectory);
+        }
+        return fileChooser;
     }
 
     private Node setAttributesBox() {
@@ -246,21 +248,8 @@ public class ReportIssuePane extends StackPane {
         priorityAndLabelsBox.setSpacing(70);
 
         priorityAndLabelsBox.setAlignment(Pos.TOP_RIGHT);
-        String highPriority = new String("High");
-        String mediumPriority = new String("Medium");
-        String lowPriority = new String("Low");
-        String noPriority = new String("Don't specify");
 
-        priorityComboBox.setItems(FXCollections.observableArrayList(
-                highPriority,
-                mediumPriority,
-                lowPriority,
-                noPriority
-        ));
-
-        priorityComboBox.setMinWidth(300);
-        priorityComboBox.setMaxWidth(300);
-        priorityComboBox.getSelectionModel().select("Don't specify");
+        setPriorityComboBox();
 
         VBox priorityBox = new VBox();
         priorityBox.getChildren().addAll(new Text("Priority"), priorityComboBox);
@@ -268,6 +257,15 @@ public class ReportIssuePane extends StackPane {
 
         priorityAndLabelsBox.setPadding(new Insets(0, 0, 0, 50));
 
+        setLabelDropdownMenu();
+
+        VBox labelsBox = new VBox();
+        labelsBox.getChildren().addAll(new Text("Labels"), dropdownMenu);
+        priorityAndLabelsBox.getChildren().addAll(labelsBox);
+        return priorityAndLabelsBox;
+    }
+
+    private void setLabelDropdownMenu() {
         List<LabelSummaryDTO> usersLabels = reportIssuePC.getUsersLabels();
         List<BugBoardLabel> usersBugBoardLabels = new ArrayList<>();
         for(LabelSummaryDTO usersLabel : usersLabels){
@@ -279,36 +277,29 @@ public class ReportIssuePane extends StackPane {
 
         dropdownMenu = new DropdownMenu(usersBugBoardLabels);
         dropdownMenu.setPadding(new Insets(15, 0, 0, 0));
+    }
 
-        VBox labelsBox = new VBox();
-        labelsBox.getChildren().addAll(new Text("Labels"), dropdownMenu);
-        priorityAndLabelsBox.getChildren().addAll(labelsBox);
-        return priorityAndLabelsBox;
+    private void setPriorityComboBox() {
+        priorityComboBox.setItems(FXCollections.observableArrayList(
+                "High",
+                "Medium",
+                "Low",
+                "Don't specify"
+        ));
+
+        priorityComboBox.setMinWidth(300);
+        priorityComboBox.setMaxWidth(300);
+        priorityComboBox.getSelectionModel().select("Don't specify");
     }
 
 
     private Node setTitleAndDescriptionBox() {
-        UnaryOperator<TextFormatter.Change> titleFilter = change -> {
-            String newText = change.getControlNewText();
+        setTextFieldProperties(MAX_TITLE_CHARS, titleTextField);
 
-            if (newText.length() > MAX_TITLE_CHARS)
-                return null;
-            return change;
-        };
-
-        titleTextField.setTextFormatter(new TextFormatter<>(titleFilter));
+        setTextFieldProperties(MAX_DESCRIPTION_CHARS, descriptionTextArea);
 
         descriptionTextArea.setWrapText(true);
         descriptionTextArea.getStyleClass().add("no-border-textarea");
-        UnaryOperator<TextFormatter.Change> descriptionFilter = change -> {
-            String newText = change.getControlNewText();
-
-            if (newText.length() > MAX_DESCRIPTION_CHARS)
-                return null;
-            return change;
-        };
-
-        descriptionTextArea.setTextFormatter(new TextFormatter<>(descriptionFilter));
 
         StackPane textFieldWrapper = FloatingLabel.createFloatingLabelField(titleTextField, "Title (max "+MAX_TITLE_CHARS+" characters)");
         VBox.setMargin(textFieldWrapper, new Insets(0, 0, 20, 0));
@@ -318,6 +309,18 @@ public class ReportIssuePane extends StackPane {
 
         titleAndDescriptionBox.getChildren().addAll(textFieldWrapper, textAreaWrapper);
         return titleAndDescriptionBox;
+    }
+
+    private void setTextFieldProperties(final int MAX_CHARS, TextInputControl titleTextField) {
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.length() > MAX_CHARS)
+                return null;
+            return change;
+        };
+
+        titleTextField.setTextFormatter(new TextFormatter<>(filter));
     }
 
     private Node setFillFormBox() {
@@ -344,17 +347,44 @@ public class ReportIssuePane extends StackPane {
         typeIssueRadioButtonBox.setPadding(new Insets(20));
         typeIssueRadioButtonBox.setStyle("-fx-border-color: white white -color-primary white");
 
+        setRadioButtons();
+
         return typeIssueRadioButtonBox;
     }
 
+    private void setRadioButtons() {
+        typeIssueRadioButtonBox.getChildren().add(setRadioButton(
+                getBugRadioButton(),
+                new Image(new ByteArrayInputStream(IssueTipology.BUG.getAssociatedImage())),
+                "Report malfunctioning"));
+        typeIssueRadioButtonBox.getChildren().add(setRadioButton(
+                questionRadioButton,
+                new Image(new ByteArrayInputStream(IssueTipology.QUESTION.getAssociatedImage())),
+                "Request for clarity"
+        ));
+        typeIssueRadioButtonBox.getChildren().add(setRadioButton(
+                documentationRadioButton,
+                new Image(new ByteArrayInputStream(IssueTipology.DOCUMENTATION.getAssociatedImage())),
+                "Report issues regarding documentation"
+        ));
+        typeIssueRadioButtonBox.getChildren().add(setRadioButton(
+                newFeatureRadioButton,
+                new Image(new ByteArrayInputStream(IssueTipology.NEW_FEATURE.getAssociatedImage())),
+                "Request or suggest new feature"
+        ));
+    }
+
     public RadioButton setRadioButton(RadioButton radioButtonToSet, Image radioButtonImage, String tooltipString){
+        radioButtonToSet.setToggleGroup(typeIssueToggleGroup);
+        radioButtonToSet.getStyleClass().add("icon-radio");
+
         ImageView imageView = new ImageView(radioButtonImage);
         imageView.setFitWidth(50);
         imageView.setFitHeight(50);
         imageView.setTranslateX(-4);
         Tooltip tooltip = new Tooltip(tooltipString);
         tooltip.setShowDelay(Duration.millis(100));
-        tooltip.install(radioButtonToSet, tooltip);
+        Tooltip.install(radioButtonToSet, tooltip);
         radioButtonToSet.setGraphic(imageView);
 
         return radioButtonToSet;
@@ -363,40 +393,13 @@ public class ReportIssuePane extends StackPane {
     private void setBackground() {
         this.setStyle("-fx-background-color: rgb(0, 0, 0, 0.6);");
         this.setOnMouseClicked(event -> {
-            if(event.getTarget() == this)
-                close();
+            reportIssuePC.closePane(event);
         });
     }
 
     private void setStyle() {
         contentPane.getStyleClass().add("overlay-pane");
         contentPane.setStyle("-fx-max-height: 1000px; -fx-min-height: 1000px; -fx-min-width: 1000px; -fx-max-width: 1000px");
-    }
-
-    public void close() {
-        parentContainer.getChildren().remove(this);
-    }
-
-    public IssueTipology getChoosenIssueTipology() {
-        Toggle choosenButton = typeIssueToggleGroup.getSelectedToggle();
-        if(choosenButton == null)
-            return null;
-        else if(choosenButton == bugRadioButton)
-            return IssueTipology.BUG;
-        else if(choosenButton == questionRadioButton)
-            return IssueTipology.QUESTION;
-        else if(choosenButton == documentationRadioButton)
-            return IssueTipology.DOCUMENTATION;
-        else
-            return IssueTipology.NEW_FEATURE;
-    }
-
-    public String getTitle() {
-        return titleTextField.getText();
-    }
-
-    public String getDescription() {
-        return descriptionTextArea.getText();
     }
 
     public List<Integer> getChoosenLabels() {
@@ -409,21 +412,6 @@ public class ReportIssuePane extends StackPane {
         for(byte[] image: binaryFiles)
             if(image != null)
                 images.add(image);
-
         return images;
-    }
-
-    public IssuePriority getIssuePriority(){
-
-        if(priorityComboBox.getValue() == null)
-            return null;
-        else if(priorityComboBox.getValue().equals("Don't specify"))
-            return IssuePriority.NO_PRIORITY;
-        else if (priorityComboBox.getValue().equals("Low"))
-            return IssuePriority.LOW_PRIORITY;
-        else if(priorityComboBox.getValue().equals("Medium"))
-            return IssuePriority.MEDIUM_PRIORITY;
-        else
-            return IssuePriority.HIGH_PRIORITY;
     }
 }

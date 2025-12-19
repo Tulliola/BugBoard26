@@ -9,6 +9,7 @@ import com.bug_board.utilities.buttons.ButtonDefinition;
 import com.bug_board.utilities.buttons.factory.implementations.ComponentButtonFactory;
 import com.bug_board.utilities.buttons.factory.interfaces.IButtonsProvider;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -112,7 +113,7 @@ public class HomePageView extends MyStage {
             homePagePC.showLabelCreationOverlay(containerUnderTitleBar);
     }
 
-    public void displayOverlayedContent(Pane newLayer) {
+    public void displayOverlayedContent(Node newLayer) {
         containerUnderTitleBar.getChildren().add(newLayer);
     }
 
