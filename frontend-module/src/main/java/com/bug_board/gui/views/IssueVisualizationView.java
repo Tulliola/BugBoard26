@@ -29,7 +29,7 @@ public class IssueVisualizationView extends MyStage {
     private TitleBar titleBar;
     private StackPane containerUnderTitleBar;
     private BorderPane centralPane;
-    private Pagination pagination;
+    private Pagination pagination = new Pagination()    ;
     private String headingText;
     private Integer idProject;
 
@@ -150,6 +150,11 @@ public class IssueVisualizationView extends MyStage {
         int numberOfPages = this.issuePC.getNumberOfPages();
 
         this.setPaginationButtons(numberOfPages);
+
+        if(numberOfPages == 0){
+            pagination.setManaged(false);
+            noIssuesFound.setManaged(true);
+        }
 
         return pagination;
     }
@@ -413,20 +418,22 @@ public class IssueVisualizationView extends MyStage {
     }
 
     private void updatePaginationNumbers(int numberOfPages) {
-        pagination.setVisible(numberOfPages > 0);
         pagination.setManaged(numberOfPages > 0);
+        pagination.setVisible(numberOfPages > 0);
+        noIssuesFound.setManaged(!(numberOfPages > 0));
+        noIssuesFound.setVisible(!(numberOfPages > 0));
 
-        pagination.setPageCount(numberOfPages);
-        pagination.setCurrentPageIndex(0);
-
-        if(!pagination.isVisible())
-            noIssuesFound.setManaged(true);
-        else
-            noIssuesFound.setManaged(false);
+        if(numberOfPages == 0)
+            pagination.setPageCount(0);
+        else {
+            pagination.setPageCount(numberOfPages);
+            pagination.setCurrentPageIndex(0);
+        }
     }
 
     private void setPaginationButtons(int numberOfPages) {
-        pagination = new Pagination(numberOfPages, 0);
+        pagination .setPageCount(numberOfPages);
+        pagination.setCurrentPageIndex(0);
         pagination.setMaxPageIndicatorCount(5);
 
         pagination.setPageFactory((pageIndex) -> {
@@ -456,10 +463,6 @@ public class IssueVisualizationView extends MyStage {
 
     public void displayOverlayedContent(Pane newLayer) {
         containerUnderTitleBar.getChildren().add(newLayer);
-    }
-
-    public StackPane getContainerUnderTitleBar() {
-        return containerUnderTitleBar;
     }
 
     public Integer getIdProject() {
