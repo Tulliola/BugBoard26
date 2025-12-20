@@ -5,7 +5,6 @@ import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueState;
 import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.presentation_controllers.IssueVisualizationPC;
-import com.bug_board.utilities.Carousel;
 import com.bug_board.utilities.IssueSummaryCard;
 import com.bug_board.utilities.MyStage;
 import com.bug_board.utilities.TitleBar;
@@ -30,14 +29,14 @@ public class IssueVisualizationView extends MyStage {
     private TitleBar titleBar;
     private StackPane containerUnderTitleBar;
     private BorderPane centralPane;
-    private VBox issueContainer;
-    private Carousel carousel;
+    private Pagination pagination;
     private String headingText;
     private Integer idProject;
 
     private List<RadioButton> tipologyFilterRadioButtons = new ArrayList<>();
     private List<RadioButton> priorityFilterRadioButtons = new ArrayList<>();
     private List<RadioButton> stateFilterRadioButtons = new ArrayList<>();
+    private Label noIssuesFound;
 
     public IssueVisualizationView(IssueVisualizationPC issuePC, String headingText) {
         this.issuePC = issuePC;
@@ -131,8 +130,6 @@ public class IssueVisualizationView extends MyStage {
         heading.setPadding(new Insets(10, 10, 10, 10));
         heading.setWrapText(true);
 
-        List<IssueSummaryDTO> issueSummaryDTOList = issuePC.getIssuesOfAPage(0);
-
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
         Region spacer2 = new Region();
@@ -140,7 +137,7 @@ public class IssueVisualizationView extends MyStage {
 
         centralPane.getChildren().addAll(
                 heading,
-                this.createIssueContainer(issueSummaryDTOList),
+                createNoIssuesFoundLabel(),
                 spacer,
                 this.createPaginationNumbersContainer(),
                 spacer2
@@ -149,35 +146,12 @@ public class IssueVisualizationView extends MyStage {
         return centralPane;
     }
 
-    private VBox createIssueContainer(List<IssueSummaryDTO> issueSummaryDTOList) {
-        issueContainer = new VBox();
-        issueContainer.setStyle("-fx-background-color: white");
-        issueContainer.setAlignment(Pos.TOP_CENTER);
-
-        if(issueSummaryDTOList.isEmpty()){
-            Label noIssuesFound = new Label("No issues found");
-            issueContainer.getChildren().add(noIssuesFound);
-        }
-        else
-            for(IssueSummaryDTO issueDTO: issueSummaryDTOList){
-                IssueSummaryCard issueCard = new IssueSummaryCard(issueDTO);
-                issueCard.setOnMouseClicked(mouseEvent -> {
-                    this.clickOnAIssueToViewItsSummary(issueDTO);
-                });
-                issueContainer.getChildren().add(issueCard);
-            }
-
-        return issueContainer;
-    }
-
-    private HBox createPaginationNumbersContainer() {
+    private Pagination createPaginationNumbersContainer() {
         int numberOfPages = this.issuePC.getNumberOfPages();
-
-        carousel = new Carousel(numberOfPages);
 
         this.setPaginationButtons(numberOfPages);
 
-        return carousel;
+        return pagination;
     }
 
     private VBox createLateralPane() {
@@ -193,8 +167,8 @@ public class IssueVisualizationView extends MyStage {
     }
 
     private Label createNoIssuesFoundLabel() {
-        Label noIssuesFound = new Label("No issues found");
-
+        noIssuesFound = new Label("No issues found");
+        noIssuesFound.setManaged(false);
         return noIssuesFound;
     }
 
@@ -431,39 +405,48 @@ public class IssueVisualizationView extends MyStage {
     }
 
     private void filterIssues() {
-        List<IssueSummaryDTO> allFilteredIssues = issuePC.getFilteredIssueList();
+        issuePC.filterIssueList();
 
-        updateIssueListInCarousel(issuePC.extractFirstPageIssues(allFilteredIssues));
-        updatePaginationNumbers();
+        int numberOfPages = issuePC.getNumberOfPages();
+
+        updatePaginationNumbers(numberOfPages);
     }
 
-    private void updateIssueListInCarousel(List<IssueSummaryDTO> newIssuesToShow) {
-        this.issueContainer.getChildren().clear();
+    private void updatePaginationNumbers(int numberOfPages) {
+        pagination.setVisible(numberOfPages > 0);
+        pagination.setManaged(numberOfPages > 0);
 
-        if(newIssuesToShow == null || newIssuesToShow.isEmpty()) {
-            this.issueContainer.getChildren().add(this.createNoIssuesFoundLabel());
-        }
+        pagination.setPageCount(numberOfPages);
+        pagination.setCurrentPageIndex(0);
+
+        if(!pagination.isVisible())
+            noIssuesFound.setManaged(true);
         else
-            for(IssueSummaryDTO newIssueToShow: newIssuesToShow){
-                IssueSummaryCard issueCard = new IssueSummaryCard(newIssueToShow);
-                issueCard.setOnMouseClicked(mouseEvent -> {
-                    this.clickOnAIssueToViewItsSummary(newIssueToShow);
-                });
-                issueContainer.getChildren().add(issueCard);
-            }
-    }
-
-    private void updatePaginationNumbers() {
-        int numberOfPages = this.issuePC.getNumberOfPages();
-
-        this.setPaginationButtons(numberOfPages);
+            noIssuesFound.setManaged(false);
     }
 
     private void setPaginationButtons(int numberOfPages) {
-        for(int i = 0; i < numberOfPages; i++){
-            List<IssueSummaryDTO> issuesInPage = issuePC.getIssuesOfAPage(i);
-            carousel.setButtonAction(i, () -> this.updateIssueListInCarousel(issuesInPage));
-        }
+        pagination = new Pagination(numberOfPages, 0);
+        pagination.setMaxPageIndicatorCount(5);
+
+        pagination.setPageFactory((pageIndex) -> {
+            VBox issueContainer = new VBox();
+            issueContainer.setAlignment(Pos.TOP_CENTER);
+            issueContainer.setPadding(new Insets(30));
+
+            List<IssueSummaryDTO> issueOfPageIndex = issuePC.getIssuesOfAPage(pageIndex);
+
+            for(IssueSummaryDTO issueOfPage: issueOfPageIndex) {
+                IssueSummaryCard issueCard = new IssueSummaryCard(issueOfPage);
+                issueCard.setOnMouseClicked(mouseEvent -> {
+                    this.clickOnAIssueToViewItsSummary(issueOfPage);
+                });
+
+                issueContainer.getChildren().add(issueCard);
+            }
+
+            return issueContainer;
+        });
     }
 
     private void clickOnAIssueToViewItsSummary(IssueSummaryDTO issueToShow) {

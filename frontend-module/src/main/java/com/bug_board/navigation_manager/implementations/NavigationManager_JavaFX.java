@@ -45,6 +45,8 @@ public class NavigationManager_JavaFX implements INavigationManager {
             projectsList = new ArrayList<>();
         }
 
+        homePagePC.setProjectsRetrieved(projectsList);
+
         HomePageView homePageView = new HomePageView(
                 homePagePC,
                 projectsList

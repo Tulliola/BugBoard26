@@ -19,7 +19,7 @@ public class PersonalIssueVisualizationPC extends IssueVisualizationPC{
     }
 
     @Override
-    public List<IssueSummaryDTO> getFilteredIssueList() {
+    public void filterIssueList() {
         IssueFiltersDTO filters = new IssueFiltersDTO();
         filters.setIssueStates(this.stateFilters);
         filters.setIssueTipologies(this.tipologyFilters);
@@ -28,11 +28,9 @@ public class PersonalIssueVisualizationPC extends IssueVisualizationPC{
         try {
             if (issueView.getIdProject() == null)
                 issueList = userIssueController.getPersonalIssues(filters);
-            return issueList;
         }
         catch(RetrieveIssuesException exc) {
             this.showIssuesRetrievalError("Server's not responding. You can visualize the issue page, but it will be empty.");
-            return null;
         }
     }
 

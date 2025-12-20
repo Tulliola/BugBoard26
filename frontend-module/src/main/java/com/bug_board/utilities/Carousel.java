@@ -2,18 +2,18 @@ package com.bug_board.utilities;
 
 
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Carousel extends HBox {
     private final int length;
     private ArrayList<ToggleButton> carouselButtons = new ArrayList<>();
     private ToggleGroup carouselToggleGroup = new ToggleGroup();
+    private final int MAX_BUTTONS = 9;
 
     public Carousel(int buttonsNumber) {
         this.length = buttonsNumber;
@@ -23,7 +23,7 @@ public class Carousel extends HBox {
 
     private void setCarousel() {
         this.setToggleGroupLogic();
-        this.getChildren().addAll(setCarouselsButtons());
+        setCarouselsButtons();
 
         if(!carouselButtons.isEmpty())
             carouselButtons.get(0).setSelected(true);
@@ -36,15 +36,37 @@ public class Carousel extends HBox {
         });
     }
 
-    private List<ToggleButton> setCarouselsButtons() {
-        for (int i = 0; i < length; i++) {
-            ToggleButton carouselButton = new ToggleButton(String.valueOf(i + 1));
-            carouselButtons.add(carouselButton);
-            carouselButton.setToggleGroup(carouselToggleGroup);
-            carouselButton.getStyleClass().add("carousel-button");
+    private void setCarouselsButtons() {
+        this.getChildren().clear();
+        carouselButtons.clear();
+
+        if(length >= 1 && length <= 9) {
+            for (int i = 0; i < length; i++) {
+                this.getChildren().add(this.addButton(i));
+            }
         }
 
-        return carouselButtons;
+        else if(length >= 10) {
+            for (int i = 0; i < 4; i++) {
+                this.getChildren().add(this.addButton(i));
+            }
+
+            Label label = new Label(" ... ");
+            this.getChildren().add(label);
+
+            ToggleButton lastButton = new ToggleButton(String.valueOf(length));
+            lastButton.getStyleClass().add("carousel-button");
+            lastButton.setToggleGroup(carouselToggleGroup);
+            this.getChildren().add(lastButton);
+        }
+    }
+
+    private ToggleButton addButton(int i) {
+        ToggleButton carouselButton = new ToggleButton(String.valueOf(i + 1));
+        carouselButtons.add(carouselButton);
+        carouselButton.setToggleGroup(carouselToggleGroup);
+        carouselButton.getStyleClass().add("carousel-button");
+        return carouselButton;
     }
 
     public void setButtonAction(int index, Runnable action) {

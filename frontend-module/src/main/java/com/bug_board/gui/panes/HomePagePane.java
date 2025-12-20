@@ -1,5 +1,6 @@
 package com.bug_board.gui.panes;
 
+import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.presentation_controllers.HomePagePC;
@@ -11,6 +12,8 @@ import com.bug_board.utilities.ProjectCard;
 import com.bug_board.utilities.animations.AnimatedSearchBar;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Pagination;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -22,17 +25,13 @@ public class HomePagePane extends VBox {
 
     private final HomePagePC homePagePC;
     private static final int PROJECTS_TO_SHOW = 3;
-    private List<ProjectSummaryDTO> projectsOnBoard;
     private List<ProjectSummaryDTO> projectsRetrieved;
     private AnimatedSearchBar searchProject =  new AnimatedSearchBar();
-    private HBox projectCardsBox = new HBox();
     private Text heading;
     private Text hintFiltering = new Text("But you can filter them by project name...");
-    private HBox carouselsBox = new HBox();
-    private List<ProjectCard> projectsCards = new ArrayList<>();
-    private Text noProjectsFoundText = new Text("No Project Has Been Found");
+    private Text noProjectsFoundText = new Text();
 
-    private Carousel carousel;
+    private Pagination pagination = new Pagination();
 
     public HomePagePane(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
         this.homePagePC = homePagePC;
@@ -53,19 +52,12 @@ public class HomePagePane extends VBox {
     private void setCarousel() {
         int carouselsIndexes = (projectsRetrieved.size() + PROJECTS_TO_SHOW - 1) / PROJECTS_TO_SHOW;
 
-        carousel = new Carousel(carouselsIndexes);
+        pagination.setPageCount(carouselsIndexes);
+        pagination.setMaxPageIndicatorCount(5);
 
-        carouselsBox.setPadding(new Insets(5));
-        carouselsBox.setSpacing(5);
-        carouselsBox.setAlignment(Pos.CENTER);
+        pagination.setPageFactory((pageIndex) -> setProjectCardsBox(pageIndex));
 
-        carouselsBox.getChildren().clear();
-        carouselsBox.getChildren().addAll(carousel);
-
-        for(int i = 0; i < carouselsIndexes; i++) {
-            int finalI = i;
-            carousel.setButtonAction(i, () -> setProjectCardsBox(finalI));
-        }
+        pagination.setPadding(new Insets(10));
     }
 
     private void setHintFiltering(){
@@ -77,57 +69,44 @@ public class HomePagePane extends VBox {
     private void addCarousel(){
         if(!projectsRetrieved.isEmpty())
             showLatestProjects();
-        else
-            showNoResults();
 
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
         this.getChildren().addAll(
-                projectCardsBox,
-                carouselsBox,
+                pagination,
+                noProjectsFoundText,
                 spacer,
                 new JokesFooter(10)
         );
+
         VBox.setVgrow(this, Priority.ALWAYS);
     }
 
-    private void setProjectCardsBox(int index) {
-        projectsCards.clear();
+    private Node setProjectCardsBox(int index) {
+        List<ProjectSummaryDTO> projectList = homePagePC.getProjectsOfAPage(index);
 
-        if(projectsRetrieved.size() >= (index+1) * PROJECTS_TO_SHOW)
-            projectsOnBoard = projectsRetrieved.subList(index * PROJECTS_TO_SHOW, (index * PROJECTS_TO_SHOW) + PROJECTS_TO_SHOW);
-        else if(!projectsRetrieved.isEmpty())
-            projectsOnBoard = projectsRetrieved.subList(index * PROJECTS_TO_SHOW, projectsRetrieved.size());
-        else{
-            this.handleNoProjectsFound();
-        }
+        HBox projectCardsBox = new HBox();
 
-        if(projectsOnBoard != null && !projectsOnBoard.isEmpty())
-            for(ProjectSummaryDTO project: projectsOnBoard){
-                projectsCards.add(new ProjectCard(project, this.homePagePC));
+        if(!projectList.isEmpty())
+            for(ProjectSummaryDTO project: projectList){
+                ProjectCard currentProjectCard = new ProjectCard(project, homePagePC);
+                currentProjectCard.setPadding(new Insets(15));
+                projectCardsBox.getChildren().add(currentProjectCard);
             }
 
         projectCardsBox.setAlignment(Pos.CENTER);
 
         projectCardsBox.setPadding(new Insets(50));
 
-        addProjectCardsToBox();
+        return projectCardsBox;
     }
 
     private void handleNoProjectsFound() {
-        noProjectsFoundText.setText("No Projects Found");
-        projectCardsBox.getChildren().add(noProjectsFoundText);
-    }
+        noProjectsFoundText.setText("No Project Has Been Found");
 
-    private void addProjectCardsToBox(){
-        projectCardsBox.getChildren().clear();
-
-        if(projectsCards != null && !projectsCards.isEmpty())
-            for(ProjectCard card: projectsCards){
-                card.setPadding(new Insets(15));
-                projectCardsBox.getChildren().add(card);
-            }
+        noProjectsFoundText.setVisible(true);
+        noProjectsFoundText.setManaged(true);
     }
 
     private void setHeading(){
@@ -156,6 +135,7 @@ public class HomePagePane extends VBox {
         searchProject.setAlignment(Pos.CENTER);
         searchProject.setPrefWidth(300);
         searchProject.setMaxWidth(300);
+        searchProject.setPadding(new Insets(20));
 
         searchProject.setButtonAction(() -> {
             this.filterProjects(searchProject.getBarText());
@@ -168,35 +148,39 @@ public class HomePagePane extends VBox {
     }
 
     private void filterProjects(String barText) {
-        if(projectCardsBox.getChildren().contains(noProjectsFoundText)){
-            projectCardsBox.getChildren().remove(noProjectsFoundText);
-        }
+        noProjectsFoundText.setVisible(false);
+        noProjectsFoundText.setManaged(false);
 
         try {
             projectsRetrieved = homePagePC.onSearchProjectButtonClick(barText);
+            System.out.println("projectsRetrieved: " + projectsRetrieved + "\nwith size: " + projectsRetrieved.size());
         }
         catch (RetrieveProjectException e) {
             noProjectsFoundText.setText(e.getMessage());
         }
 
-        projectCardsBox.getChildren().clear();
+        this.setCarousel();
 
-        if(!projectsRetrieved.isEmpty())
+        if(!projectsRetrieved.isEmpty()) {
+            pagination.setVisible(true);
+            pagination.setManaged(true);
+            this.setCarousel();
+
             showLatestProjects();
-        else
-            showNoResults();
+        }
+        else {
+            pagination.setVisible(false);
+            pagination.setManaged(false);
+
+            noProjectsFoundText.setVisible(true);
+            noProjectsFoundText.setManaged(true);
+
+            handleNoProjectsFound();
+        }
     }
 
     private void showLatestProjects() {
-        setProjectCardsBox(0);
-        setCarousel();
-    }
-
-    private void showNoResults() {
-        projectCardsBox.getChildren().removeAll(projectsCards);
-        projectCardsBox.setPrefHeight(550);
-        projectCardsBox.getChildren().add(noProjectsFoundText);
-        carouselsBox.getChildren().clear();
+        pagination.setCurrentPageIndex(0);
     }
 
     private void setNoProjectsFoundText() {

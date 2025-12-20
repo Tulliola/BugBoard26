@@ -62,15 +62,11 @@ public abstract class IssueVisualizationPC {
         return issueList.subList(start, end);
     }
 
-    public List<IssueSummaryDTO> extractFirstPageIssues(List<IssueSummaryDTO> initialList) {
-        return initialList.subList(0, Math.min(PAGE_SIZE, initialList.size()));
-    }
-
     public int getNumberOfPages() {
         return Math.ceilDiv(this.issueList.size(), PAGE_SIZE);
     }
 
-    public abstract List<IssueSummaryDTO> getFilteredIssueList();
+    public abstract void filterIssueList();
 
     public List<IssueTipology> getTipologies() {
         return Arrays.asList(IssueTipology.values());

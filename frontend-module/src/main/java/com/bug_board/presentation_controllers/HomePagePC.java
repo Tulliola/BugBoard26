@@ -11,12 +11,17 @@ import com.bug_board.session_manager.SessionManager;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomePagePC {
     private final UserProjectController userProjectController;
     private final INavigationManager navigationManager;
     private HomePageView homePageView;
+    private List<ProjectSummaryDTO> projectsRetrieved;
+
+    private final int MAX_PROJECTS_PER_PAGE = 3;
 
     public HomePagePC(
                       UserProjectController userProjectController,
@@ -75,6 +80,20 @@ public class HomePagePC {
         Pane reportIssueOverlay = navigationManager.buildReportIssueComponent(containerUnderTitleBar, projectReported, this);
 
         homePageView.displayOverlayedContent(reportIssueOverlay);
+    }
+
+    public List<ProjectSummaryDTO> getProjectsOfAPage(int pageIndex){
+        List<ProjectSummaryDTO> projectsOfPage;
+
+        int start = pageIndex * MAX_PROJECTS_PER_PAGE;
+        int end = Math.min(start + MAX_PROJECTS_PER_PAGE, projectsRetrieved.size());
+        projectsOfPage = projectsRetrieved.subList(start, end);
+
+        return projectsOfPage;
+    }
+
+    public void setProjectsRetrieved(List<ProjectSummaryDTO> projectsRetrieved) {
+        this.projectsRetrieved = projectsRetrieved;
     }
 
     public StackPane getContainer() {

@@ -653,3 +653,75 @@
 
     -fx-alignment: center;
 }
+
+.pagination {
+    -fx-padding: 0;
+}
+
+.pagination .pagination-control {
+    -fx-background-color: transparent;
+}
+
+.pagination .page-information {
+    visibility: hidden;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
+.pagination .toggle-button {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 2px 0;
+    -fx-border-color: transparent;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-pref-width: 35px;
+}
+
+.pagination .toggle-button:hover {
+    -fx-text-fill: -color-primary;
+    -fx-border-color: -color-primary;
+}
+
+.pagination .toggle-button:selected {
+    -fx-text-fill: -color-primary;
+    -fx-border-color: -color-primary;
+    -fx-font-weight: bold;
+}
+
+.pagination .pagination-control .left-arrow-button,
+.pagination .pagination-control .right-arrow-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 0.5em;
+
+    -fx-mark-color: #2d2d2d;
+}
+
+.pagination .pagination-control .left-arrow-button .arrow,
+.pagination .pagination-control .right-arrow-button .arrow{
+    -fx-background-color: -fx-mark-color;
+}
+
+.pagination .pagination-control .left-arrow-button:hover,
+.pagination .pagination-control .right-arrow-button:hover{
+    -fx-mark-color: -color-primary;
+}
+
+.pagination .pagination-control .label {
+    -fx-visible: false;
+    -fx-managed: false;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+    -fx-min-width: 0;
+    -fx-padding: 0;
+    -fx-font-size: 0;
+}
+
+.pagination:focused .pagination-control .label {
+    -fx-visible: false;
+    -fx-managed: false;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+    -fx-padding: 0;
+}
