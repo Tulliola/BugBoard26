@@ -1,16 +1,14 @@
-package com.bug_board.backendmodule.services.implementations;
+package com.bug_board.backendmodule.services.implementations.jpa_implementations;
 
 import com.bug_board.backendmodule.exception.backend.MalformedMailException;
 import com.bug_board.backendmodule.services.interfaces.IEmailService;
 import com.bug_board.dto.email.IEmailToSendDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-@Service
 public class JavaEmailSenderEmailService implements IEmailService {
 
     @Value("${spring.mail.username}")

@@ -11,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-@Service
 public class AuthenticationServiceJPA implements IAuthenticationService {
 
     private final JWTService jwtService;

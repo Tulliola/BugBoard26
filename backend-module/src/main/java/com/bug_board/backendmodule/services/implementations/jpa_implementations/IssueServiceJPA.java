@@ -19,7 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
-@Service
 public class IssueServiceJPA implements IIssueService {
 
     private final IIssueRepository issueRepository;

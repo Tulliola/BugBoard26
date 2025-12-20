@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public class ProjectRepositoryJpaAdapter implements IProjectRepository {
     private final IProjectRepositoryJPA projectRepositoryJPA;
 
