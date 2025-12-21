@@ -12,7 +12,6 @@ import javafx.scene.layout.StackPane;
 public class SearchBar extends HBox {
     protected TextField searchField = new TextField();
     protected Button searchButton = new Button();
-    protected boolean isExpanded = false;
     protected StackPane container;
 
     public SearchBar() {
@@ -22,7 +21,6 @@ public class SearchBar extends HBox {
     public void initialize() {
         setButton();
         setButtonImage();
-        setTextField();
         setStackPane();
 
         this.setAlignment(Pos.CENTER);
@@ -35,14 +33,15 @@ public class SearchBar extends HBox {
         container.setAlignment(searchButton, Pos.CENTER_RIGHT);
     }
 
-    private void setTextField() {
-        searchField.setPromptText("Search project");
+    public void setTextFieldPrompt(String searchBarPrompt) {
+        searchField.setPromptText(searchBarPrompt);
         searchField.setId("search-field");
         searchField.setPadding(new Insets(10, 55, 10, 10));
     }
 
     protected void setButton() {
         searchButton.setId("search-button");;
+        searchButton.setTranslateX(-10);
     }
 
     protected void setButtonImage(){

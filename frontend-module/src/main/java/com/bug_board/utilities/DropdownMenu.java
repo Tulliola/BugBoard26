@@ -18,18 +18,78 @@ import java.util.List;
 
 public class DropdownMenu extends VBox {
     private Button triggerButton;
-    private Popup popup = new Popup();
-    private VBox itemsPane = new VBox();
+    private Popup popup;
+    private ScrollPane itemsScrollPane;
+    private VBox itemsPane;
     private List<CheckBox> checkBoxes = new ArrayList<>();
-    private List<CheckBox> checkedBoxes = new ArrayList<>();
-    private List<BugBoardLabel> options;
     private List<Integer> labelsSelected = new ArrayList<>();
+    private List<HBox> rows = new ArrayList<>();
     private static final int MAX_NUM_OF_LABELS = 3;
 
     public DropdownMenu(List<BugBoardLabel> options) {
-        this.options = options;
+        setTriggerButtonProperties();
+        setContent(options);
+    }
 
-        triggerButton = new Button("Select up to 3 labels");
+    private void setContent(List<BugBoardLabel> options) {
+        popup = new Popup();
+        popup.setAutoHide(true);
+
+        itemsPane = new VBox(5);
+        itemsPane.setPadding(new Insets(10));
+
+        for (BugBoardLabel option : options) {
+            addLabel(option);
+        }
+
+        SearchBar searchBar = new SearchBar();
+
+        searchBar.setTextFieldPrompt("Search Label");
+        searchBar.setButtonAction(() -> filterLabel(searchBar.getBarText(), options));
+        searchBar.setPadding(new Insets(10));
+
+        itemsScrollPane = new ScrollPane(itemsPane);
+        itemsScrollPane.setFitToWidth(true);
+        itemsScrollPane.setMaxHeight(200);
+        itemsScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        itemsScrollPane.getStyleClass().add("custom-dropdown-scroll");
+
+        VBox searchBarAndLabelsWrapper = new VBox();
+        searchBarAndLabelsWrapper.getChildren().addAll(searchBar, itemsScrollPane);
+        searchBarAndLabelsWrapper.setAlignment(Pos.TOP_CENTER);
+        searchBarAndLabelsWrapper.setStyle("-fx-background-color: white; -fx-border-color: -color-primary; -fx-border-width: 2px; -fx-min-width: 350px");
+
+        popup.getContent().add(searchBarAndLabelsWrapper);
+    }
+
+    private void addLabel(BugBoardLabel option) {
+        option.setPadding(new Insets(0, 0, 0, 10));
+        CheckBox labelCheckBox = new CheckBox();
+
+        labelCheckBox.setGraphic(option);
+        labelCheckBox.getStyleClass().add("bugboard-checkbox");
+        labelCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            this.setAndCheckLabelsCeiling(labelCheckBox, newValue);
+            addSelectedLabelId(option, newValue);
+        });
+
+        HBox row = new HBox();
+        row.getStyleClass().add("dropdown-row");
+        rows.add(row);
+
+        labelCheckBox.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+             row.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), isSelected);
+        });
+
+        checkBoxes.add(labelCheckBox);
+
+        row.getChildren().add(labelCheckBox);
+
+        itemsPane.getChildren().add(row);
+    }
+
+    private void setTriggerButtonProperties() {
+        Button triggerButton = new Button("Select up to 3 labels");
         triggerButton.setId("popup-button");
         triggerButton.setMaxWidth(Double.MAX_VALUE);
         triggerButton.setAlignment(Pos.CENTER_LEFT);
@@ -46,62 +106,36 @@ public class DropdownMenu extends VBox {
         triggerButton.setGraphic(graphicBox);
         triggerButton.setContentDisplay(ContentDisplay.RIGHT);
 
-
-        popup = new Popup();
-        popup.setAutoHide(true);
-
-        itemsPane = new VBox(5);
-        itemsPane.setPadding(new Insets(10));
-        itemsPane.setStyle("-fx-background-color: white; -fx-border-color: -color-primary; -fx-border-width: 2px; -fx-min-width: 350px");
-
-        for (BugBoardLabel option : options) {
-            option.setPadding(new Insets(0, 0, 0, 10));
-            CheckBox labelCheckBox = new CheckBox();
-
-
-            labelCheckBox.setGraphic(option);
-            labelCheckBox.getStyleClass().add("bugboard-checkbox");
-            labelCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                this.setAndCheckLabelsCeiling(labelCheckBox, newValue);
-                addSelectedLabelId(option, newValue);
-            });
-
-            HBox row = new HBox();
-            row.getStyleClass().add("dropdown-row");
-            labelCheckBox.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
-                 row.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), isSelected);
-            });
-            row.setOnMouseClicked(e -> {
-                if (e.getTarget() != labelCheckBox && e.getTarget() != labelCheckBox.lookup(".box")) {
-                    labelCheckBox.setSelected(!labelCheckBox.isSelected());
-                    labelCheckBox.fire();
-                }
-            });
-
-            checkBoxes.add(labelCheckBox);
-            row.getChildren().add(labelCheckBox);
-            itemsPane.getChildren().add(row);
-        }
-
-        ScrollPane scrollPane = new ScrollPane(itemsPane);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setMaxHeight(200);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.getStyleClass().add("custom-dropdown-scroll");
-
-        popup.getContent().add(scrollPane);
-
         triggerButton.setOnAction(e -> {
             if (popup.isShowing()) {
                 popup.hide();
-            } else {
+            }
+            else {
                 Bounds bounds = triggerButton.localToScreen(triggerButton.getBoundsInLocal());
-                scrollPane.setMinWidth(bounds.getWidth());
+                itemsScrollPane.setMinWidth(bounds.getWidth());
                 popup.show(triggerButton, bounds.getMinX(), bounds.getMaxY());
             }
         });
 
         this.getChildren().add(triggerButton);
+    }
+
+    private void filterLabel(String barText, List<BugBoardLabel> label) {
+
+        for(int i = 0; i < label.size(); i++) {
+            if(
+                label.get(i).getName().toLowerCase().contains(barText.toLowerCase()) ||
+                label.get(i).getDescription().toLowerCase().contains(barText.toLowerCase()) ||
+                ((CheckBox)rows.get(i).getChildren().getFirst()).isSelected()
+            ) {
+                rows.get(i).setVisible(true);
+                rows.get(i).setManaged(true);
+            }
+            else {
+                rows.get(i).setVisible(false);
+                rows.get(i).setManaged(false);
+            }
+        }
     }
 
     private void addSelectedLabelId(BugBoardLabel option, Boolean newValue) {

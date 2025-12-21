@@ -398,7 +398,7 @@ public class ReportIssuePane extends StackPane {
 
     private void setStyle() {
         contentPane.getStyleClass().add("overlay-pane");
-        contentPane.setStyle("-fx-max-height: 1000px; -fx-min-height: 1000px; -fx-min-width: 1000px; -fx-max-width: 1000px");
+        contentPane.setStyle("-fx-max-height: 1000px; -fx-min-height: 1000px; -fx-min-width: 1200px; -fx-max-width: 1200px");
     }
 
     public List<Integer> getChoosenLabels() {

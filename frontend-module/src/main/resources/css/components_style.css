@@ -570,9 +570,8 @@
     -fx-background-color: #f5f5f5;
 }
 
-.dropdown-row:selected {/
+.dropdown-row:selected {
     -fx-background-color: #eaf9f7;
-
     -fx-border-color: -color-primary;
 }
 
@@ -584,7 +583,7 @@
 .bugboard-checkbox .box {
     -fx-background-color: white;
     -fx-border-color: #A3A3A3;
-    -fx-border-width: 1.5px;
+    -fx-border-width: 1px;
     -fx-border-radius: 5px;
 
     -fx-min-width: 18px;

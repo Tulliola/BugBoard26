@@ -46,7 +46,6 @@ public class AnimatedSearchBar extends SearchBar {
             searchField.setPrefWidth(250.0);
             searchField.setOpacity(1.0);
             searchField.setTranslateX(0.0);
-            searchButton.setTranslateX(-10);
         });
 
 

@@ -136,6 +136,7 @@ public class HomePagePane extends VBox {
         searchProject.setPrefWidth(300);
         searchProject.setMaxWidth(300);
         searchProject.setPadding(new Insets(20));
+        searchProject.setTextFieldPrompt("Search Project");
 
         searchProject.setButtonAction(() -> {
             this.filterProjects(searchProject.getBarText());
