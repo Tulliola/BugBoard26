@@ -269,6 +269,10 @@
 }
 
 #clear-button{
+    -fx-min-width: 40;
+    -fx-max-width: 40;
+    -fx-min-height: 31;
+    -fx-max-height: 31;
     -fx-effect: none;
 }
 

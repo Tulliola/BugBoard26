@@ -131,7 +131,6 @@ public class HomePageView extends MyStage {
     }
 
     public StackPane getContainerUnderTitleBar() {
-
         return containerUnderTitleBar;
     }
 }

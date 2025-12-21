@@ -1,5 +1,6 @@
 package com.bug_board.utilities;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -20,6 +21,8 @@ public class SearchBar extends HBox {
     }
 
     public void initialize() {
+        this.setSpacing(10);
+
         setSearchButton();
 
         setSearchButtonImage();
@@ -35,7 +38,6 @@ public class SearchBar extends HBox {
 
     private void setClearButton() {
         clearButton.setId("clear-button");
-        clearButton.setPadding(new Insets(15));
         setClearButtonImage();
         this.getChildren().add(clearButton);
     }
