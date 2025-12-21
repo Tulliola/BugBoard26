@@ -70,6 +70,11 @@ public class HomePageView extends MyStage {
 
         ToggleGroup groupButtons = new ToggleGroup();
 
+        groupButtons.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue == null)
+                oldValue.setSelected(true);
+        });
+
         for(ButtonDefinition definition: buttonProvider.createTitleBarButtons()){
             ToggleButton buttonToAdd = new ToggleButton(definition.getText());
 

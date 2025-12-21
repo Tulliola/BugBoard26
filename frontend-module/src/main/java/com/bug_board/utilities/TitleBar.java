@@ -85,7 +85,7 @@ public class TitleBar extends StackPane {
         firstLayerTitleBar.getChildren().addAll(spacer, minimizeButton, redimensionButton, closeButton);
 
         setActionPropertiesForFirstLayerTitleBarButtons(this.barHeight);
-        setActionPropertiesForFirstLayerTitleBar(parentStage);
+        setActionPropertiesForFirstLayerTitleBar();
     }
 
     private void setActionPropertiesForFirstLayerTitleBarButtons(int height) {
@@ -111,7 +111,7 @@ public class TitleBar extends StackPane {
         });
     }
 
-    private void setActionPropertiesForFirstLayerTitleBar(Stage parentStage) {
+    private void setActionPropertiesForFirstLayerTitleBar() {
         this.onMouseClickedProperty().set(e -> {
             Stage stage = (Stage) this.getScene().getWindow();
             xOffset = stage.getX() - e.getScreenX();
