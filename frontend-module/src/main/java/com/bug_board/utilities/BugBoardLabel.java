@@ -10,6 +10,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import lombok.Getter;
 
 import java.awt.*;
 
@@ -18,6 +19,8 @@ public class BugBoardLabel extends StackPane {
     private SVGPath shape;
     private String color;
     private LabelSummaryDTO label;
+
+
     public BugBoardLabel(LabelSummaryDTO labelSummaryDTO) {
         this.label = labelSummaryDTO;
         this.createBugBoardLabel(labelSummaryDTO.getName(), labelSummaryDTO.getColor());

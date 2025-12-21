@@ -13,6 +13,8 @@ public class AnimatedSearchBar extends SearchBar {
 
     public AnimatedSearchBar() {
         super();
+        clearButton.setVisible(false);
+        clearButton.setManaged(false);
         container.setAlignment(Pos.CENTER_RIGHT);
         searchField.setVisible(false);
         searchField.setManaged(false);
@@ -46,13 +48,15 @@ public class AnimatedSearchBar extends SearchBar {
             searchField.setPrefWidth(250.0);
             searchField.setOpacity(1.0);
             searchField.setTranslateX(0.0);
+            clearButton.setVisible(true);
+            clearButton.setManaged(true);
         });
 
 
         timeline.play();
     }
 
-    public void setButtonAction(Runnable action){
+    public void setSearchButtonAction(Runnable action){
         searchButton.setOnAction(e -> {
             if(!isExpanded){
                 animate();

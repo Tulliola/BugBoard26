@@ -1,11 +1,9 @@
 package com.bug_board.gui.panes;
 
-import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.dto.ProjectSummaryDTO;
 import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.presentation_controllers.HomePagePC;
 import com.bug_board.session_manager.SessionManager;
-import com.bug_board.utilities.Carousel;
 import com.bug_board.utilities.JokesFooter;
 import com.bug_board.utilities.MySpacer;
 import com.bug_board.utilities.ProjectCard;
@@ -18,7 +16,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomePagePane extends VBox {
@@ -138,9 +135,8 @@ public class HomePagePane extends VBox {
         searchProject.setPadding(new Insets(20));
         searchProject.setTextFieldPrompt("Search Project");
 
-        searchProject.setButtonAction(() -> {
-            this.filterProjects(searchProject.getBarText());
-        });
+        searchProject.setSearchButtonAction(() -> this.filterProjects(searchProject.getBarText()));
+        searchProject.setClearButtonAction(() -> filterProjects(""));
 
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(searchProject);
@@ -154,13 +150,12 @@ public class HomePagePane extends VBox {
 
         try {
             projectsRetrieved = homePagePC.onSearchProjectButtonClick(barText);
-            System.out.println("projectsRetrieved: " + projectsRetrieved + "\nwith size: " + projectsRetrieved.size());
         }
         catch (RetrieveProjectException e) {
             noProjectsFoundText.setText(e.getMessage());
         }
 
-        this.setCarousel();
+        homePagePC.setProjectsRetrieved(projectsRetrieved);
 
         if(!projectsRetrieved.isEmpty()) {
             pagination.setVisible(true);

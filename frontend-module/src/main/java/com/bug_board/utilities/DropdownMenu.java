@@ -1,6 +1,5 @@
 package com.bug_board.utilities;
 
-import com.bug_board.dto.LabelSummaryDTO;
 import javafx.css.PseudoClass;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -17,16 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DropdownMenu extends VBox {
-    private Button triggerButton;
+    private List<BugBoardLabel> options;
     private Popup popup;
     private ScrollPane itemsScrollPane;
     private VBox itemsPane;
     private List<CheckBox> checkBoxes = new ArrayList<>();
-    private List<Integer> labelsSelected = new ArrayList<>();
+    private List<Integer> labelsSelectedId = new ArrayList<>();
     private List<HBox> rows = new ArrayList<>();
     private static final int MAX_NUM_OF_LABELS = 3;
 
     public DropdownMenu(List<BugBoardLabel> options) {
+        this.options = options;
         setTriggerButtonProperties();
         setContent(options);
     }
@@ -45,7 +45,8 @@ public class DropdownMenu extends VBox {
         SearchBar searchBar = new SearchBar();
 
         searchBar.setTextFieldPrompt("Search Label");
-        searchBar.setButtonAction(() -> filterLabel(searchBar.getBarText(), options));
+        searchBar.setSearchButtonAction(() -> filterLabel(searchBar.getBarText()));
+        searchBar.setClearButtonAction(() -> filterLabel(""));
         searchBar.setPadding(new Insets(10));
 
         itemsScrollPane = new ScrollPane(itemsPane);
@@ -120,13 +121,12 @@ public class DropdownMenu extends VBox {
         this.getChildren().add(triggerButton);
     }
 
-    private void filterLabel(String barText, List<BugBoardLabel> label) {
-
-        for(int i = 0; i < label.size(); i++) {
+    private void filterLabel(String barText) {
+        for(int i = 0; i < options.size(); i++) {
             if(
-                label.get(i).getName().toLowerCase().contains(barText.toLowerCase()) ||
-                label.get(i).getDescription().toLowerCase().contains(barText.toLowerCase()) ||
-                ((CheckBox)rows.get(i).getChildren().getFirst()).isSelected()
+                options.get(i).getName().toLowerCase().contains(barText.toLowerCase()) ||
+                options.get(i).getDescription().toLowerCase().contains(barText.toLowerCase()) ||
+                checkBoxes.get(i).isSelected()
             ) {
                 rows.get(i).setVisible(true);
                 rows.get(i).setManaged(true);
@@ -136,16 +136,46 @@ public class DropdownMenu extends VBox {
                 rows.get(i).setManaged(false);
             }
         }
+        reorderRows();
     }
 
-    private void addSelectedLabelId(BugBoardLabel option, Boolean newValue) {
-        if(newValue) {
-            if (labelsSelected.size() < MAX_NUM_OF_LABELS)
-                labelsSelected.add(mapToLabelSummaryDTO(option).getIdLabel());
+    private void reorderRows() {
+        List<HBox> reorderedRows = new ArrayList<>();
+        List<CheckBox> reorderedCheckBoxes = new ArrayList<>();
+        List<BugBoardLabel> reorderedLabels = new ArrayList<>();
+
+        for(int i = 0; i < checkBoxes.size(); i++) {
+            if(checkBoxes.get(i).isSelected()) {
+                reorderedLabels.add(options.get(i));
+                reorderedCheckBoxes.add(checkBoxes.get(i));
+                reorderedRows.add(rows.get(i));
+            }
+        }
+
+        for(int i = 0; i < checkBoxes.size(); i++) {
+            if(!checkBoxes.get(i).isSelected()) {
+                reorderedLabels.add(options.get(i));
+                reorderedCheckBoxes.add(checkBoxes.get(i));
+                reorderedRows.add(rows.get(i));
+            }
+        }
+
+        rows = reorderedRows;
+        checkBoxes = reorderedCheckBoxes;
+        options = reorderedLabels;
+
+        itemsPane.getChildren().removeAll(rows);
+        itemsPane.getChildren().addAll(rows);
+    }
+
+    private void addSelectedLabelId(BugBoardLabel option, Boolean isSelected) {
+        if(isSelected) {
+            if (labelsSelectedId.size() < MAX_NUM_OF_LABELS)
+                labelsSelectedId.add(option.getLabelId());
         }
         else {
-            if (labelsSelected.contains(option.getLabelId())) {
-                labelsSelected.remove(mapToLabelSummaryDTO(option).getIdLabel());
+            if (labelsSelectedId.contains(option.getLabelId())) {
+                labelsSelectedId.remove(option.getLabelId());
             }
         }
     }
@@ -167,17 +197,6 @@ public class DropdownMenu extends VBox {
     }
 
     public List<Integer> getSelectedLabels() {
-        return labelsSelected;
-    }
-
-    //TODO dove fare il mapper???
-    private LabelSummaryDTO mapToLabelSummaryDTO(BugBoardLabel bugBoardLabel) {
-        LabelSummaryDTO labelSummaryDTO = new LabelSummaryDTO();
-        labelSummaryDTO.setIdLabel(bugBoardLabel.getLabelId());
-        labelSummaryDTO.setColor(bugBoardLabel.getColor());
-        labelSummaryDTO.setName(bugBoardLabel.getName());
-        labelSummaryDTO.setDescription(bugBoardLabel.getDescription());
-
-        return labelSummaryDTO;
+        return labelsSelectedId;
     }
 }

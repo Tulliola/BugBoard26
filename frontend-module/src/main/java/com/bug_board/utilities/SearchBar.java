@@ -13,18 +13,42 @@ public class SearchBar extends HBox {
     protected TextField searchField = new TextField();
     protected Button searchButton = new Button();
     protected StackPane container;
+    protected Button clearButton = new Button();
 
     public SearchBar() {
         this.initialize();
     }
 
     public void initialize() {
-        setButton();
-        setButtonImage();
+        setSearchButton();
+
+        setSearchButtonImage();
+
         setStackPane();
 
-        this.setAlignment(Pos.CENTER);
         this.getChildren().addAll(container);
+
+        setClearButton();
+
+        this.setAlignment(Pos.CENTER);
+    }
+
+    private void setClearButton() {
+        clearButton.setId("clear-button");
+        clearButton.setPadding(new Insets(15));
+        setClearButtonImage();
+        this.getChildren().add(clearButton);
+    }
+
+    private void setClearButtonImage() {
+        Image searchIcon = new Image(getClass().getResourceAsStream("/icons/clear_filters.png"), 20, 20, true, true);
+        ImageView searchIconView = new ImageView(searchIcon);
+        searchIconView.setFitHeight(20);
+        searchIconView.setFitWidth(20);
+        searchIconView.setSmooth(true);
+        searchIconView.setPreserveRatio(true);
+        searchIconView.setSmooth(true);
+        clearButton.setGraphic(searchIconView);
     }
 
     private void setStackPane() {
@@ -39,12 +63,12 @@ public class SearchBar extends HBox {
         searchField.setPadding(new Insets(10, 55, 10, 10));
     }
 
-    protected void setButton() {
+    protected void setSearchButton() {
         searchButton.setId("search-button");;
         searchButton.setTranslateX(-10);
     }
 
-    protected void setButtonImage(){
+    protected void setSearchButtonImage(){
         Image searchIcon = new Image(getClass().getResourceAsStream("/icons/search_icon.png"), 20, 20, true, true);
         ImageView searchIconView = new ImageView(searchIcon);
         searchIconView.setFitHeight(20);
@@ -56,8 +80,12 @@ public class SearchBar extends HBox {
     }
 
 
-    public void setButtonAction(Runnable action){
-        searchButton.setOnAction(e -> {
+    public void setSearchButtonAction(Runnable action){
+        searchButton.setOnAction(e -> action.run());
+    }
+
+    public void setClearButtonAction(Runnable action){
+        clearButton.setOnAction(e -> {
             action.run();
         });
     }
