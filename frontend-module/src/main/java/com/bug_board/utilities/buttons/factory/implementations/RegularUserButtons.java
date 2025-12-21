@@ -17,7 +17,8 @@ public class RegularUserButtons extends AdminButtons implements IButtonsProvider
     public List<ButtonDefinition> createTitleBarButtons() {
         return List.of(
                 new ButtonDefinition("Issues reported by me", "VIEW_PERSONAL_ISSUES"),
-                new ButtonDefinition("Create a new label", "CREATE_LABEL")
+                new ButtonDefinition("Create a new label", "CREATE_LABEL"),
+                new ButtonDefinition("View my labels", "VIEW_LABELS")
         );
     }
 }

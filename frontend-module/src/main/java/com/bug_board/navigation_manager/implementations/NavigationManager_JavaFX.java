@@ -127,7 +127,7 @@ public class NavigationManager_JavaFX implements INavigationManager {
 
     @Override
     public Pane buildRegisterUserComponent(StackPane parentContainer, HomePagePC parentPC) {
-        UserRegistrationController userRegistrationController = new UserRegistrationController(new UserDAO_REST(new MyHTTPClient()), new EmailSenderDAO_REST(new MyHTTPClient()));
+        UserRegistrationController userRegistrationController = new UserRegistrationController(new UserDAO_REST(new MyHTTPClient()));
 
         UserRegistrationPC userRegistrationPC = new UserRegistrationPC(userRegistrationController);
 
@@ -139,25 +139,29 @@ public class NavigationManager_JavaFX implements INavigationManager {
     }
 
     @Override
-    public Pane buildReportIssueComponent(StackPane parentContainer, int projectToReport, HomePagePC homePagePC) {
+    public Pane buildReportIssueComponent(StackPane parentContainer, int projectToReport) {
         ReportIssueController reportIssueController = new ReportIssueController(new ProjectIssueDAO_REST(new MyHTTPClient()), new UserLabelDAO_REST(new MyHTTPClient()));
 
         ReportIssuePC reportIssuePC = new ReportIssuePC(reportIssueController, projectToReport);
 
-        ReportIssuePane reportIssuePane = new ReportIssuePane(parentContainer, reportIssuePC);
-
-        return reportIssuePane;
+        return new ReportIssuePane(parentContainer, reportIssuePC);
     }
 
     @Override
     public Pane buildIssueSummaryComponent(StackPane containerUnderTitleBar, IssueSummaryDTO issueToShow, IssueVisualizationPC issuePC) {
-        IssueSummaryPane issueSummaryPane = new IssueSummaryPane(containerUnderTitleBar, issueToShow, issuePC);
-
-        return issueSummaryPane;
+        return new IssueSummaryPane(containerUnderTitleBar, issueToShow, issuePC);
     }
 
     @Override
     public Pane buildImageViewComponent(StackPane containerUnderTitleBar, byte[] imageToView) {
         return new ImageViewerPane(containerUnderTitleBar, imageToView);
+    }
+
+    @Override
+    public Pane buildAllLabelsComponent(StackPane containerUnderTitleBar) {
+        return new AllLabelsPane(
+                new LabelManagementPC(new UserLabelController(new UserLabelDAO_REST(new MyHTTPClient()))),
+                containerUnderTitleBar
+        );
     }
 }

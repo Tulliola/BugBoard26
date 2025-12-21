@@ -76,9 +76,16 @@ public class HomePagePC {
     }
 
     public void showReportIssueOverlay(StackPane containerUnderTitleBar, int projectReported) {
-        Pane reportIssueOverlay = navigationManager.buildReportIssueComponent(containerUnderTitleBar, projectReported, this);
+        Pane reportIssueOverlay = navigationManager.buildReportIssueComponent(containerUnderTitleBar, projectReported);
 
         homePageView.displayOverlayedContent(reportIssueOverlay);
+    }
+
+
+    public void showAllLabelsOverlay(StackPane containerUnderTitleBar) {
+        Pane modifyLabelOverlay = navigationManager.buildAllLabelsComponent(containerUnderTitleBar);
+
+        homePageView.displayOverlayedContent(modifyLabelOverlay);
     }
 
     public List<ProjectSummaryDTO> getProjectsOfAPage(int pageIndex){

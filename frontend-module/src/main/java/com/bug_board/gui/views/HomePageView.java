@@ -94,6 +94,9 @@ public class HomePageView extends MyStage {
             case "REGISTER_COLLABORATOR":
                 clickRegisterCollaboratorButton();
                 break;
+            case "VIEW_LABELS":
+                clickViewAllLabelsButton();
+                break;
             default:
                 break;
         }
@@ -111,6 +114,11 @@ public class HomePageView extends MyStage {
     private void clickCreateLabelButton() {
         if(containerUnderTitleBar.getChildren().getLast() ==  homePagePane)
             homePagePC.showLabelCreationOverlay(containerUnderTitleBar);
+    }
+
+    private void clickViewAllLabelsButton() {
+        if(containerUnderTitleBar.getChildren().getLast() == homePagePane)
+            homePagePC.showAllLabelsOverlay(containerUnderTitleBar);
     }
 
     public void displayOverlayedContent(Node newLayer) {

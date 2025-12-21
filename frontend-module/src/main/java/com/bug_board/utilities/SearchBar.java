@@ -55,11 +55,11 @@ public class SearchBar extends HBox {
         container = new StackPane(searchField, searchButton);
         container.setAlignment(Pos.CENTER);
         container.setAlignment(searchButton, Pos.CENTER_RIGHT);
+        searchField.setId("search-field");
     }
 
     public void setTextFieldPrompt(String searchBarPrompt) {
         searchField.setPromptText(searchBarPrompt);
-        searchField.setId("search-field");
         searchField.setPadding(new Insets(10, 55, 10, 10));
     }
 

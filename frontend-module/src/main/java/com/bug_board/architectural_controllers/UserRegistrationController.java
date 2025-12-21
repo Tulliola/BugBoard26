@@ -1,6 +1,5 @@
 package com.bug_board.architectural_controllers;
 
-import com.bug_board.dao.implementations.EmailSenderDAO_REST;
 import com.bug_board.dao.implementations.UserDAO_REST;
 import com.bug_board.dto.UserCreationDTO;
 import com.bug_board.exceptions.architectural_controllers.UserRegistrationException;
@@ -11,10 +10,9 @@ import com.bug_board.exceptions.dao.HTTPSendException;
 
 public class UserRegistrationController {
     UserDAO_REST userDAO;
-    EmailSenderDAO_REST emailSenderDAO;
-    public UserRegistrationController(UserDAO_REST userDAO,  EmailSenderDAO_REST emailSenderDAO) {
+
+    public UserRegistrationController(UserDAO_REST userDAO) {
         this.userDAO = userDAO;
-        this.emailSenderDAO = emailSenderDAO;
     }
 
     public void registerUser(UserCreationDTO userCreationDTO) throws UserRegistrationException {

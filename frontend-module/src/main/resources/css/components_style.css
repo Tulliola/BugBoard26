@@ -126,9 +126,12 @@
 }
 
 /* Scroll pane */
-.scroll-pane {
-    -fx-background-color: #273B7A;
-    -fx-text-fill: white;
+.scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .content {
+    -fx-background-color: transparent;
 }
 
 /* Icons */

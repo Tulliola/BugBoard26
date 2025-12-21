@@ -23,7 +23,9 @@ public interface INavigationManager {
 
     Pane buildIssueSummaryComponent(StackPane containerUnderTitleBar, IssueSummaryDTO issueToShow, IssueVisualizationPC issuePC);
 
-    Pane buildReportIssueComponent(StackPane containerUnderTitleBar, int projectToReport, HomePagePC homePagePC);
+    Pane buildReportIssueComponent(StackPane containerUnderTitleBar, int projectToReport);
 
     Pane buildImageViewComponent(StackPane containerUnderTitleBar, byte[] imageToView);
+
+    Pane buildAllLabelsComponent(StackPane containerUnderTitleBar);
 }

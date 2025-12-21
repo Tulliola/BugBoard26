@@ -19,11 +19,11 @@ public class BugBoardLabel extends StackPane {
     private SVGPath shape;
     private String color;
     private LabelSummaryDTO label;
-
-
+    
     public BugBoardLabel(LabelSummaryDTO labelSummaryDTO) {
         this.label = labelSummaryDTO;
         this.createBugBoardLabel(labelSummaryDTO.getName(), labelSummaryDTO.getColor());
+        this.setToolTipDescription(labelSummaryDTO.getDescription());
     }
 
     public BugBoardLabel(String name, String color) {
