@@ -35,6 +35,7 @@ public class DropdownMenu extends VBox {
         popup = new Popup();
         popup.setAutoHide(true);
 
+
         itemsPane = new VBox(5);
         itemsPane.setPadding(new Insets(10));
 
@@ -45,13 +46,22 @@ public class DropdownMenu extends VBox {
         SearchBar searchBar = new SearchBar();
 
         searchBar.setTextFieldPrompt("Search Label");
-        searchBar.setSearchButtonAction(() -> filterLabel(searchBar.getBarText()));
-        searchBar.setClearButtonAction(() -> filterLabel(""));
+        searchBar.setSearchButtonAction(() -> {
+            filterLabel(searchBar.getBarText());
+            itemsScrollPane.setVvalue(0);
+        });
+        searchBar.setClearButtonAction(() -> {
+                    filterLabel("");
+                    itemsScrollPane.setVvalue(0);
+                }
+        );
         searchBar.setPadding(new Insets(10));
+
+        popup.setOnShowing((event) -> searchBar.clearButton.fire());
 
         itemsScrollPane = new ScrollPane(itemsPane);
         itemsScrollPane.setFitToWidth(true);
-        itemsScrollPane.setMaxHeight(200);
+        itemsScrollPane.setMaxHeight(270);
         itemsScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         itemsScrollPane.getStyleClass().add("custom-dropdown-scroll");
 

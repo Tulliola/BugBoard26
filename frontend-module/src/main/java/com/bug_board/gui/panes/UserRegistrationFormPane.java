@@ -125,6 +125,9 @@ public class UserRegistrationFormPane extends StackPane {
 
         userRadioButton.setToggleGroup(roleRadioButtonGroup);
         adminRadioButton.setToggleGroup(roleRadioButtonGroup);
+
+        userRadioButton.getStyleClass().add("icon-radio");
+        adminRadioButton.getStyleClass().add("icon-radio");
     }
 
     private void setRadioButtonsIcons(){
