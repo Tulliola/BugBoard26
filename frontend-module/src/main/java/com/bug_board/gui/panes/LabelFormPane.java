@@ -1,6 +1,5 @@
 package com.bug_board.gui.panes;
 
-import com.bug_board.exceptions.architectural_controllers.LabelCreationException;
 import com.bug_board.exceptions.views.TitleNotSpecifiedForLabelException;
 import com.bug_board.presentation_controllers.LabelManagementPC;
 import com.bug_board.utilities.BugBoardLabel;
@@ -19,7 +18,7 @@ import javafx.scene.text.Text;
 
 import java.util.function.UnaryOperator;
 
-public class LabelCreationFormPane extends StackPane {
+public abstract class LabelFormPane extends StackPane{
     private final LabelManagementPC labelPC;
 
     private VBox form;
@@ -33,10 +32,10 @@ public class LabelCreationFormPane extends StackPane {
     private static final int MAX_TITLE_CHARS = 35;
     private static final int MAX_DESCRIPTION_CHARS = 200;
 
-    public LabelCreationFormPane(LabelManagementPC labelPC, StackPane parentContainer) {
+    public LabelFormPane(LabelManagementPC labelPC, StackPane parentContainer) {
         this.parentContainer = parentContainer;
         this.labelPC = labelPC;
-        labelPC.setCreationPane(this);
+//        labelPC.setCreationPane(this);
 
         this.initalize();
     }
@@ -200,7 +199,7 @@ public class LabelCreationFormPane extends StackPane {
     public void close() {
         parentContainer.getChildren().remove(this);
     }
-    
+
     public String getChosenColor() {
         return this.sampleLabel.getColor();
     }

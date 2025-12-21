@@ -14,4 +14,6 @@ public class LabelSummaryDTO {
     private String color;
     private String description;
     private Integer idLabel;
+
+    private String creator;
 }

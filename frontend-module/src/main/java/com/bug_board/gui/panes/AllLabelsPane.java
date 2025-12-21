@@ -107,10 +107,15 @@ public class AllLabelsPane extends StackPane {
 
         rowInScrollPane.getChildren().addAll(
                 this.createBugBoardLabelRepresentation(labelToShow),
-                spacer,
+                spacer
+        );
+
+        if(labelToShow.getCreator() != null){
+            rowInScrollPane.getChildren().addAll(
                 this.createManagementButton("/icons/edit.png", () -> clickModifyButton()),
                 this.createManagementButton("/icons/trash.png", () -> clickDeleteButton(new BugBoardLabel(labelToShow)))
-        );
+            );
+        }
 
         return rowInScrollPane;
     }

@@ -21,6 +21,7 @@ public class LabelMapper {
         mappedLabel.setColor(labelToMap.getColor());
         mappedLabel.setDescription(labelToMap.getDescription());
         mappedLabel.setIdLabel(labelToMap.getIdLabel());
+        mappedLabel.setCreator(labelToMap.getCreatorUsername());
 
         return mappedLabel;
     }

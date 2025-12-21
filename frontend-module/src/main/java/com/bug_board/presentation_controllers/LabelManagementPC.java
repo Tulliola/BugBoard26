@@ -14,6 +14,7 @@ import com.bug_board.utilities.BugBoardLabel;
 import javafx.animation.PauseTransition;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -36,11 +37,23 @@ public class LabelManagementPC {
         this.allLabelsPane = allLabelsPane;
     }
 
-    public void onConfirmCreationButtonClicked()
-            throws LabelCreationException {
+    public void onConfirmCreationButtonClicked() {
         if(this.labelCreationFormPane == null)
             throw new RuntimeException("Label creation form pane needs to be set");
 
+        LabelCreationDTO labelToCreate = getLabelCreationDTO();
+
+        try {
+            labelController.createNewLabel(labelToCreate);
+            showConfirmationCreationMessage("Label successfully created!");
+        }
+        catch(LabelCreationException exc){
+            showCreationError();
+        }
+
+    }
+
+    private LabelCreationDTO getLabelCreationDTO() {
         String chosenColor = labelCreationFormPane.getChosenColor();
         String labelTitle = labelCreationFormPane.getTitleTextField().getText();
         String labelDescription = labelCreationFormPane.getDescriptionTextArea().getText();
@@ -52,9 +65,7 @@ public class LabelManagementPC {
         labelToCreate.setDescription(labelDescription);
         labelToCreate.setColor(chosenColor);
 
-        labelController.createNewLabel(labelToCreate);
-
-        showConfirmationCreationMessage("Label successfully created!");
+        return labelToCreate;
     }
 
     public void onDeleteButtonClicked(BugBoardLabel labelToDelete, StackPane parentContainer) {
@@ -66,7 +77,8 @@ public class LabelManagementPC {
         try {
             labelController.deleteLabel(idLabel);
             showConfirmationDeleteMessage("Label successfully deleted!");
-        } catch (LabelDeleteException e) {
+        }
+        catch (LabelDeleteException e) {
             showDeleteError();
         }
     }
@@ -84,8 +96,6 @@ public class LabelManagementPC {
 
     private void showConfirmationDeleteMessage(String text) {
         allLabelsPane.getChildren().removeLast();
-        allLabelsPane.getChildren().removeLast();
-
         allLabelsPane.getChildren().add(new TransactionPane("/gifs/successful_transaction.gif", text));
 
         PauseTransition delay = new PauseTransition(Duration.seconds(5));
@@ -109,7 +119,7 @@ public class LabelManagementPC {
 
         delay.play();
     }
-    
+
     private void showDeleteError() {
         allLabelsPane.getChildren().removeLast();
         allLabelsPane.getChildren().removeLast();
@@ -118,5 +128,30 @@ public class LabelManagementPC {
         transactionPane.setErrorGradient();
 
         allLabelsPane.getChildren().add(transactionPane);
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(5));
+
+        delay.setOnFinished(event -> {
+            allLabelsPane.close();
+        });
+
+        delay.play();
+    }
+    
+    private void showCreationError() {
+        labelCreationFormPane.getChildren().removeLast();
+        
+        TransactionPane transactionPane = new TransactionPane("/gifs/generic_error.gif", "Couldn't create the label. Please, try later.");
+        transactionPane.setErrorGradient();
+
+        labelCreationFormPane.getChildren().add(transactionPane);
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(5));
+
+        delay.setOnFinished(event -> {
+            labelCreationFormPane.close();
+        });
+
+        delay.play();
     }
 }
