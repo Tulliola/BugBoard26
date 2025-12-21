@@ -77,7 +77,7 @@ public class AllLabelsPane extends StackPane {
     private SearchBar createSearchBarBox() {
         SearchBar searchBar = new SearchBar();
         searchBar.setTextFieldPrompt("Search a label...");
-        searchBar.setButtonAction(() -> {
+        searchBar.setSearchButtonAction(() -> {
             this.filterLabelsByName(searchBar.getBarText());
         });
 
@@ -90,12 +90,12 @@ public class AllLabelsPane extends StackPane {
         labelsContainer.setStyle("-fx-background-color: white");
 
         for(LabelSummaryDTO personalLabel: labelManagementPC.getUserLabels())
-            labelsContainer.getChildren().add(this.createRowInScrollPane(this.createBugBoardLabelRepresentation(personalLabel)));
+            labelsContainer.getChildren().add(this.createRowInScrollPane(personalLabel));
 
         return labelsContainer;
     }
 
-    private HBox createRowInScrollPane(BugBoardLabel labelToShow) {
+    private HBox createRowInScrollPane(LabelSummaryDTO labelToShow) {
         HBox rowInScrollPane = new HBox();
         rowInScrollPane.setPadding(new Insets(10));
         rowInScrollPane.setSpacing(10);
@@ -104,11 +104,12 @@ public class AllLabelsPane extends StackPane {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
+
         rowInScrollPane.getChildren().addAll(
-                labelToShow,
+                this.createBugBoardLabelRepresentation(labelToShow),
                 spacer,
                 this.createManagementButton("/icons/edit.png", () -> clickModifyButton()),
-                this.createManagementButton("/icons/trash.png", () -> clickDeleteButton())
+                this.createManagementButton("/icons/trash.png", () -> clickDeleteButton(new BugBoardLabel(labelToShow)))
         );
 
         return rowInScrollPane;
@@ -118,8 +119,8 @@ public class AllLabelsPane extends StackPane {
 
     }
 
-    private void clickDeleteButton() {
-        labelManagementPC.onDeleteButtonClicked();
+    private void clickDeleteButton(BugBoardLabel labelToDelete) {
+        labelManagementPC.onDeleteButtonClicked(labelToDelete, this);
     }
 
     private Button createManagementButton(String imageURL, Runnable actionToPerform) {
@@ -154,7 +155,7 @@ public class AllLabelsPane extends StackPane {
         labelsContainer.getChildren().clear();
 
         for(LabelSummaryDTO filteredLabel: labelManagementPC.getFilteredLabels(text))
-            labelsContainer.getChildren().add(this.createRowInScrollPane(this.createBugBoardLabelRepresentation(filteredLabel)));
+            labelsContainer.getChildren().add(this.createRowInScrollPane(filteredLabel));
 
     }
 
@@ -171,7 +172,7 @@ public class AllLabelsPane extends StackPane {
         parentContainer.getChildren().remove(this);
     }
 
-    public void showConfirmationDialog() {
-
+    public void showConfirmationDialog(Pane confirmationDialog) {
+        this.getChildren().add(confirmationDialog);
     }
 }

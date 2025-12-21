@@ -19,7 +19,7 @@ public class BugBoardLabel extends StackPane {
     private SVGPath shape;
     private String color;
     private LabelSummaryDTO label;
-    
+
     public BugBoardLabel(LabelSummaryDTO labelSummaryDTO) {
         this.label = labelSummaryDTO;
         this.createBugBoardLabel(labelSummaryDTO.getName(), labelSummaryDTO.getColor());
@@ -45,6 +45,8 @@ public class BugBoardLabel extends StackPane {
 
         textInShape = new Text(text);
         textInShape.setStyle("-fx-fill: white; -fx-font-size: 13px");
+
+        color = fillColor;
 
         Circle pin = new Circle(10);
         pin.setStyle("-fx-fill: white; -fx-stroke: " + borderColor + "; -fx-stroke-width: 1px");
