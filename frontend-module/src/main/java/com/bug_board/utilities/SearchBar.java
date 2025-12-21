@@ -43,13 +43,12 @@ public class SearchBar extends HBox {
     }
 
     private void setClearButtonImage() {
-        Image searchIcon = new Image(getClass().getResourceAsStream("/icons/clear_filters.png"), 20, 20, true, true);
+        Image searchIcon = new Image(getClass().getResourceAsStream("/icons/clear_filters_20x20.png"), 20, 20, true, true);
         ImageView searchIconView = new ImageView(searchIcon);
         searchIconView.setFitHeight(20);
         searchIconView.setFitWidth(20);
         searchIconView.setSmooth(true);
         searchIconView.setPreserveRatio(true);
-        searchIconView.setSmooth(true);
         clearButton.setGraphic(searchIconView);
     }
 

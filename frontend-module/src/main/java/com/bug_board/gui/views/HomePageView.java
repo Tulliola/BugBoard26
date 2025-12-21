@@ -8,6 +8,7 @@ import com.bug_board.utilities.*;
 import com.bug_board.utilities.buttons.ButtonDefinition;
 import com.bug_board.utilities.buttons.factory.implementations.ComponentButtonFactory;
 import com.bug_board.utilities.buttons.factory.interfaces.IButtonsProvider;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -24,6 +25,7 @@ public class HomePageView extends MyStage {
     private StackPane containerUnderTitleBar = new StackPane();
     private final HomePagePane homePagePane;
     private TitleBar titleBar;
+    private ToggleGroup groupButtons;
 
     public HomePageView(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
         this.homePagePC = homePagePC;
@@ -60,7 +62,6 @@ public class HomePageView extends MyStage {
 
         this.setScene(scene);
         this.setMaximized(true);
-
     }
 
     private void setTitleBarButtons() {
@@ -68,11 +69,23 @@ public class HomePageView extends MyStage {
                 SessionManager.getInstance().getRole().getRoleName()
         );
 
-        ToggleGroup groupButtons = new ToggleGroup();
+        groupButtons = new ToggleGroup();
+
+        setReableAllToggle();
 
         groupButtons.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue == null)
-                oldValue.setSelected(true);
+            if(newValue == null) {
+                if (containerUnderTitleBar.getChildren().getLast() != homePagePane)
+                    oldValue.setSelected(true);
+            }
+
+            else{
+                groupButtons.getToggles().forEach(toggle -> {
+                    ToggleButton toggleButton = (ToggleButton) toggle;
+                    if(toggleButton != newValue)
+                        toggleButton.setDisable(true);
+                });
+            }
         });
 
         for(ButtonDefinition definition: buttonProvider.createTitleBarButtons()){
@@ -117,7 +130,7 @@ public class HomePageView extends MyStage {
     }
 
     private void clickCreateLabelButton() {
-        if(containerUnderTitleBar.getChildren().getLast() ==  homePagePane)
+        if(containerUnderTitleBar.getChildren().getLast() == homePagePane)
             homePagePC.showLabelCreationOverlay(containerUnderTitleBar);
     }
 
@@ -132,5 +145,18 @@ public class HomePageView extends MyStage {
 
     public StackPane getContainerUnderTitleBar() {
         return containerUnderTitleBar;
+    }
+
+    public void setReableAllToggle(){
+        containerUnderTitleBar.getChildren().addListener((ListChangeListener<Node>)  change -> {
+            if(containerUnderTitleBar.getChildren().getLast() == homePagePane){
+                groupButtons.getToggles().forEach(toggle -> {
+                    ToggleButton toggleButton = (ToggleButton) toggle;
+                    toggleButton.setDisable(false);
+                });
+
+                groupButtons.selectToggle(null);
+            }
+        });
     }
 }
