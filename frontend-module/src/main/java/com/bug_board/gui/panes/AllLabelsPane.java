@@ -112,7 +112,7 @@ public class AllLabelsPane extends StackPane {
 
         if(labelToShow.getCreator() != null){
             rowInScrollPane.getChildren().addAll(
-                this.createManagementButton("/icons/edit.png", () -> clickModifyButton()),
+                this.createManagementButton("/icons/edit.png", () -> clickModifyButton(new BugBoardLabel(labelToShow))),
                 this.createManagementButton("/icons/trash.png", () -> clickDeleteButton(new BugBoardLabel(labelToShow)))
             );
         }
@@ -120,8 +120,9 @@ public class AllLabelsPane extends StackPane {
         return rowInScrollPane;
     }
 
-    private void clickModifyButton() {
-
+    private void clickModifyButton(BugBoardLabel labelToModify) {
+        System.out.println(labelToModify.getLabelId());
+        labelManagementPC.onModifyButtonClicked(labelToModify, this);
     }
 
     private void clickDeleteButton(BugBoardLabel labelToDelete) {
@@ -179,5 +180,9 @@ public class AllLabelsPane extends StackPane {
 
     public void showConfirmationDialog(Pane confirmationDialog) {
         this.getChildren().add(confirmationDialog);
+    }
+
+    public void showOverlayedContent(Pane overlayContent){
+        this.getChildren().add(overlayContent);
     }
 }

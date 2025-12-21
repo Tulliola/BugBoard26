@@ -2,26 +2,27 @@ package com.bug_board.presentation_controllers;
 
 import com.bug_board.architectural_controllers.UserLabelController;
 import com.bug_board.dto.LabelCreationDTO;
+import com.bug_board.dto.LabelModifyingDTO;
 import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.exceptions.architectural_controllers.LabelCreationException;
 import com.bug_board.exceptions.architectural_controllers.LabelDeleteException;
-import com.bug_board.gui.panes.AllLabelsPane;
-import com.bug_board.gui.panes.ConfirmDeleteLabelDialog;
-import com.bug_board.gui.panes.TransactionPane;
-import com.bug_board.gui.panes.LabelCreationFormPane;
+import com.bug_board.exceptions.architectural_controllers.LabelModifyingException;
+import com.bug_board.gui.panes.*;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.BugBoardLabel;
 import javafx.animation.PauseTransition;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
-import lombok.NonNull;
 
 import java.util.List;
 
 public class LabelManagementPC {
     private final UserLabelController  labelController;
+
     private LabelCreationFormPane labelCreationFormPane;
+    private LabelModifyingFormPane labelModifyingFormPane;
     private AllLabelsPane allLabelsPane;
+
     private final List<LabelSummaryDTO> labels;
 
     public LabelManagementPC(UserLabelController labelController) {
@@ -35,6 +36,10 @@ public class LabelManagementPC {
 
     public void setVisualizationPane(AllLabelsPane allLabelsPane) {
         this.allLabelsPane = allLabelsPane;
+    }
+
+    public void setModifyingPane(LabelModifyingFormPane labelModifyingFormPane) {
+        this.labelModifyingFormPane = labelModifyingFormPane;
     }
 
     public void onConfirmCreationButtonClicked() {
@@ -73,14 +78,46 @@ public class LabelManagementPC {
         allLabelsPane.showConfirmationDialog(confirmDialog);
     }
 
+    public void onModifyButtonClicked(BugBoardLabel labelToModify, StackPane parentContainer) {
+        LabelFormPane modifyFormPane = new LabelModifyingFormPane(labelToModify, this, parentContainer);
+        allLabelsPane.showOverlayedContent(modifyFormPane);
+    }
+
     public void onConfirmDeleteButtonClicked(Integer idLabel) {
         try {
             labelController.deleteLabel(idLabel);
-            showConfirmationDeleteMessage("Label successfully deleted!");
+            showConfirmationDeleteOrModifyMessage("Label successfully deleted!");
         }
         catch (LabelDeleteException e) {
-            showDeleteError();
+            showModifyingOrDeleteError("Couldn't delete the label. Please, try later.");
         }
+    }
+
+    public void onConfirmModifyingButtonClicked() {
+        LabelModifyingDTO modifyingDTO = getLabelModifyingDTO();
+
+        try {
+            labelController.modifyLabel(modifyingDTO);
+            showConfirmationDeleteOrModifyMessage("Label successfully modified!");
+        }
+        catch (LabelModifyingException e) {
+            showModifyingOrDeleteError("Couldn't modify the label. Please, try later");
+        }
+    }
+
+    public LabelModifyingDTO getLabelModifyingDTO() {
+        Integer idLabel = this.labelModifyingFormPane.getIdLabel();
+        String labelTitle = labelModifyingFormPane.getTitleTextField().getText();
+        String labelDescription = labelModifyingFormPane.getDescriptionTextArea().getText();
+        String chosenColor = labelModifyingFormPane.getChosenColor();
+
+        LabelModifyingDTO labelModifyingDTO = new LabelModifyingDTO();
+        labelModifyingDTO.setIdLabel(idLabel);
+        labelModifyingDTO.setName(labelTitle);
+        labelModifyingDTO.setDescription(labelDescription);
+        labelModifyingDTO.setColor(chosenColor);
+
+        return labelModifyingDTO;
     }
 
     public List<LabelSummaryDTO> getUserLabels() {
@@ -94,7 +131,8 @@ public class LabelManagementPC {
                 .toList();
     }
 
-    private void showConfirmationDeleteMessage(String text) {
+    private void showConfirmationDeleteOrModifyMessage(String text) {
+        allLabelsPane.getChildren().removeLast();
         allLabelsPane.getChildren().removeLast();
         allLabelsPane.getChildren().add(new TransactionPane("/gifs/successful_transaction.gif", text));
 
@@ -120,27 +158,9 @@ public class LabelManagementPC {
         delay.play();
     }
 
-    private void showDeleteError() {
-        allLabelsPane.getChildren().removeLast();
-        allLabelsPane.getChildren().removeLast();
-
-        TransactionPane transactionPane = new TransactionPane("/gifs/generic_error.gif", "Couldn't delete the label. Please, try later.");
-        transactionPane.setErrorGradient();
-
-        allLabelsPane.getChildren().add(transactionPane);
-
-        PauseTransition delay = new PauseTransition(Duration.seconds(5));
-
-        delay.setOnFinished(event -> {
-            allLabelsPane.close();
-        });
-
-        delay.play();
-    }
-    
     private void showCreationError() {
         labelCreationFormPane.getChildren().removeLast();
-        
+
         TransactionPane transactionPane = new TransactionPane("/gifs/generic_error.gif", "Couldn't create the label. Please, try later.");
         transactionPane.setErrorGradient();
 
@@ -150,6 +170,24 @@ public class LabelManagementPC {
 
         delay.setOnFinished(event -> {
             labelCreationFormPane.close();
+        });
+
+        delay.play();
+    }
+
+    private void showModifyingOrDeleteError(String text) {
+        allLabelsPane.getChildren().removeLast();
+        allLabelsPane.getChildren().removeLast();
+
+        TransactionPane transactionPane = new TransactionPane("/gifs/generic_error.gif", text);
+        transactionPane.setErrorGradient();
+
+        allLabelsPane.getChildren().add(transactionPane);
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(5));
+
+        delay.setOnFinished(event -> {
+            allLabelsPane.close();
         });
 
         delay.play();

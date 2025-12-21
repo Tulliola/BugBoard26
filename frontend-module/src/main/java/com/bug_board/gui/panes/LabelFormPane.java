@@ -13,20 +13,19 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.function.UnaryOperator;
 
 public abstract class LabelFormPane extends StackPane{
-    private final LabelManagementPC labelPC;
+    protected final LabelManagementPC labelPC;
 
     private VBox form;
     private final StackPane parentContainer;
-    private BugBoardLabel sampleLabel;
-    private Label errorLabel = new Label();
-    private TextField titleTextField;
-    private TextArea descriptionTextArea;
+    protected BugBoardLabel sampleLabel;
+    protected Label errorLabel = new Label();
+    protected TextField titleTextField;
+    protected TextArea descriptionTextArea;
     private final String[] colorPalette = {"#FF0000", "#FF8000", "#FFFF00",
             "#80FF00", "#00FF00", "#00FF80", "#00FFFF", "#0080FF"};
     private static final int MAX_TITLE_CHARS = 35;
@@ -35,12 +34,11 @@ public abstract class LabelFormPane extends StackPane{
     public LabelFormPane(LabelManagementPC labelPC, StackPane parentContainer) {
         this.parentContainer = parentContainer;
         this.labelPC = labelPC;
-//        labelPC.setCreationPane(this);
-
-        this.initalize();
     }
 
-    private void initalize() {
+    protected abstract void setSpecificFeaturesForSpecificImplementation();
+
+    protected void initalize() {
         this.setBackground();
 
         errorLabel.setManaged(false);
@@ -59,15 +57,9 @@ public abstract class LabelFormPane extends StackPane{
 
         form.getChildren().add(painterGif);
 
-        Text createYourLabelText = new Text("Create your own label!");
-        createYourLabelText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
-
-        sampleLabel = new BugBoardLabel("This is a Label", "#FFFFFF");
-
-
         form.getChildren().addAll(
-                createYourLabelText,
-                sampleLabel,
+                this.createHeaderText(),
+                this.createSampleLabel(),
                 this.createPalette(),
                 this.createTitleTextField(),
                 this.createDescriptionTextArea(),
@@ -77,6 +69,10 @@ public abstract class LabelFormPane extends StackPane{
 
         return form;
     }
+
+    protected abstract Text createHeaderText();
+
+    protected abstract BugBoardLabel createSampleLabel();
 
     private StackPane createTitleTextField() {
         titleTextField = new TextField();
@@ -163,26 +159,15 @@ public abstract class LabelFormPane extends StackPane{
         });
 
         confirmButton.setOnMouseClicked(event -> {
-            this.clickConfirmCreationButton();
+            this.clickConfirmButton();
         });
 
         return confirmButton;
     }
 
-    private void clickConfirmCreationButton() {
-        try{
-            errorLabel.setManaged(false);
-            checkMandatoryFields();
-            labelPC.onConfirmCreationButtonClicked();
-        }
-        catch(TitleNotSpecifiedForLabelException exc){
-            errorLabel.setText(exc.getMessage());
-            errorLabel.setTextFill(Color.RED);
-            errorLabel.setManaged(true);
-        }
-    }
+    protected abstract void clickConfirmButton();
 
-    private void checkMandatoryFields() {
+    protected void checkMandatoryFields() {
         if(titleTextField.getText().isEmpty())
             throw new TitleNotSpecifiedForLabelException("You must specify at least a title for your label");
     }
@@ -210,9 +195,5 @@ public abstract class LabelFormPane extends StackPane{
 
     public TextArea getDescriptionTextArea() {
         return descriptionTextArea;
-    }
-
-    public VBox getForm() {
-        return form;
     }
 }
