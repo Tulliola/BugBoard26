@@ -13,8 +13,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.util.List;
@@ -28,9 +29,10 @@ public class HomePagePane extends VBox {
     private Label heading;
     private Label hintFiltering = new Label("But you can filter them by project name...");
     private VBox headerBox = new VBox();
-    private Label noProjectsFoundText = new Label();
     private Pagination pagination = new Pagination();
     private VBox centralPanel = new VBox();
+    private StackPane carouselWrapper = new StackPane();
+    private Label noProjectsFoundLabel;
 
     public HomePagePane(HomePagePC homePagePC, List<ProjectSummaryDTO> projectList) {
         this.homePagePC = homePagePC;
@@ -43,7 +45,7 @@ public class HomePagePane extends VBox {
         setHeading();
         setHintFiltering();
         setSearchProjectBar();
-        this.getChildren().add(headerBox);
+        this.getChildren().addAll(headerBox);
         setCarousel();
         addCarousel();
         this.getChildren().add(centralPanel);
@@ -76,15 +78,36 @@ public class HomePagePane extends VBox {
         Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
 
+        createNoProjectsFoundLabel();
+
+        if(projectsRetrieved.isEmpty()) {
+            carouselWrapper.getChildren().add(createNoProjectsFoundBox());
+        }
+        else
+            carouselWrapper.getChildren().add(pagination);
+
         centralPanel.getChildren().addAll(
+                searchProject,
                 topSpacer,
-                pagination,
-                noProjectsFoundText,
+                carouselWrapper,
                 bottomSpacer,
                 new JokesFooter(10)
         );
 
         VBox.setVgrow(centralPanel, Priority.ALWAYS);
+    }
+
+    private Node createNoProjectsFoundBox() {
+        VBox noProjectsFoundBox = new VBox();
+
+        ImageView noProjectsFoundIcon = new ImageView(new Image(getClass().getResourceAsStream("/icons/not_found.png")));
+
+        Label noProjectsFoundLabel = createNoProjectsFoundLabel();
+
+        noProjectsFoundBox.getChildren().addAll(noProjectsFoundIcon, noProjectsFoundLabel);
+        noProjectsFoundBox.setAlignment(Pos.CENTER);
+
+        return noProjectsFoundBox;
     }
 
     private Node setProjectCardsBox(int index) {
@@ -100,18 +123,17 @@ public class HomePagePane extends VBox {
             }
 
         projectCardsBox.setAlignment(Pos.CENTER);
-
         projectCardsBox.setPadding(new Insets(50));
 
         return projectCardsBox;
     }
 
-    private void handleNoProjectsFound() {
-        noProjectsFoundText.setText("No Project Has Been Found");
-        noProjectsFoundText.setStyle("-fx-text-fill: red; -fx-font-style: italic; -fx-font-size: 20px;");
-        noProjectsFoundText.setAlignment(Pos.CENTER);
-        noProjectsFoundText.setVisible(true);
-        noProjectsFoundText.setManaged(true);
+    private Label createNoProjectsFoundLabel() {
+        noProjectsFoundLabel = new Label();
+        noProjectsFoundLabel.setText("No projects found");
+        noProjectsFoundLabel.setStyle("-fx-font-style: italic; -fx-font-size: 20px;");
+        noProjectsFoundLabel.setAlignment(Pos.CENTER);
+        return noProjectsFoundLabel;
     }
 
     private void setHeading(){
@@ -124,11 +146,10 @@ public class HomePagePane extends VBox {
 
         heading.setTextAlignment(TextAlignment.CENTER);
 
-        Region spacer = new Region();
-        VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        headerBox.setAlignment(Pos.TOP_CENTER);
-        headerBox.getChildren().addAll(spacer, heading);
+        headerBox.setAlignment(Pos.CENTER);
+        headerBox.getChildren().add(heading);
+
 
         this.setAlignment(Pos.CENTER);
     }
@@ -137,8 +158,7 @@ public class HomePagePane extends VBox {
         searchProject.setAlignment(Pos.CENTER);
         searchProject.setPrefWidth(300);
         searchProject.setMaxWidth(300);
-        searchProject.setPadding(new Insets(20));
-        searchProject.setTextFieldPrompt("Search Project");
+        searchProject.setTextFieldPrompt("Search project");
 
         searchProject.setSearchButtonAction(() -> this.filterProjects(searchProject.getBarText()));
         searchProject.setClearButtonAction(() -> filterProjects(""));
@@ -146,37 +166,32 @@ public class HomePagePane extends VBox {
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(searchProject);
         searchProject.setStyle("-fx-padding: 0.5em 25px 0.5em 0.5em;");
-        headerBox.getChildren().addAll(MySpacer.createVSpacer(), searchProject);
+        headerBox.getChildren().addAll(MySpacer.createVSpacer());
     }
 
     private void filterProjects(String barText) {
-        noProjectsFoundText.setVisible(false);
-        noProjectsFoundText.setManaged(false);
-
         try {
             projectsRetrieved = homePagePC.onSearchProjectButtonClick(barText);
         }
         catch (RetrieveProjectException e) {
-            noProjectsFoundText.setText(e.getMessage());
+            noProjectsFoundLabel.setText(e.getMessage());
         }
 
         homePagePC.setProjectsRetrieved(projectsRetrieved);
 
         if(!projectsRetrieved.isEmpty()) {
-            pagination.setVisible(true);
-            pagination.setManaged(true);
+            carouselWrapper.getChildren().removeLast();
+            carouselWrapper.getChildren().add(pagination);
+
             this.setCarousel();
 
             showLatestProjects();
         }
         else {
-            pagination.setVisible(false);
-            pagination.setManaged(false);
+            carouselWrapper.getChildren().removeLast();
+            carouselWrapper.getChildren().add(createNoProjectsFoundBox());
 
-            noProjectsFoundText.setVisible(true);
-            noProjectsFoundText.setManaged(true);
-
-            handleNoProjectsFound();
+            createNoProjectsFoundLabel();
         }
     }
 

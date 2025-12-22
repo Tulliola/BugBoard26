@@ -246,6 +246,7 @@
 
 #homepage_heading{
     -fx-font-size: 70px;
+    -fx-padding: 20 0 0 0;
 }
 
 .toggle-button.carousel-button{
