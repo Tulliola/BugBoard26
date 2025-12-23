@@ -6,25 +6,32 @@ import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.exceptions.architectural_controllers.IssueCreationException;
+import com.bug_board.exceptions.architectural_controllers.RetrieveLabelsException;
 import com.bug_board.exceptions.views.IssueImageTooLargeException;
 import com.bug_board.exceptions.views.NoTipologySpecifiedException;
 import com.bug_board.exceptions.views.NoDescriptionForIssueException;
 import com.bug_board.exceptions.views.NoTitleSpecifiedForIssueException;
 import com.bug_board.gui.panes.ReportIssuePane;
 import com.bug_board.gui.panes.TransactionPane;
+import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import javafx.animation.PauseTransition;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ReportIssuePC {
+public class ReportIssuePC extends ServerDependantPresentationController {
     private ReportIssuePane reportIssuePane;
     private ReportIssueController reportIssueController;
     private int projectToReport;
     private final int ISSUE_IMAGES_MAX_LENGTH = 5 * 1024 * 1024;
+    private List userLabels = new ArrayList();
 
-    public ReportIssuePC(ReportIssueController reportIssueController, int projectToReport) {
+    public ReportIssuePC(INavigationManager navigationManager,
+                         ReportIssueController reportIssueController,
+                         int projectToReport) {
+        super(navigationManager);
         this.reportIssueController = reportIssueController;
         this.projectToReport = projectToReport;
     }
@@ -33,11 +40,15 @@ public class ReportIssuePC {
         this.reportIssuePane = reportIssuePane;
     }
 
-    public List<LabelSummaryDTO> getUsersLabels() {
-        return reportIssueController.getUsersLabels();
+    public void setUserLabels() throws RetrieveLabelsException {
+        this.userLabels = reportIssueController.getUsersLabels();
     }
 
-    public void onConfirmButtonClicked() throws IssueCreationException {
+    public List<LabelSummaryDTO> getUsersLabels() {
+        return userLabels;
+    }
+
+    public void onConfirmButtonClicked() {
         IssueTipology chosenTiplogy = this.getSelectedIssueType();
         String issueTitle = this.getIssueTitle();
         String issueDescription = this.getIssueDescription();

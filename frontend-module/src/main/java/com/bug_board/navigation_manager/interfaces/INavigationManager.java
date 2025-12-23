@@ -9,9 +9,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 public interface INavigationManager {
-    void navigateToHomePage() throws RetrieveProjectException;
+    void navigateToHomePage();
 
-    void navigateToViewPersonalIssues() throws RetrieveIssuesException;
+    void navigateToViewPersonalIssues();
 
     void navigateToViewProjectIssues(Integer idProject, String projectName);
 
@@ -28,4 +28,6 @@ public interface INavigationManager {
     Pane buildImageViewComponent(StackPane containerUnderTitleBar, byte[] imageToView);
 
     Pane buildAllLabelsComponent(StackPane containerUnderTitleBar);
+
+    void navigateToLoginPage();
 }

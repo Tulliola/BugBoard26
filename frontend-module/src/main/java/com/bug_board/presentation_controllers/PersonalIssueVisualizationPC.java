@@ -7,6 +7,8 @@ import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.exceptions.architectural_controllers.RetrieveIssueImagesException;
 import com.bug_board.exceptions.architectural_controllers.RetrieveIssuesException;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersonalIssueVisualizationPC extends IssueVisualizationPC{
@@ -30,7 +32,8 @@ public class PersonalIssueVisualizationPC extends IssueVisualizationPC{
                 issueList = userIssueController.getPersonalIssues(filters);
         }
         catch(RetrieveIssuesException exc) {
-            this.showIssuesRetrievalError("Server's not responding. You can visualize the issue page, but it will be empty.");
+            navigationManager.closeWindow(this.issueView);
+            this.showErrorAlert("There has been an error in retrieving the issues. Please, try later.", exc.getTechnicalMessage());
         }
     }
 
@@ -40,8 +43,9 @@ public class PersonalIssueVisualizationPC extends IssueVisualizationPC{
             return userIssueController.getAllIssueImages(idIssue);
         }
         catch (RetrieveIssueImagesException e) {
-            this.showIssuesRetrievalError("Couldn't retrieve the images. Please, try later.");
-            return null;
+            navigationManager.closeWindow(this.issueView);
+            this.showErrorAlert("There has been an error in retrieving the images. Please, try later.", e.getTechnicalMessage());
+            return new ArrayList<>();
         }
     }
 }

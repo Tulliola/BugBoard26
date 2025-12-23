@@ -63,6 +63,12 @@ public class IssueRepositoryJpaAdapter implements IIssueRepository {
                     root.get("priority").in(filters.getIssuePriorities())
             );
 
+        specification = specification.and((root, query, criteriaBuilder) -> {
+            query.orderBy(criteriaBuilder.desc(root.get("idIssue")));
+
+            return criteriaBuilder.conjunction();
+        });
+
         return specification;
     }
 }

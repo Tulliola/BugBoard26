@@ -189,13 +189,14 @@ public class ReportIssuePane extends StackPane {
 
     private void removeFile(int index, Button imageButton) {
         imageButton.setVisible(true);
-        binaryFiles.remove(index);
+        binaryFiles.set(index, null);
     }
 
     private void addFile(int index, File choosenFile, ImageView imageChosen, Button imageButton) {
         try {
             binaryFiles.set(index, Files.readAllBytes(choosenFile.toPath()));
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             throw new RuntimeException(ex);
         }
 

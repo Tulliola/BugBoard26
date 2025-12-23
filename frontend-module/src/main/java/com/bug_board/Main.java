@@ -3,9 +3,9 @@ package com.bug_board;
 import com.bug_board.architectural_controllers.AuthenticationController;
 import com.bug_board.dao.httphandler.MyHTTPClient;
 import com.bug_board.dao.implementations.AuthenticationDAO_REST;
+import com.bug_board.gui.views.LoginView;
 import com.bug_board.navigation_manager.implementations.NavigationManager_JavaFX;
 import com.bug_board.presentation_controllers.LoginPC;
-import com.bug_board.gui.views.LoginView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

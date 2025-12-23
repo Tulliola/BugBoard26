@@ -27,8 +27,8 @@ public class AllLabelsPane extends StackPane {
                          StackPane parentContainer) {
         this.labelManagementPC = labelManagementPC;
         labelManagementPC.setVisualizationPane(this);
-        this.parentContainer = parentContainer;
 
+        this.parentContainer = parentContainer;
         initialize();
     }
 
@@ -124,7 +124,6 @@ public class AllLabelsPane extends StackPane {
     }
 
     private void clickModifyButton(BugBoardLabel labelToModify) {
-        System.out.println(labelToModify.getLabelId());
         labelManagementPC.onModifyButtonClicked(labelToModify, this);
     }
 

@@ -22,15 +22,15 @@ public class ReportIssueController {
         this.userLabelDAO = userLabelDAO;
     }
 
-    public List<LabelSummaryDTO> getUsersLabels() {
+    public List<LabelSummaryDTO> getUsersLabels() throws RetrieveLabelsException{
         try {
             return userLabelDAO.getLabels();
         } catch (HTTPSendException | BadConversionToDTOException | ErrorHTTPResponseException e) {
-            throw new RetrieveLabelsException(e.getMessage());
+            throw new RetrieveLabelsException("Server is currently not responding. Please, try later.", e.getMessage());
         }
     }
 
-    public void createNewIssue(IssueCreationDTO issueToCreate) {
+    public void createNewIssue(IssueCreationDTO issueToCreate) throws IssueCreationException{
         try {
             userProjectDAO.createNewIssue(issueToCreate.getIdProject(), issueToCreate);
         } catch (ErrorHTTPResponseException | HTTPSendException | BadConversionToDTOException | BadConversionToJSONException e) {

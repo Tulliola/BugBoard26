@@ -2,19 +2,17 @@ package com.bug_board.presentation_controllers;
 
 import com.bug_board.architectural_controllers.UserProjectController;
 import com.bug_board.dto.ProjectSummaryDTO;
-import com.bug_board.exceptions.architectural_controllers.RetrieveIssuesException;
 import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
-import com.bug_board.gui.panes.TransactionPane;
 import com.bug_board.gui.views.HomePageView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import com.bug_board.session_manager.SessionManager;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class HomePagePC {
+public class HomePagePC extends ServerDependantPresentationController {
     private final UserProjectController userProjectController;
     private final INavigationManager navigationManager;
     private HomePageView homePageView;
@@ -25,16 +23,24 @@ public class HomePagePC {
     public HomePagePC(
                       UserProjectController userProjectController,
                       INavigationManager navigationManager) {
+        super(navigationManager);
         this.userProjectController = userProjectController;
         this.navigationManager = navigationManager;
     }
 
-    public List<ProjectSummaryDTO> onSearchProjectButtonClick(String projectNameToFilter)
-            throws RetrieveProjectException {
-        if(SessionManager.getInstance().getRole().getRoleName().equals("ROLE_USER"))
-            return userProjectController.getWorkingOnProjectsByUser(projectNameToFilter);
-        else
-            return userProjectController.getOverviewedProjectsByUser(projectNameToFilter);
+    public List<ProjectSummaryDTO> onSearchProjectButtonClick(String projectNameToFilter) {
+        try {
+            if (SessionManager.getInstance().getRole().getRoleName().equals("ROLE_USER"))
+                return userProjectController.getWorkingOnProjectsByUser(projectNameToFilter);
+            else
+                return userProjectController.getOverviewedProjectsByUser(projectNameToFilter);
+        }
+        catch(RetrieveProjectException exc) {
+            navigationManager.closeWindow(homePageView);
+            showErrorAlert("There has been an error filtering your projects. Please, try later.", exc.getTechnicalMessage());
+        }
+
+        return new ArrayList<>();
     }
 
     public void showLabelCreationOverlay(StackPane container) {
@@ -51,23 +57,8 @@ public class HomePagePC {
 
     public void onViewPersonalIssuesButtonClicked() {
         navigationManager.closeWindow(this.homePageView);
-        try {
-            navigationManager.navigateToViewPersonalIssues();
-        }
-        catch (RetrieveIssuesException e) {
-            TransactionPane errorPane = new TransactionPane("/gifs/generic_error.gif", e.getMessage());
-            errorPane.setErrorGradient();
 
-            homePageView.displayOverlayedContent(errorPane);
-        }
-    }
-
-    public void showProjectsRetrievalError() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Server error");
-        alert.setHeaderText("Couldn't retrieve the projects.");
-        alert.setContentText("Server's not responding. You can visualize the home page, but it will be empty.");
-        alert.showAndWait();
+        navigationManager.navigateToViewPersonalIssues();
     }
 
 

@@ -27,7 +27,7 @@ public class UserIssueController {
         }
         catch (HTTPSendException | BadConversionToDTOException | ErrorHTTPResponseException |
                BadConversionToJSONException throwables) {
-            throw new RetrieveIssuesException("There has been an error in retrieving your personal issues. Try later");
+            throw new RetrieveIssuesException("There has been an error in retrieving your personal issues. Please, try later.", throwables.getMessage());
         }
     }
 
@@ -38,7 +38,7 @@ public class UserIssueController {
         }
         catch (HTTPSendException | ErrorHTTPResponseException |
                BadConversionToDTOException throwables) {
-            throw new RetrieveIssueImagesException("There has been an error in retrieving the images of the issue. Try later");
+            throw new RetrieveIssueImagesException("There has been an error in retrieving the images of the issue. Please, try later.", throwables.getMessage());
         }
     }
 }

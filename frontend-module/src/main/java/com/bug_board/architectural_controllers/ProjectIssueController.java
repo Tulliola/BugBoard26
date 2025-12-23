@@ -25,7 +25,7 @@ public class ProjectIssueController {
         }
         catch (HTTPSendException | ErrorHTTPResponseException |
                BadConversionToJSONException | BadConversionToDTOException throwables) {
-            throw new RetrieveIssuesException("There has been an error in retrieving the issues. Try later");
+            throw new RetrieveIssuesException("There has been an error in retrieving the issues. Please, try later.", throwables.getMessage());
         }
     }
 
@@ -36,7 +36,7 @@ public class ProjectIssueController {
         }
         catch (HTTPSendException | ErrorHTTPResponseException |
                BadConversionToDTOException throwables) {
-            throw new RetrieveIssueImagesException("There has been an error in retrieving the images of the issue. Try later");
+            throw new RetrieveIssueImagesException("There has been an error in retrieving the images of the issue. Please, try later.", throwables.getMessage());
         }
     }
 }

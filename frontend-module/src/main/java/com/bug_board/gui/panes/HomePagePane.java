@@ -102,7 +102,7 @@ public class HomePagePane extends VBox {
 
         ImageView noProjectsFoundIcon = new ImageView(new Image(getClass().getResourceAsStream("/icons/not_found.png")));
 
-        Label noProjectsFoundLabel = createNoProjectsFoundLabel();
+        noProjectsFoundLabel = createNoProjectsFoundLabel();
 
         noProjectsFoundBox.getChildren().addAll(noProjectsFoundIcon, noProjectsFoundLabel);
         noProjectsFoundBox.setAlignment(Pos.CENTER);
@@ -170,12 +170,7 @@ public class HomePagePane extends VBox {
     }
 
     private void filterProjects(String barText) {
-        try {
-            projectsRetrieved = homePagePC.onSearchProjectButtonClick(barText);
-        }
-        catch (RetrieveProjectException e) {
-            noProjectsFoundLabel.setText(e.getMessage());
-        }
+        projectsRetrieved = homePagePC.onSearchProjectButtonClick(barText);
 
         homePagePC.setProjectsRetrieved(projectsRetrieved);
 
@@ -190,9 +185,8 @@ public class HomePagePane extends VBox {
         else {
             carouselWrapper.getChildren().removeLast();
             carouselWrapper.getChildren().add(createNoProjectsFoundBox());
-
-            createNoProjectsFoundLabel();
         }
+
     }
 
     private void showLatestProjects() {

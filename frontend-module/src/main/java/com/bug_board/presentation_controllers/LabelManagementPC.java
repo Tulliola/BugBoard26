@@ -7,26 +7,35 @@ import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.exceptions.architectural_controllers.LabelCreationException;
 import com.bug_board.exceptions.architectural_controllers.LabelDeleteException;
 import com.bug_board.exceptions.architectural_controllers.LabelModifyingException;
+import com.bug_board.exceptions.architectural_controllers.RetrieveLabelsException;
 import com.bug_board.gui.panes.*;
+import com.bug_board.navigation_manager.interfaces.INavigationManager;
 import com.bug_board.session_manager.SessionManager;
 import com.bug_board.utilities.BugBoardLabel;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.util.List;
 
-public class LabelManagementPC {
+public class LabelManagementPC extends ServerDependantPresentationController{
     private final UserLabelController  labelController;
 
     private LabelCreationFormPane labelCreationFormPane;
     private LabelModifyingFormPane labelModifyingFormPane;
     private AllLabelsPane allLabelsPane;
 
-    private final List<LabelSummaryDTO> labels;
+    private List<LabelSummaryDTO> labels;
 
-    public LabelManagementPC(UserLabelController labelController) {
+    public LabelManagementPC(INavigationManager navigationManager,
+                             UserLabelController labelController) {
+        super(navigationManager);
         this.labelController = labelController;
+    }
+
+    public void setLabels() throws RetrieveLabelsException {
         this.labels = labelController.getUsersLabels();
     }
 

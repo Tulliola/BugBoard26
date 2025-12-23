@@ -5,10 +5,8 @@ import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueState;
 import com.bug_board.enum_classes.IssueTipology;
-import com.bug_board.exceptions.architectural_controllers.RetrieveProjectException;
 import com.bug_board.gui.views.IssueVisualizationView;
 import com.bug_board.navigation_manager.interfaces.INavigationManager;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -17,9 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class IssueVisualizationPC {
+public abstract class IssueVisualizationPC extends ServerDependantPresentationController {
 
-    protected final INavigationManager navigationManager;
     protected IssueVisualizationView issueView;
 
     protected List<IssueSummaryDTO> issueList;
@@ -30,7 +27,7 @@ public abstract class IssueVisualizationPC {
     protected List<String> stateFilters = new ArrayList<>();
 
     public IssueVisualizationPC(INavigationManager navigationManager){
-        this.navigationManager = navigationManager;
+        super(navigationManager);
     }
 
     public void setView(IssueVisualizationView issueView) {
@@ -39,19 +36,7 @@ public abstract class IssueVisualizationPC {
 
     public void onGoBackButtonClicked() {
         navigationManager.closeWindow(this.issueView);
-        try {
-            navigationManager.navigateToHomePage();
-        }
-        catch (RetrieveProjectException e) {
-            showIssuesRetrievalError("Server's not responding. You can visualize the issue page, but it will be empty.");
-        }
-    }
-
-    public void showIssuesRetrievalError(String text) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Server error");
-        alert.setContentText(text);
-        alert.showAndWait();
+        navigationManager.navigateToHomePage();
     }
 
     public List<IssueSummaryDTO> getIssuesOfAPage(int currentPage) {

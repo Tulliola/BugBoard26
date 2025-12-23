@@ -52,11 +52,12 @@ public class UserLabelController {
         }
     }
 
-    public List<LabelSummaryDTO> getUsersLabels() {
+    public List<LabelSummaryDTO> getUsersLabels()
+            throws RetrieveLabelsException {
         try {
             return userLabelDAO.getLabels();
         } catch (HTTPSendException | BadConversionToDTOException | ErrorHTTPResponseException e) {
-            throw new RetrieveLabelsException(e.getMessage());
+            throw new RetrieveLabelsException("Couldn't retrieve your personal labels. Please, try later.", e.getMessage());
         }
     }
 }

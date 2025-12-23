@@ -38,6 +38,8 @@ public class UserRegistrationPC {
         catch (UserRegistrationException e) {
             if(e.getMessage().contains("exists"))
                 this.addUserAlreadyExists();
+            else
+                this.addErrorPane();
         }
         finally {
             this.showConfirmationPane();
@@ -53,6 +55,14 @@ public class UserRegistrationPC {
         userRegistrationFormPane.getChildren().add(transactionPane);
     }
 
+    private void addErrorPane() {
+        userRegistrationFormPane.getChildren().removeLast();
+
+        TransactionPane transactionPane = new TransactionPane("/gifs/generic_error.gif", "Couldn't register the user. Please, try later.");
+        transactionPane.setErrorGradient();
+
+        userRegistrationFormPane.getChildren().add(transactionPane);
+    }
 
     private void addConfirmationPane() {
         userRegistrationFormPane.getChildren().removeLast();

@@ -22,7 +22,7 @@ public class UserProjectController {
             return userProjectDAO.getOverviewedProjectsByUser(projectNameToFilter);
         }
         catch (HTTPSendException | BadConversionToDTOException | ErrorHTTPResponseException throwables) {
-            throw new RetrieveProjectException("Couldn't retrieve projects from database");
+            throw new RetrieveProjectException("There has been an error in retrieving the projects. Please, try later.", throwables.getMessage());
         }
     }
 
@@ -32,7 +32,7 @@ public class UserProjectController {
             return userProjectDAO.getWorkingOnProjectsByUser(projectNameToFilter);
         }
         catch (HTTPSendException | BadConversionToDTOException | ErrorHTTPResponseException throwables) {
-            throw new RetrieveProjectException("Couldn't retrieve projects from database");
+            throw new RetrieveProjectException("There has been an error in retrieving the issues. Please, try later.", throwables.getMessage());
         }
     }
 }

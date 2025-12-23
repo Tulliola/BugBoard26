@@ -25,7 +25,7 @@ public class MyHTTPClient {
             response = http.send(request, HttpResponse.BodyHandlers.ofString());
         }
         catch (IOException | InterruptedException throwables) {
-            throw new HTTPSendException("There has been an issue in the sending phase: " + throwables.getMessage());
+            throw new HTTPSendException("There has been an issue in the sending phase: " + throwables.toString());
         }
 
         if (response.statusCode() >= 200 && response.statusCode() < 300)
