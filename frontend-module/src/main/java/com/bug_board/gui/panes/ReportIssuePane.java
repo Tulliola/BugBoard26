@@ -5,7 +5,7 @@ import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.exceptions.views.*;
 import com.bug_board.presentation_controllers.ReportIssuePC;
 import com.bug_board.utilities.BugBoardLabel;
-import com.bug_board.utilities.DropdownMenu;
+import com.bug_board.utilities.LabelDropdownMenu;
 import com.bug_board.utilities.animations.FloatingLabel;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -63,7 +63,7 @@ public class ReportIssuePane extends StackPane {
     private final VBox priorityAndLabelsBox = new VBox();
     @Getter
     private final ComboBox<String> priorityComboBox = new ComboBox<>();
-    private DropdownMenu dropdownMenu;
+    private LabelDropdownMenu labelDropdownMenu;
 
     private final ArrayList<byte[]> binaryFiles = new ArrayList<>(NUM_OF_IMAGES);
 
@@ -255,7 +255,7 @@ public class ReportIssuePane extends StackPane {
         setLabelDropdownMenu();
 
         VBox labelsBox = new VBox();
-        labelsBox.getChildren().addAll(new Text("Labels"), dropdownMenu);
+        labelsBox.getChildren().addAll(new Text("Labels"), labelDropdownMenu);
         priorityAndLabelsBox.getChildren().addAll(labelsBox);
         return priorityAndLabelsBox;
     }
@@ -270,8 +270,8 @@ public class ReportIssuePane extends StackPane {
             usersBugBoardLabels.add(bugBoardLabelFromLabel);
         }
 
-        dropdownMenu = new DropdownMenu(usersBugBoardLabels);
-        dropdownMenu.setPadding(new Insets(15, 0, 0, 0));
+        labelDropdownMenu = new LabelDropdownMenu(usersBugBoardLabels);
+        labelDropdownMenu.setPadding(new Insets(15, 0, 0, 0));
     }
 
     private void setPriorityComboBox() {
@@ -402,7 +402,7 @@ public class ReportIssuePane extends StackPane {
     }
 
     public List<Integer> getChoosenLabels() {
-        return dropdownMenu.getSelectedLabels();
+        return labelDropdownMenu.getSelectedLabels();
     }
 
     public List<byte[]> getIssueImages(){

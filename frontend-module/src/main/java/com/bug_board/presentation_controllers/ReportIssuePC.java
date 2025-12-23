@@ -55,16 +55,14 @@ public class ReportIssuePC {
 
         try {
             reportIssueController.createNewIssue(issueToCreate);
+            this.addConfirmationPane();
         }
         catch (IssueCreationException exc){
             this.addErrorCreatingIssuePane();
-            this.showConfirmationPane();
-
-            throw new IssueCreationException(exc.getMessage());
         }
-
-        this.addConfirmationPane();
-        this.showConfirmationPane();
+        finally {
+            this.setAnimation();
+        }
     }
 
     private IssuePriority getIssuePriority() {
@@ -126,7 +124,7 @@ public class ReportIssuePC {
         reportIssuePane.getChildren().add(new TransactionPane("/gifs/successful_transaction.gif", "Issue reported successfully!"));
     }
 
-    private void showConfirmationPane(){
+    private void setAnimation(){
         PauseTransition delay = new PauseTransition(Duration.seconds(5));
 
         delay.setOnFinished(event -> {

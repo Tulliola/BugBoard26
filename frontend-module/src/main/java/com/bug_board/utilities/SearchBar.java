@@ -88,7 +88,9 @@ public class SearchBar extends HBox {
     public void setClearButtonAction(Runnable action){
         clearButton.setOnAction(e -> {
             action.run();
+            searchField.setText("");
         });
+
     }
 
     public String getBarText(){

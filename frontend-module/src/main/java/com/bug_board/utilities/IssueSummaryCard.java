@@ -4,6 +4,7 @@ import com.bug_board.dto.IssueSummaryDTO;
 import com.bug_board.dto.LabelSummaryDTO;
 import com.bug_board.enum_classes.IssueTipology;
 import com.bug_board.utilities.animations.OnMouseEnteredHoverEffect;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -161,18 +162,27 @@ public class IssueSummaryCard extends HBox {
         FlowPane labelsPane = new FlowPane();
 
         labelsPane.setPadding(new Insets(10, 10, 10, 10));
-        labelsPane.setAlignment(Pos.CENTER_LEFT);
-        labelsPane.setVgap(10);
+        labelsPane.setAlignment(Pos.CENTER);
         labelsPane.setHgap(10);
         labelsPane.setPrefWrapLength(800);
 
+        if(issueToShow.getLabels().isEmpty()) {
+            BugBoardLabel noLabelsLabel = new BugBoardLabel("No labels associated", "#A3A3A3");
+            noLabelsLabel.setScaleX(0.75);
+            noLabelsLabel.setScaleY(0.75);
+
+            Group labelGroups = new Group(noLabelsLabel);
+
+            labelsPane.getChildren().add(labelGroups);
+        }
+
         for(LabelSummaryDTO label: this.issueToShow.getLabels()) {
             BugBoardLabel bugBoardLabel = new BugBoardLabel(label);
-            bugBoardLabel.setToolTipDescription(label.getDescription());
             bugBoardLabel.setScaleX(0.75);
             bugBoardLabel.setScaleY(0.75);
 
             Group labelContainer = new Group(bugBoardLabel);
+
 
             labelsPane.getChildren().add(labelContainer);
         }

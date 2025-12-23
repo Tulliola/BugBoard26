@@ -16,7 +16,6 @@ public class TitleBar extends StackPane {
     private int barHeight;
     private Button minimizeButton = new Button();
     private Button closeButton = new Button();
-    private Button redimensionButton = new Button();
     private double xOffset;
     private double yOffset;
     private HBox textWrapper = new HBox();
@@ -57,10 +56,8 @@ public class TitleBar extends StackPane {
     private void setButtons() {
         Image minimizeIcon = new Image(getClass().getResource("/images/hideImage.png").toExternalForm());
         Image closeIcon = new Image(getClass().getResource("/images/closeImage.png").toExternalForm());
-        Image redimensionIcon = new Image(getClass().getResource("/images/redimensionImage.png").toExternalForm());
 
         setButton(minimizeButton, minimizeIcon);
-        setButton(redimensionButton, redimensionIcon);
         setButton(closeButton, closeIcon);
     }
 
@@ -82,7 +79,7 @@ public class TitleBar extends StackPane {
         firstLayerTitleBar.setPrefSize(parentStage.getWidth(), barHeight);
         firstLayerTitleBar.setId("title-bar");
         setBrandNameForFirstLayerTitleBar();
-        firstLayerTitleBar.getChildren().addAll(spacer, minimizeButton, redimensionButton, closeButton);
+        firstLayerTitleBar.getChildren().addAll(spacer, minimizeButton, closeButton);
 
         setActionPropertiesForFirstLayerTitleBarButtons(this.barHeight);
         setActionPropertiesForFirstLayerTitleBar();
@@ -98,16 +95,6 @@ public class TitleBar extends StackPane {
             SessionManager.getInstance().clearSession();
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
-        });
-
-        redimensionButton.setOnAction(e -> {
-            Stage stage = (Stage) redimensionButton.getScene().getWindow();
-
-            if(stage.isResizable())
-                if(stage.isMaximized())
-                    stage.setMaximized(false);
-                else
-                    stage.setMaximized(true);
         });
     }
 

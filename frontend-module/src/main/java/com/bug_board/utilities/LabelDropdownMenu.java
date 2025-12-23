@@ -5,27 +5,28 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Popup;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DropdownMenu extends VBox {
+public class LabelDropdownMenu extends VBox {
     private List<BugBoardLabel> options;
     private Popup popup;
     private ScrollPane itemsScrollPane;
     private VBox itemsPane;
+    private StackPane itemsWrapper = new StackPane();
     private List<CheckBox> checkBoxes = new ArrayList<>();
     private List<Integer> labelsSelectedId = new ArrayList<>();
     private List<HBox> rows = new ArrayList<>();
     private static final int MAX_NUM_OF_LABELS = 3;
+    private Button triggerButton;
 
-    public DropdownMenu(List<BugBoardLabel> options) {
+    public LabelDropdownMenu(List<BugBoardLabel> options) {
         this.options = options;
         setTriggerButtonProperties();
         setContent(options);
@@ -51,10 +52,9 @@ public class DropdownMenu extends VBox {
             itemsScrollPane.setVvalue(0);
         });
         searchBar.setClearButtonAction(() -> {
-                    filterLabel("");
-                    itemsScrollPane.setVvalue(0);
-                }
-        );
+            filterLabel("");
+            itemsScrollPane.setVvalue(0);
+        });
         searchBar.setPadding(new Insets(10));
 
         popup.setOnShowing((event) -> searchBar.clearButton.fire());
@@ -65,8 +65,10 @@ public class DropdownMenu extends VBox {
         itemsScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         itemsScrollPane.getStyleClass().add("custom-dropdown-scroll");
 
+        itemsWrapper.getChildren().add(itemsScrollPane);
+
         VBox searchBarAndLabelsWrapper = new VBox();
-        searchBarAndLabelsWrapper.getChildren().addAll(searchBar, itemsScrollPane);
+        searchBarAndLabelsWrapper.getChildren().addAll(searchBar, itemsWrapper);
         searchBarAndLabelsWrapper.setAlignment(Pos.TOP_CENTER);
         searchBarAndLabelsWrapper.setStyle("-fx-background-color: white; -fx-border-color: -color-primary; -fx-border-width: 2px; -fx-min-width: 350px");
 
@@ -100,7 +102,7 @@ public class DropdownMenu extends VBox {
     }
 
     private void setTriggerButtonProperties() {
-        Button triggerButton = new Button("Select up to 3 labels");
+        triggerButton = new Button("Select up to 3 labels");
         triggerButton.setId("popup-button");
         triggerButton.setMaxWidth(Double.MAX_VALUE);
         triggerButton.setAlignment(Pos.CENTER_LEFT);
@@ -132,6 +134,9 @@ public class DropdownMenu extends VBox {
     }
 
     private void filterLabel(String barText) {
+        itemsWrapper.getChildren().clear();
+        itemsWrapper.getChildren().add(itemsScrollPane);
+
         for(int i = 0; i < options.size(); i++) {
             if(
                 options.get(i).getName().toLowerCase().contains(barText.toLowerCase()) ||
@@ -147,6 +152,36 @@ public class DropdownMenu extends VBox {
             }
         }
         reorderRows();
+        checkShowedLabels();
+    }
+
+    private void checkShowedLabels() {
+        boolean isAtLeastOneLabelShowing = false;
+
+        for(HBox row : rows) {
+            if(row.isVisible()) {
+                isAtLeastOneLabelShowing = true;
+                break;
+            }
+        }
+
+        if(!isAtLeastOneLabelShowing) {
+            VBox noLabelsFound = new VBox();
+
+            Bounds bounds = triggerButton.localToScreen(triggerButton.getBoundsInLocal());
+            noLabelsFound.setMinWidth(bounds.getWidth());
+
+            Label noLabelsFoundLabel = new Label("No labels found");
+            noLabelsFoundLabel.setStyle("-fx-font-style: italic; -fx-font-size: 20px;");
+
+            ImageView noLabelsFoundImageView = new ImageView(new Image(getClass().getResourceAsStream("/icons/not_found.png"), 100, 100, true, true));
+
+            noLabelsFound.getChildren().addAll(noLabelsFoundImageView, noLabelsFoundLabel);
+            noLabelsFound.setAlignment(Pos.CENTER);
+
+            itemsWrapper.getChildren().removeLast();
+            itemsWrapper.getChildren().add(noLabelsFound);
+        }
     }
 
     private void reorderRows() {

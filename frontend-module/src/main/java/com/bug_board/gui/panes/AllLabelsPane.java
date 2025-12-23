@@ -80,6 +80,9 @@ public class AllLabelsPane extends StackPane {
         searchBar.setSearchButtonAction(() -> {
             this.filterLabelsByName(searchBar.getBarText());
         });
+        searchBar.setClearButtonAction(() -> {
+            this.filterLabelsByName("");
+        });
 
         return searchBar;
     }
@@ -87,7 +90,7 @@ public class AllLabelsPane extends StackPane {
     private VBox createLabelsContainer() {
         labelsContainer = new VBox();
         labelsContainer.setFillWidth(true);
-        labelsContainer.setStyle("-fx-background-color: white");
+        labelsContainer.setStyle("-fx-background-color: white; -fx-alignment: center;");
 
         for(LabelSummaryDTO personalLabel: labelManagementPC.getUserLabels())
             labelsContainer.getChildren().add(this.createRowInScrollPane(personalLabel));
@@ -153,6 +156,7 @@ public class AllLabelsPane extends StackPane {
         labelsScrollPane.setPrefSize(300, 500);
         labelsScrollPane.setFitToWidth(true);
         labelsScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        labelsScrollPane.setStyle("-fx-background-color: white");
 
         return labelsScrollPane;
     }
@@ -163,6 +167,17 @@ public class AllLabelsPane extends StackPane {
         for(LabelSummaryDTO filteredLabel: labelManagementPC.getFilteredLabels(text))
             labelsContainer.getChildren().add(this.createRowInScrollPane(filteredLabel));
 
+        if(labelsContainer.getChildren().isEmpty())
+            showNoLabelFoundPane();
+    }
+
+    private void showNoLabelFoundPane() {
+        Label noLabelsFoundLabel = new Label("No labels found");
+        noLabelsFoundLabel.setStyle("-fx-font-style: italic; -fx-font-size: 20px;");
+
+        ImageView noLabelsFoundImage = new ImageView(new Image(getClass().getResourceAsStream("/icons/not_found.png")));
+
+        labelsContainer.getChildren().addAll(noLabelsFoundImage,noLabelsFoundLabel);
     }
 
     private void setBackground() {

@@ -33,17 +33,15 @@ public class UserRegistrationPC {
 
         try {
             this.userRegistrationController.registerUser(userToCreate);
+            this.addConfirmationPane();
         }
         catch (UserRegistrationException e) {
-            if(e.getMessage().contains("exists")){
+            if(e.getMessage().contains("exists"))
                 this.addUserAlreadyExists();
-                this.showConfirmationPane();
-            }
-
-            throw new UserRegistrationException(e.getMessage());
         }
-        this.addConfirmationPane();
-        this.showConfirmationPane();
+        finally {
+            this.showConfirmationPane();
+        }
     }
 
     private void addUserAlreadyExists() {

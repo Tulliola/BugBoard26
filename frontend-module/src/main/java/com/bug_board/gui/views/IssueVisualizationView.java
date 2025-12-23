@@ -10,6 +10,7 @@ import com.bug_board.utilities.MyStage;
 import com.bug_board.utilities.TitleBar;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -36,7 +37,7 @@ public class IssueVisualizationView extends MyStage {
     private List<RadioButton> tipologyFilterRadioButtons = new ArrayList<>();
     private List<RadioButton> priorityFilterRadioButtons = new ArrayList<>();
     private List<RadioButton> stateFilterRadioButtons = new ArrayList<>();
-    private Label noIssuesFound;
+    private VBox noIssuesFound;
 
     public IssueVisualizationView(IssueVisualizationPC issuePC, String headingText) {
         this.issuePC = issuePC;
@@ -130,15 +131,12 @@ public class IssueVisualizationView extends MyStage {
         heading.setPadding(new Insets(10, 10, 10, 10));
         heading.setWrapText(true);
 
-        Region spacer = new Region();
-        VBox.setVgrow(spacer, Priority.ALWAYS);
         Region spacer2 = new Region();
         VBox.setVgrow(spacer2, Priority.ALWAYS);
 
         centralPane.getChildren().addAll(
                 heading,
                 createNoIssuesFoundLabel(),
-                spacer,
                 this.createPaginationNumbersContainer(),
                 spacer2
         );
@@ -154,6 +152,7 @@ public class IssueVisualizationView extends MyStage {
         if(numberOfPages == 0){
             pagination.setManaged(false);
             noIssuesFound.setManaged(true);
+            noIssuesFound.setVisible(true);
         }
 
         return pagination;
@@ -171,9 +170,19 @@ public class IssueVisualizationView extends MyStage {
         return lateralPane;
     }
 
-    private Label createNoIssuesFoundLabel() {
-        noIssuesFound = new Label("No issues found");
+    private Node createNoIssuesFoundLabel() {
+        noIssuesFound = new VBox();
         noIssuesFound.setManaged(false);
+        noIssuesFound.setVisible(false);
+        noIssuesFound.setAlignment(Pos.CENTER);
+
+        Label noIssuesFoundLabel = new Label("No issues found");
+        noIssuesFoundLabel.setStyle("-fx-font-style: italic; -fx-font-size: 20px;");
+
+        ImageView noIssuesFoundImages = new ImageView(new Image(getClass().getResourceAsStream("/icons/not_found.png")));
+
+        noIssuesFound.getChildren().addAll(noIssuesFoundImages, noIssuesFoundLabel);
+
         return noIssuesFound;
     }
 
@@ -432,7 +441,7 @@ public class IssueVisualizationView extends MyStage {
     }
 
     private void setPaginationButtons(int numberOfPages) {
-        pagination .setPageCount(numberOfPages);
+        pagination.setPageCount(numberOfPages);
         pagination.setCurrentPageIndex(0);
         pagination.setMaxPageIndicatorCount(5);
 
