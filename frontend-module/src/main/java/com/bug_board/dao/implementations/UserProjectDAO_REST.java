@@ -16,12 +16,10 @@ import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class UserProjectDAO_REST implements IUserProjectDAO {
-    private final String baseUrl = "http://localhost:8080/api/me/projects";
-    private final MyHTTPClient httpClient;
+public class UserProjectDAO_REST extends DAO_REST implements IUserProjectDAO {
 
     public UserProjectDAO_REST(MyHTTPClient httpClient) {
-        this.httpClient = httpClient;
+        super(httpClient);
     }
 
     @Override
@@ -31,11 +29,11 @@ public class UserProjectDAO_REST implements IUserProjectDAO {
         URI uri;
 
         if(projectNameToFilter == null || projectNameToFilter.equals(""))
-            uri = URI.create(baseUrl + "/overviewed");
+            uri = URI.create(baseUrl + "/me/projects/overviewed");
         else {
             try {
                 String encodedString = URLEncoder.encode(projectNameToFilter, StandardCharsets.UTF_8.toString());
-                uri = URI.create(baseUrl + "/overviewed?projectName=" + encodedString);
+                uri = URI.create(baseUrl + "/me/projects/overviewed?projectName=" + encodedString);
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
@@ -60,11 +58,11 @@ public class UserProjectDAO_REST implements IUserProjectDAO {
         HttpRequest request;
         URI uri;
         if(projectNameToFilter == null || projectNameToFilter.equals(""))
-            uri = URI.create(baseUrl + "/working-on");
+            uri = URI.create(baseUrl + "/me/projects/working-on");
         else {
             try {
                 String encodedString = URLEncoder.encode(projectNameToFilter, StandardCharsets.UTF_8.toString());
-                uri = URI.create(baseUrl + "/working-on?projectName=" + encodedString);
+                uri = URI.create(baseUrl + "/me/projects/working-on?projectName=" + encodedString);
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }

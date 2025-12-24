@@ -19,13 +19,11 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.util.List;
 
-public class ProjectIssueDAO_REST implements IProjectIssueDAO {
-    private final String baseUrl = "http://localhost:8080/api/projects";
-    private final MyHTTPClient httpClient;
+public class ProjectIssueDAO_REST extends DAO_REST implements IProjectIssueDAO {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ProjectIssueDAO_REST(MyHTTPClient httpClient) {
-        this.httpClient = httpClient;
+        super(httpClient);
     }
 
     @Override
@@ -36,7 +34,7 @@ public class ProjectIssueDAO_REST implements IProjectIssueDAO {
         HttpRequest request;
         try {
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/" + idProject + "/issues/search"))
+                    .uri(URI.create(baseUrl + "/projects/" + idProject + "/issues/search"))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                     .POST(HttpRequest.BodyPublishers.ofString(
@@ -57,7 +55,7 @@ public class ProjectIssueDAO_REST implements IProjectIssueDAO {
         HttpRequest request;
         try{
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/" + idProject + "/issues"))
+                    .uri(URI.create(baseUrl + "/projects/" + idProject + "/issues"))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer "+SessionManager.getInstance().getJwtToken())
                     .POST(HttpRequest.BodyPublishers.ofString(
@@ -76,7 +74,7 @@ public class ProjectIssueDAO_REST implements IProjectIssueDAO {
         HttpRequest request;
 
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/" + idProject + "/issues/" + idIssue + "/images"))
+                .uri(URI.create(baseUrl + "/projects/" + idProject + "/issues/" + idIssue + "/images"))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer "+SessionManager.getInstance().getJwtToken())
                 .GET()

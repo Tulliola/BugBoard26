@@ -1,0 +1,24 @@
+spring.application.name=BugBoard26
+
+#   App implementation
+app.implementation=IMPLEMENTATION_TYPE
+
+#   Connection to database properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/DATABASE_NAME
+spring.datasource.username=USER
+spring.datasource.password=PASSWORD
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+
+#   Hikari configuration
+spring.datasource.hikari.maximum-pool-size=MAX_POOL_SIZE
+spring.datasource.hikari.idle-timeout=IDLE_TIMEOUT
+spring.datasource.hikari.connection-timeout=CONNECTION_TIMEOUT
+
+#   Email configuration
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=YOUR_EMAIL
+spring.mail.password=YOUR_PASSWORD
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true

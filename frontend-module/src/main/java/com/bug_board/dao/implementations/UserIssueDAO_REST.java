@@ -18,13 +18,11 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.util.List;
 
-public class UserIssueDAO_REST implements IUserIssueDAO {
-    private final String baseUrl = "http://localhost:8080/api/me/issues";
-    private final MyHTTPClient httpClient;
+public class UserIssueDAO_REST extends DAO_REST implements IUserIssueDAO {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public UserIssueDAO_REST(MyHTTPClient httpClient) {
-        this.httpClient = httpClient;
+        super(httpClient);
     }
 
     @Override
@@ -35,7 +33,7 @@ public class UserIssueDAO_REST implements IUserIssueDAO {
         HttpRequest request;
         try {
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/search"))
+                    .uri(URI.create(baseUrl + "/me/issues/search"))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                     .POST(HttpRequest.BodyPublishers.ofString(
@@ -57,7 +55,7 @@ public class UserIssueDAO_REST implements IUserIssueDAO {
         HttpRequest request;
 
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/" + idIssue + "/images"))
+                .uri(URI.create(baseUrl + "/me/issues/" + idIssue + "/images"))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer "+SessionManager.getInstance().getJwtToken())
                 .GET()

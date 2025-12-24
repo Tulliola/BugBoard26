@@ -1,0 +1,7 @@
+.git
+.idea
+**/target
+**/*.class
+**/application-dev.properties
+**/dto.properties
+.env

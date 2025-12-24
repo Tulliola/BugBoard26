@@ -1,13 +1,26 @@
 package com.bug_board.properties;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertiesManager {
     private static PropertiesManager instance;
     private static String dtoProperties = "dto.properties";
+    private final Properties properties;
 
-    private PropertiesManager() {}
+    private PropertiesManager() {
+        properties = new Properties();
+        try {
+            InputStream input = PropertiesManager.class.getClassLoader().getResourceAsStream(dtoProperties);
+
+            if(input != null)
+                properties.load(input);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static PropertiesManager getInstance() {
         if(instance == null)
@@ -17,27 +30,21 @@ public class PropertiesManager {
     }
 
     public String getMockEmail(){
-        Properties properties = new Properties();
-        try {
-            properties.load(PropertiesManager.class.getClassLoader().getResourceAsStream(dtoProperties));
-        }
-        catch (IOException e) {
-            throw new PropertiesNotFoundException("Couldn't retrieve any property you have specified.");
-        }
+        String envValue = System.getenv("MOCK_EMAIL_ADDRESS");
 
-        return properties.getProperty("app.mock-email-addressee");
+        if(envValue != null && !envValue.isEmpty())
+            return envValue;
+
+        return properties.getProperty("mock.email.addressee");
     }
 
     public String getEmailDTOImplementation(){
-        Properties properties = new Properties();
 
-        try{
-            properties.load(PropertiesManager.class.getClassLoader().getResourceAsStream(dtoProperties));
-        }
-        catch (IOException exc) {
-            throw new RuntimeException("Couldn't retrieve any property you have specified.");
-        }
+        String envValue = System.getenv("EMAIL_IMPLEMENTATION_TYPE");
 
-        return properties.getProperty("app.email-dto-implementation");
+        if(envValue != null && !envValue.isEmpty())
+            return envValue;
+
+        return properties.getProperty("email.implementation.type");
     }
 }

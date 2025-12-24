@@ -14,13 +14,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 
-public class AuthenticationDAO_REST implements IAuthenticationDAO {
-    private final String baseUrl = "http://localhost:8080/api";
-    private final MyHTTPClient httpClient;
+public class AuthenticationDAO_REST extends DAO_REST implements IAuthenticationDAO {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public AuthenticationDAO_REST(MyHTTPClient httpClient) {
-        this.httpClient = httpClient;
+        super(httpClient);
     }
 
     @Override

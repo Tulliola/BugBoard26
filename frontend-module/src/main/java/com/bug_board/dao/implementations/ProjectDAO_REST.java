@@ -17,13 +17,11 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.util.List;
 
-public class ProjectDAO_REST implements IProjectDAO {
-    private final String baseUrl = "http://localhost:8080/api/projects";
-    private final MyHTTPClient httpClient;
+public class ProjectDAO_REST extends DAO_REST implements IProjectDAO {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ProjectDAO_REST(MyHTTPClient httpClient) {
-        this.httpClient = httpClient;
+        super(httpClient);
     }
 
     @Override
@@ -33,7 +31,7 @@ public class ProjectDAO_REST implements IProjectDAO {
 
         try{
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/" + idProject + "/users/collaborators"))
+                    .uri(URI.create(baseUrl + "/projects/" + idProject + "/users/collaborators"))
                     .header("Authorization", "Bearer "+ SessionManager.getInstance().getJwtToken())
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(
@@ -51,7 +49,7 @@ public class ProjectDAO_REST implements IProjectDAO {
             throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/" + idProject +"/addable-users"))
+                .uri(URI.create(baseUrl + "/projects/" + idProject +"/addable-users"))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer "+SessionManager.getInstance().getJwtToken())
                 .GET()
