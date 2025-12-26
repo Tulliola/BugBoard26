@@ -1,6 +1,7 @@
 package com.bug_board.architectural_controllers;
 
 import com.bug_board.dao.implementations.UserDAO_REST;
+import com.bug_board.dao.interfaces.IUserDAO;
 import com.bug_board.dto.UserCreationDTO;
 import com.bug_board.exceptions.architectural_controllers.UserRegistrationException;
 import com.bug_board.exceptions.dao.BadConversionToDTOException;
@@ -9,9 +10,9 @@ import com.bug_board.exceptions.dao.ErrorHTTPResponseException;
 import com.bug_board.exceptions.dao.HTTPSendException;
 
 public class UserRegistrationController {
-    UserDAO_REST userDAO;
+    private final IUserDAO userDAO;
 
-    public UserRegistrationController(UserDAO_REST userDAO) {
+    public UserRegistrationController(IUserDAO userDAO) {
         this.userDAO = userDAO;
     }
 

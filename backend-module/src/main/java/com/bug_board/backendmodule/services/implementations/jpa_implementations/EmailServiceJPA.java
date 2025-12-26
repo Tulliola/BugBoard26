@@ -7,16 +7,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
-public class JavaEmailSenderEmailService implements IEmailService {
+public class EmailServiceJPA implements IEmailService {
 
     @Value("${spring.mail.username}")
     private String sender;
 
     private final JavaMailSender mailSender;
 
-    public JavaEmailSenderEmailService(JavaMailSender mailSender) {
+    public EmailServiceJPA(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
