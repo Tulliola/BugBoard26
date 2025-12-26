@@ -14,7 +14,6 @@ import java.util.List;
 
 public class HomePagePC extends ServerDependantPresentationController {
     private final UserProjectController userProjectController;
-    private final INavigationManager navigationManager;
     private HomePageView homePageView;
     private List<ProjectSummaryDTO> projectsRetrieved;
 
@@ -25,7 +24,6 @@ public class HomePagePC extends ServerDependantPresentationController {
                       INavigationManager navigationManager) {
         super(navigationManager);
         this.userProjectController = userProjectController;
-        this.navigationManager = navigationManager;
     }
 
     public List<ProjectSummaryDTO> onSearchProjectButtonClick(String projectNameToFilter) {

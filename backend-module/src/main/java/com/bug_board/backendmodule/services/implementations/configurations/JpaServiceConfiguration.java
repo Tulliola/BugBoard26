@@ -42,7 +42,7 @@ public class JpaServiceConfiguration {
     @Bean
     public IEmailService jpaEmailService(JavaMailSender mailSenderBySpring) {
         log.info("Email Service: JavaMailSender Implementation");
-        return new JavaEmailSenderEmailService(mailSenderBySpring);
+        return new EmailServiceJPA(mailSenderBySpring);
     }
 
     @Bean
