@@ -437,6 +437,7 @@ public class IssueVisualizationView extends MyStage {
         else {
             pagination.setPageCount(numberOfPages);
             pagination.setCurrentPageIndex(0);
+            this.setPaginationButtons(numberOfPages);
         }
     }
 
