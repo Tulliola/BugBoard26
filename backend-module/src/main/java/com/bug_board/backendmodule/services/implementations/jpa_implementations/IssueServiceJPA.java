@@ -14,11 +14,18 @@ import com.bug_board.dto.IssueFiltersDTO;
 import com.bug_board.dto.IssueImageDTO;
 import com.bug_board.dto.IssueSummaryDTO;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
+
 import java.util.List;
 
+@Validated
 public class IssueServiceJPA implements IIssueService {
 
     private final IIssueRepository issueRepository;
@@ -39,7 +46,9 @@ public class IssueServiceJPA implements IIssueService {
     @Transactional
     @Override
     @PreAuthorize("hasRole('ROLE_USER')")
-    public IssueSummaryDTO publishNewIssueToProject(String usernamePrincipal, Integer idProject, IssueCreationDTO issueToAdd) {
+    public IssueSummaryDTO publishNewIssueToProject(String usernamePrincipal,
+                                                    Integer idProject,
+                                                    IssueCreationDTO issueToAdd) {
         if(!idProject.equals(issueToAdd.getIdProject()))
             throw new BadRequestException("idProject in the URL and idProject in the issue you want to create don't match.");
 
@@ -70,7 +79,8 @@ public class IssueServiceJPA implements IIssueService {
     @Override
     @PreAuthorize("hasRole('ROLE_USER')")
     @Transactional
-    public List<IssueSummaryDTO> getIssuesOfAUser(String username, IssueFiltersDTO filters) {
+    public List<IssueSummaryDTO> getIssuesOfAUser(String username,
+                                                  IssueFiltersDTO filters) {
         List<Issue> issuesRetrieved = issueRepository.retrieveAllUsersIssues(username, filters);
         return IssueMapper.toIssueSummaryDTOS(issuesRetrieved);
     }
@@ -78,17 +88,16 @@ public class IssueServiceJPA implements IIssueService {
     @Transactional
     @Override
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPERADMIN')")
-    public List<IssueSummaryDTO> getIssuesOfAProject(Integer idProject, IssueFiltersDTO filters) {
+    public List<IssueSummaryDTO> getIssuesOfAProject(Integer idProject,
+                                                     IssueFiltersDTO filters) {
         List<Issue> issuesRetrieved = issueRepository.retrieveAllProjectsIssues(idProject, filters);
         return IssueMapper.toIssueSummaryDTOS(issuesRetrieved);
     }
 
     @Override
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPERADMIN')")
-    public List<IssueImageDTO> getImagesOfAIssue(Integer projectId, Integer issueId) {
-        if(projectId <= 0)
-            throw new BadRequestException("idProject in the URL is not valid.");
-
+    public List<IssueImageDTO> getImagesOfAIssue(Integer projectId,
+                                                 Integer issueId) {
         Issue issueRetrieved = issueRepository.getIssue(issueId);
 
         if(issueRetrieved == null)
@@ -99,7 +108,8 @@ public class IssueServiceJPA implements IIssueService {
 
     @Override
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    public List<IssueImageDTO> getImagesOfAIssue(String username, Integer issueId) {
+    public List<IssueImageDTO> getImagesOfAIssue(String username,
+                                                 Integer issueId) {
         Issue issueRetrieved = issueRepository.getIssue(issueId);
 
         if(issueRetrieved == null)

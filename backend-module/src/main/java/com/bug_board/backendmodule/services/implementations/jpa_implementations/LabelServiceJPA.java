@@ -11,12 +11,18 @@ import com.bug_board.backendmodule.exception.backend.ResourceNotFoundException;
 import com.bug_board.dto.LabelCreationDTO;
 import com.bug_board.dto.LabelModifyingDTO;
 import com.bug_board.dto.LabelSummaryDTO;
+import jakarta.validation.Valid;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
+@Validated
 public class LabelServiceJPA implements ILabelService {
 
     private final ILabelRepository labelRepository;
@@ -30,7 +36,8 @@ public class LabelServiceJPA implements ILabelService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_USER')")
-    public LabelSummaryDTO createPersonalLabel(String usernamePrincipal, LabelCreationDTO labelToCreate) {
+    public LabelSummaryDTO createPersonalLabel(String usernamePrincipal,
+                                               LabelCreationDTO labelToCreate) {
         if(labelToCreate.getColor() == null)
             labelToCreate.setColor("#FFFFFF");
 
@@ -49,7 +56,8 @@ public class LabelServiceJPA implements ILabelService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_USER')")
-    public void deletePersonalLabel(String usernamePrincipal ,Integer idLabel) {
+    public void deletePersonalLabel(String usernamePrincipal,
+                                    Integer idLabel) {
         if(labelRepository.existsLabel(idLabel)) {
 
             Label baseLabel =  labelRepository.getLabelById(idLabel);
@@ -68,7 +76,9 @@ public class LabelServiceJPA implements ILabelService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_USER')")
-    public LabelSummaryDTO modifyPersonalLabel(String usernamePrincipal, Integer idLabel, LabelModifyingDTO labelToModify) {
+    public LabelSummaryDTO modifyPersonalLabel(String usernamePrincipal,
+                                               Integer idLabel,
+                                               LabelModifyingDTO labelToModify) {
         if(labelRepository.existsLabel(labelToModify.getIdLabel())) {
             if(!(idLabel.equals(labelToModify.getIdLabel())))
                 throw new BadRequestException("Id Label in URL and Id Label in label specified do not match");
