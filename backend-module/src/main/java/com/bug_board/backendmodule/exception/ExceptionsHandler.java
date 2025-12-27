@@ -5,6 +5,7 @@ import com.bug_board.backendmodule.exception.backend.MalformedMailException;
 import com.bug_board.backendmodule.exception.backend.ResourceAlreadyExistsException;
 import com.bug_board.backendmodule.exception.backend.ResourceNotFoundException;
 import com.bug_board.dto.ErrorResponseDTO;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailAuthenticationException;
@@ -104,6 +105,17 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(MalformedMailException.class)
     public ResponseEntity<ErrorResponseDTO> handleMalformedMailException(MalformedMailException exc) {
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                exc.getMessage()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleConstraintViolationException(ConstraintViolationException exc) {
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),

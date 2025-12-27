@@ -13,16 +13,22 @@ import com.bug_board.dto.UserSummaryDTO;
 import com.bug_board.backendmodule.exception.backend.ResourceAlreadyExistsException;
 import com.bug_board.backendmodule.exception.backend.ResourceNotFoundException;
 import com.bug_board.dto.email.IEmailToSendDTO;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.bug_board.backendmodule.util.PasswordGenerator;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Validated
 public class UserServiceJPA implements IUserService {
     private final IProjectRepository projectRepository;
     private final IUserRepository userRepository;

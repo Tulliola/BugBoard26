@@ -6,4 +6,5 @@ module com.bug_board.sharedmodule {
 
     requires static lombok;
     requires jakarta.persistence;
+    requires jakarta.validation;
 }

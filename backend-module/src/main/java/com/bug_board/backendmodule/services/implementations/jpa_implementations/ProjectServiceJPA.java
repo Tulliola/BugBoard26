@@ -11,12 +11,17 @@ import com.bug_board.backendmodule.exception.backend.ResourceAlreadyExistsExcept
 import com.bug_board.backendmodule.exception.backend.ResourceNotFoundException;
 import com.bug_board.dto.UserSummaryDTO;
 import com.bug_board.dto.ProjectSummaryDTO;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
+@Validated
 public class ProjectServiceJPA implements IProjectService {
 
     private final IProjectRepository projectRepository;
@@ -30,7 +35,8 @@ public class ProjectServiceJPA implements IProjectService {
 
     @Override
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
-    public List<ProjectSummaryDTO> getOverviewedProjects(String username, String projectNameToFilter) {
+    public List<ProjectSummaryDTO> getOverviewedProjects(String username,
+                                                         String projectNameToFilter) {
         if(projectNameToFilter == null || projectNameToFilter.isEmpty()) {
             List<Project> overviewedProjects = projectRepository.getOverviewedProjectsByUser(username);
             return ProjectMapper.toProjectSummaryDTOS(overviewedProjects);
@@ -43,7 +49,8 @@ public class ProjectServiceJPA implements IProjectService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_USER')")
-    public List<ProjectSummaryDTO> getWorkingOnProjects(String username, String projectNameToFilter) {
+    public List<ProjectSummaryDTO> getWorkingOnProjects(String username,
+                                                        String projectNameToFilter) {
         if(projectNameToFilter == null || projectNameToFilter.isEmpty()) {
             List<Project> workingOnProjects = projectRepository.getWorkingOnProjectsByUser(username);
             return ProjectMapper.toProjectSummaryDTOS(workingOnProjects);
@@ -57,7 +64,8 @@ public class ProjectServiceJPA implements IProjectService {
     @Transactional
     @Override
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
-    public UserSummaryDTO assignCollaboratorToProject(Integer idProject, String collaboratorUsername) {
+    public UserSummaryDTO assignCollaboratorToProject(Integer idProject,
+                                                      String collaboratorUsername) {
         User newCollaborator = userService.findUserByUsername(collaboratorUsername);
 
         if(newCollaborator == null)

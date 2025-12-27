@@ -5,12 +5,16 @@ import com.bug_board.backendmodule.security.JWTService;
 import com.bug_board.backendmodule.services.interfaces.IAuthenticationService;
 import com.bug_board.dto.UserAuthenticationDTO;
 import com.bug_board.enum_classes.UserRole;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+@Validated
 public class AuthenticationServiceJPA implements IAuthenticationService {
 
     private final JWTService jwtService;
