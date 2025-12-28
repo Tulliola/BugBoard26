@@ -4,6 +4,7 @@ import com.bug_board.enum_classes.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.Setter;
 public class UserCreationDTO {
     @NotNull(message = "Email must not be null.")
     @NotBlank(message = "Email must be specified.")
+    @Size(max = 40)
     private String  email;
 
     @NotNull(message = "Role must not be null.")

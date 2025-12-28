@@ -17,6 +17,7 @@ import java.util.List;
 public class IssueCreationDTO {
     @NotNull(message = "Title must not be null.")
     @NotBlank(message = "Title must be specified.")
+    @Size(max = 40)
     private String title;
 
     @NotNull(message = "Description must not be null.")

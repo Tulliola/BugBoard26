@@ -2,6 +2,7 @@ package com.bug_board.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +15,11 @@ import lombok.Setter;
 public class UserAuthenticationDTO {
     @NotNull(message = "Username must not be null.")
     @NotBlank(message = "Username must be specified.")
+    @Size(max = 50)
     private String username;
 
     @NotNull(message = "Password must not be null.")
     @NotBlank(message = "Password must be specified.")
+    @Size(max = 255)
     private String password;
 }
