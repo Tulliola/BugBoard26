@@ -168,7 +168,7 @@ public abstract class LabelFormPane extends StackPane{
     protected abstract void clickConfirmButton();
 
     protected void checkMandatoryFields() {
-        if(titleTextField.getText().isEmpty())
+        if(titleTextField.getText().isBlank())
             throw new TitleNotSpecifiedForLabelException("You must specify at least a title for your label");
     }
 

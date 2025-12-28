@@ -1,5 +1,6 @@
 package com.bug_board.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LabelModifyingDTO {
     @NotNull(message = "Label must not be null.")
+    @Min(value = 1, message = "Label must have an identifier greater or equal than 1")
     private Integer idLabel;
 
     @NotNull(message = "Name must not be null.")

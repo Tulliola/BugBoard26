@@ -5,9 +5,7 @@ import com.bug_board.enum_classes.IssueState;
 import com.bug_board.enum_classes.IssueTipology;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.List;
@@ -27,7 +25,11 @@ public class IssueCreationDTO {
 
     @NotNull(message = "Tipology must not be null.")
     private IssueTipology tipology;
+
+    @NotNull(message = "Priority must not be null")
     private IssuePriority priority;
+
+    @Size(max = 3, message = "Issue must have at most 3 images")
     private List<byte[]> images;
     private final IssueState state = IssueState.TODO;
 
@@ -35,6 +37,7 @@ public class IssueCreationDTO {
     @Min(value = 1, message = "IdProject must be greater than 0.")
     private Integer idProject;
 
+    @Size(max = 3, message = "Issue must have at most 3 labels")
     private List<@Min(value = 1, message = "idLabel must be greater than 0.")
                  @NotNull(message = "idLabel must not be null.") Integer> idLabels;
 }

@@ -20,5 +20,4 @@ public class UserCreationDTO {
 
     @NotNull(message = "Role must not be null.")
     private UserRole role;
-    private byte[] bioPic;
 }
