@@ -30,7 +30,7 @@ public class IssueCreationDTO {
     private IssuePriority priority;
 
     @Size(max = 3, message = "Issue must have at most 3 images")
-    private List<byte[]> images;
+    private List<@Size(max = 5 * 1024 * 1024) byte[]> images;
     private final IssueState state = IssueState.TODO;
 
     @NotNull(message = "Project must not be null.")
