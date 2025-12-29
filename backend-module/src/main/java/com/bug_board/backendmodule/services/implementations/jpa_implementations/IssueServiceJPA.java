@@ -14,13 +14,8 @@ import com.bug_board.dto.IssueFiltersDTO;
 import com.bug_board.dto.IssueImageDTO;
 import com.bug_board.dto.IssueSummaryDTO;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
