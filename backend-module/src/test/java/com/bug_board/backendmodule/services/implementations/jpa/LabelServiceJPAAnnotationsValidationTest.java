@@ -1,4 +1,4 @@
-package com.bug_board.backendmodule.service.implementations.jpa;
+package com.bug_board.backendmodule.services.implementations.jpa;
 
 import com.bug_board.backendmodule.repositories.interfaces.ILabelRepository;
 import com.bug_board.backendmodule.services.interfaces.ILabelService;
