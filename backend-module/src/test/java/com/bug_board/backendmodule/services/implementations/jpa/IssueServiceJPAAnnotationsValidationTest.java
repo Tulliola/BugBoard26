@@ -55,19 +55,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         return issueCreationDTO;
     }
 
-    /*
-    CE coperte:
-    CE1 NV
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void nullUsernameShouldThrowConstraintViolationException() {
 
@@ -77,19 +64,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
 
     }
 
-     /*
-    CE coperte:
-    CE2 NV
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.17 V
-    CE8.21 V
-     */
     @Test
     public void emptyUsernameShouldThrowConstraintViolationException() {
         IssueCreationDTO issueCreationDTO = validIssueCreationDTO();
@@ -101,19 +75,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE4 NV
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void nullProjectShouldThrowConstraintViolationException() {
 
@@ -122,19 +83,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE5 NV
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void projectWithIdLessThanOrEqualToZeroShouldThrowConstraintViolationException() {
 
@@ -144,12 +92,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
 
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE7 NV
-     */
     @Test
     public void nullIssueCreationDTOShouldThrowConstraintViolationException() {
         assertThrows(ConstraintViolationException.class, () -> {
@@ -157,19 +99,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.1 NV
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void nullIssueTitleShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -180,19 +109,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.2 NV
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void emptyIssueTitleShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -203,19 +119,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.3 NV
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void issueTitleLongerThanFortyCharsShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -230,19 +133,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.5 NV
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void nullIssueDescriptionShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -253,19 +143,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.6 NV
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void emptyIssueDescriptionShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -276,19 +153,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.8 NV
-    CE8.11 V
-    CE8.14 V
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void nullIssueTipologyShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -299,19 +163,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.9 V
-    CE8.10 NV
-    CE8.14 V
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void nullIssuePriorityShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -322,19 +173,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.12 NV
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void nullIssueProjectShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -345,19 +183,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.13 NV
-    CE8.15 V
-    CE8.19 V
-     */
     @Test
     public void issueProjectWithIdLessThanOrEqualToZeroShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -368,19 +193,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.16 NV
-    CE8.19 V
-     */
     @Test
     public void issueWithMoreThanThreeAssociatedImagesShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -391,19 +203,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.18 NV
-    CE8.19 V
-     */
     @Test
     public void issueAtLeastOneImageLargerThanFiveMegabytesShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -414,19 +213,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.15 V
-    CE8.20 NV
-     */
     @Test
     public void issueWithMoreThanThreeAssociatedLabelsShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
@@ -437,19 +223,6 @@ public class IssueServiceJPAAnnotationsValidationTest {
         });
     }
 
-    /*
-    CE coperte:
-    CE3 V
-    CE6 V
-    CE8 V
-    CE8.4 V
-    CE8.7 V
-    CE8.9 V
-    CE8.11 V
-    CE8.14 V
-    CE8.15 V
-    CE8.22 NV
-     */
     @Test
     public void issueAssociatedLabelsWithIdLessThanOrEqualToZeroShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
