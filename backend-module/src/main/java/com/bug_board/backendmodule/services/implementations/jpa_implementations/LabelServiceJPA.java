@@ -58,20 +58,15 @@ public class LabelServiceJPA implements ILabelService {
     @PreAuthorize("hasRole('ROLE_USER')")
     public void deletePersonalLabel(String usernamePrincipal,
                                     Integer idLabel) {
-        if(labelRepository.existsLabel(idLabel)) {
+        Label baseLabel =  labelRepository.getLabelById(idLabel);
 
-            Label baseLabel =  labelRepository.getLabelById(idLabel);
+        if(baseLabel == null)
+            throw new ResourceNotFoundException("Label not found");
 
-            if(baseLabel == null)
-                throw new ResourceNotFoundException("Label not found");
+        if(!usernamePrincipal.equals(baseLabel.getCreatorUsername()))
+            throw new AccessDeniedException("The label you want to delete is not yours.");
 
-            if(!usernamePrincipal.equals(baseLabel.getCreatorUsername()))
-                throw new AccessDeniedException("The label you want to delete is not yours.");
-
-            labelRepository.deleteLabel(idLabel);
-        }
-        else
-            throw new ResourceNotFoundException("Label with specified id not found");
+        labelRepository.deleteLabel(idLabel);
     }
 
     @Override
@@ -79,30 +74,32 @@ public class LabelServiceJPA implements ILabelService {
     public LabelSummaryDTO modifyPersonalLabel(String usernamePrincipal,
                                                Integer idLabel,
                                                LabelModifyingDTO labelToModify) {
-        if(labelRepository.existsLabel(labelToModify.getIdLabel())) {
-            if(!(idLabel.equals(labelToModify.getIdLabel())))
-                throw new BadRequestException("Id Label in URL and Id Label in label specified do not match");
+        if(!(idLabel.equals(labelToModify.getIdLabel())))
+            throw new BadRequestException("Id Label in URL and Id Label in label specified do not match");
 
-            if(labelToModify.getColor() == null)
-                labelToModify.setColor("#FFFFFF");
+        if(labelToModify.getColor() == null)
+            labelToModify.setColor("#FFFFFF");
 
-            Label baseLabel = labelRepository.getLabelById(labelToModify.getIdLabel());
+        Label baseLabel = labelRepository.getLabelById(labelToModify.getIdLabel());
 
-            if(baseLabel == null)
-                throw new ResourceNotFoundException("Label not found");
+        if(baseLabel == null)
+            throw new ResourceNotFoundException("Label not found");
 
-            if(!usernamePrincipal.equals(baseLabel.getCreatorUsername()))
-                throw new AccessDeniedException("The label you want to modify it's not yours.");
+        if(!usernamePrincipal.equals(baseLabel.getCreatorUsername()))
+            throw new AccessDeniedException("The label you want to modify it's not yours.");
 
-            Label mappedLabel =  LabelMapper.labelModifyingDTOtoLabel(labelToModify);
-            mappedLabel.setCreator(userService.findUserByUsername(usernamePrincipal));
+        Label mappedLabel =  LabelMapper.labelModifyingDTOtoLabel(labelToModify);
 
-            Label labelModified = labelRepository.updateLabel(mappedLabel);
+        User creatorOfTheLabel = userService.findUserByUsername(usernamePrincipal);
 
-            return LabelMapper.toDTO(labelModified);
-        }
-        else
-            throw new ResourceNotFoundException("Label with specified id not found");
+        if(creatorOfTheLabel == null)
+            throw new ResourceNotFoundException("User not found");
+
+        mappedLabel.setCreator(creatorOfTheLabel);
+
+        Label labelModified = labelRepository.updateLabel(mappedLabel);
+
+        return LabelMapper.toDTO(labelModified);
     }
 
     @Override
