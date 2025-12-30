@@ -1,6 +1,7 @@
 package com.bug_board.backendmodule.services.implementations.jpa_implementations;
 
 import com.bug_board.backendmodule.entity.*;
+import com.bug_board.backendmodule.exception.backend.ResourceNotFoundException;
 import com.bug_board.backendmodule.mappers.IssueImageMapper;
 import com.bug_board.backendmodule.repositories.interfaces.IIssueRepository;
 import com.bug_board.backendmodule.services.interfaces.IIssueService;
@@ -50,11 +51,18 @@ public class IssueServiceJPA implements IIssueService {
         Issue mappedIssue = IssueMapper.toIssue(issueToAdd);
 
         Project projectOfIssue = projectService.getProject(issueToAdd.getIdProject());
+
+        if(projectOfIssue == null)
+            throw new ResourceNotFoundException("Project not found.");
+
         mappedIssue.setProject(projectOfIssue);
 
         if(issueToAdd.getIdLabels() != null)
             for (Integer idLabel : issueToAdd.getIdLabels()) {
                 Label retrievedLabel = labelService.getLabel(idLabel);
+
+                if(retrievedLabel == null)
+                    throw new ResourceNotFoundException("Label not found.");
 
                 if(retrievedLabel.getCreatorUsername() != null)
                     if(!usernamePrincipal.equals(retrievedLabel.getCreatorUsername()))

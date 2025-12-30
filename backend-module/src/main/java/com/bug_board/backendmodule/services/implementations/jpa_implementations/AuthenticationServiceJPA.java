@@ -31,11 +31,11 @@ public class AuthenticationServiceJPA implements IAuthenticationService {
 
     @Override
     public String verify(UserAuthenticationDTO userAuthenticationDTO) {
-        Authentication authentication =
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                        userAuthenticationDTO.getUsername(),
-                        userAuthenticationDTO.getPassword())
-                );
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                userAuthenticationDTO.getUsername(),
+                userAuthenticationDTO.getPassword())
+        );
 
         return jwtService.generateToken(userAuthenticationDTO.getUsername());
     }
