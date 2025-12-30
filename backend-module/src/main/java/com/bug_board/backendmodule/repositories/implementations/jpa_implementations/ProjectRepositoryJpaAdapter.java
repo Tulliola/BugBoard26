@@ -3,7 +3,6 @@ package com.bug_board.backendmodule.repositories.implementations.jpa_implementat
 import com.bug_board.backendmodule.entity.Project;
 import com.bug_board.backendmodule.entity.User;
 import com.bug_board.backendmodule.repositories.interfaces.IProjectRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

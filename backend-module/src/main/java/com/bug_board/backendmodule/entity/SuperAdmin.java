@@ -21,7 +21,7 @@ public class SuperAdmin extends Admin implements ISuperAdminRole {
     /* Relation SuperAdmin - Project */
 
     @OneToMany(mappedBy = "creator")
-    private List<Project> createdProjects = new ArrayList<Project>();
+    private List<Project> createdProjects = new ArrayList<>();
 
 
     public SuperAdmin() {

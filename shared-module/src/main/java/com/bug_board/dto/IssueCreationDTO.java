@@ -3,8 +3,6 @@ package com.bug_board.dto;
 import com.bug_board.enum_classes.IssuePriority;
 import com.bug_board.enum_classes.IssueState;
 import com.bug_board.enum_classes.IssueTipology;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.validation.constraints.*;
 import lombok.*;
 

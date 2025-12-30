@@ -1,5 +1,6 @@
 package com.bug_board.backendmodule.security;
 
+import com.bug_board.backendmodule.exception.security.NoKeyGeneratorAlgorithmFoundException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -25,13 +26,14 @@ public class JWTService {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk = keyGen.generateKey();
             secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+        }
+        catch (NoSuchAlgorithmException e) {
+            throw new NoKeyGeneratorAlgorithmFoundException("Cannot find the algorithm you have specified.");
         }
     }
 
     public String generateToken(String username) {
-        Map<String, Object> claims = new HashMap<String, Object>();
+        Map<String, Object> claims = new HashMap<>();
 
         return Jwts.builder()
                 .claims(claims)

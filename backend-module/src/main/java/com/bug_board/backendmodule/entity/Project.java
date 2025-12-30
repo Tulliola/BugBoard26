@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,10 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "progetto")
-public class Project {
+public class Project implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idprogetto", nullable = false)
@@ -33,7 +38,7 @@ public class Project {
 
     /* Relation Project - Issue */
     @OneToMany(mappedBy = "project")
-    private List<Issue> issues = new ArrayList<Issue>();
+    private List<Issue> issues = new ArrayList<>();
 
     /* Relation Project - Admin */
     @ManyToMany
@@ -42,7 +47,7 @@ public class Project {
             joinColumns = @JoinColumn(name = "idprogetto"),
             inverseJoinColumns = @JoinColumn(name = "amministratore")
     )
-    private List<Admin> admins = new ArrayList<Admin>();
+    private List<Admin> admins = new ArrayList<>();
 
     /* Relation Project - RegularUser */
     @ManyToMany
@@ -51,7 +56,7 @@ public class Project {
             joinColumns = @JoinColumn(name = "idprogetto"),
             inverseJoinColumns = @JoinColumn(name = "utente_partecipante")
     )
-    private List<RegularUser> partecipants = new ArrayList<RegularUser>();
+    private List<RegularUser> partecipants = new ArrayList<>();
 
     public Project() {}
 

@@ -4,7 +4,6 @@ import com.bug_board.backendmodule.entity.Issue;
 import com.bug_board.backendmodule.repositories.interfaces.IIssueRepository;
 import com.bug_board.dto.IssueFiltersDTO;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

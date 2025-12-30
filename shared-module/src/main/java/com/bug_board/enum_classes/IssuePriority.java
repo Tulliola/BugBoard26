@@ -1,5 +1,6 @@
 package com.bug_board.enum_classes;
 
+import com.bug_board.enum_classes.exceptions.NoSuchImageException;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.io.IOException;
@@ -20,12 +21,12 @@ public enum IssuePriority {
 
     public byte[] getAssociatedImage() {
         if(this.imageURL == null)
-            return null;
+            return new byte[0];
 
         try {
             return IssueTipology.class.getResourceAsStream(this.imageURL).readAllBytes();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new NoSuchImageException("Cannot find any image with specified url");
         }
     }
 

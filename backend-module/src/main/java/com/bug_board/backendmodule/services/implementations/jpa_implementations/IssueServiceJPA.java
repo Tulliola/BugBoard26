@@ -64,9 +64,8 @@ public class IssueServiceJPA implements IIssueService {
                 if(retrievedLabel == null)
                     throw new ResourceNotFoundException("Label not found.");
 
-                if(retrievedLabel.getCreatorUsername() != null)
-                    if(!usernamePrincipal.equals(retrievedLabel.getCreatorUsername()))
-                        throw new AccessDeniedException("The label you want to associate to this issue is not yours.");
+                if(retrievedLabel.getCreatorUsername() != null && !usernamePrincipal.equals(retrievedLabel.getCreatorUsername()))
+                    throw new AccessDeniedException("The label you want to associate to this issue is not yours.");
 
                 mappedIssue.addLabelAttachedToIssue(retrievedLabel);
             }

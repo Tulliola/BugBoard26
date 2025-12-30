@@ -19,15 +19,15 @@ public class RegularUser extends User implements IRegularUserRole {
 
     /*Relation RegularUser - Label */
     @OneToMany(mappedBy = "creator")
-    private List<Label> personalLabels = new ArrayList<Label>();
+    private List<Label> personalLabels = new ArrayList<>();
 
     /* Relation RegularUser - Project */
     @ManyToMany(mappedBy = "partecipants")
-    private List<Project> partecipatingProjects = new ArrayList<Project>();
+    private List<Project> partecipatingProjects = new ArrayList<>();
 
     /* Relazione RegularUser - Issue */
     @OneToMany(mappedBy = "creator")
-    private List<Issue> personalIssues = new ArrayList<Issue>();
+    private List<Issue> personalIssues = new ArrayList<>();
 
     public RegularUser() {
         super(UserRole.ROLE_USER);

@@ -13,6 +13,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +23,12 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "issue")
-public class Issue {
+public class Issue implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     /* Issue specific attributes */
-    private final static int maxAttachableLabels = 3;
+    private static final int MAX_ATTACHABLE_LABELS = 3;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -99,7 +104,7 @@ public class Issue {
 
     public void addLabelAttachedToIssue(Label newLabel) {
         if(this.attachedLabels != null) {
-            if (maxAttachableLabels == this.attachedLabels.size())
+            if (MAX_ATTACHABLE_LABELS == this.attachedLabels.size())
                 throw new MaximumLabelsException("You have reached the limit of attachable labels.");
 
             if (newLabel == null)

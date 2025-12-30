@@ -21,7 +21,7 @@ public class Admin extends User implements IAdminRole {
     /* Relation Admin - Project */
 
     @ManyToMany(mappedBy = "admins")
-    private List<Project> overviewedProjects = new ArrayList<Project>();
+    private List<Project> overviewedProjects = new ArrayList<>();
 
 
     public Admin(){

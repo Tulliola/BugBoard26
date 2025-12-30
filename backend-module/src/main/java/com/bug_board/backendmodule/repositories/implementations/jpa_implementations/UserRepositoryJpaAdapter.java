@@ -4,7 +4,6 @@ import com.bug_board.backendmodule.entity.User;
 import com.bug_board.backendmodule.repositories.interfaces.IUserRepository;
 import com.bug_board.enum_classes.UserRole;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

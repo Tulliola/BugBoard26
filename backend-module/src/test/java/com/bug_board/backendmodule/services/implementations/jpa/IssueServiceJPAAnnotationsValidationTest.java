@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @WithMockUser(username = "Tulliola", roles = {"USER"})
 @ActiveProfiles("dev")
-public class IssueServiceJPAAnnotationsValidationTest {
+class IssueServiceJPAAnnotationsValidationTest {
     @Autowired
     private IIssueService issueService;
 
@@ -56,51 +56,52 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void nullUsernameShouldThrowConstraintViolationException() {
-
-        assertThrows(ConstraintViolationException.class, () -> {
-            issueService.publishNewIssueToProject(null, validIdProject, validIssueCreationDTO());
-        });
-
-    }
-
-    @Test
-    public void emptyUsernameShouldThrowConstraintViolationException() {
+    void nullUsernameShouldThrowConstraintViolationException() {
         IssueCreationDTO issueCreationDTO = validIssueCreationDTO();
-        issueCreationDTO.setImages(List.of(new byte[5 * 1023 * 1023], new byte[5 * 1023 * 1023], new byte[5 * 1023 * 1023]));
-        issueCreationDTO.setIdLabels(List.of(1, 2, 3));
 
         assertThrows(ConstraintViolationException.class, () -> {
-            issueService.publishNewIssueToProject("", validIdProject, validIssueCreationDTO());
-        });
-    }
-
-    @Test
-    public void nullProjectShouldThrowConstraintViolationException() {
-
-        assertThrows(ConstraintViolationException.class, () -> {
-           issueService.publishNewIssueToProject(validUsername, null, validIssueCreationDTO());
-        });
-    }
-
-    @Test
-    public void projectWithIdLessThanOrEqualToZeroShouldThrowConstraintViolationException() {
-
-        assertThrows(ConstraintViolationException.class, () -> {
-            issueService.publishNewIssueToProject(validUsername, 0, validIssueCreationDTO());
+            issueService.publishNewIssueToProject(null, validIdProject, issueCreationDTO);
         });
 
     }
 
     @Test
-    public void nullIssueCreationDTOShouldThrowConstraintViolationException() {
+    void emptyUsernameShouldThrowConstraintViolationException() {
+        IssueCreationDTO issueCreationDTO = validIssueCreationDTO();
+
+        assertThrows(ConstraintViolationException.class, () -> {
+            issueService.publishNewIssueToProject("", validIdProject, issueCreationDTO);
+        });
+    }
+
+    @Test
+    void nullProjectShouldThrowConstraintViolationException() {
+        IssueCreationDTO issueCreationDTO = validIssueCreationDTO();
+
+        assertThrows(ConstraintViolationException.class, () -> {
+           issueService.publishNewIssueToProject(validUsername, null, issueCreationDTO);
+        });
+    }
+
+    @Test
+    void projectWithIdLessThanOrEqualToZeroShouldThrowConstraintViolationException() {
+        IssueCreationDTO issueCreationDTO = validIssueCreationDTO();
+
+        assertThrows(ConstraintViolationException.class, () -> {
+            issueService.publishNewIssueToProject(validUsername, 0, issueCreationDTO);
+        });
+
+    }
+
+    @Test
+    void nullIssueCreationDTOShouldThrowConstraintViolationException() {
         assertThrows(ConstraintViolationException.class, () -> {
            issueService.publishNewIssueToProject(validUsername, 1, null);
         });
     }
 
     @Test
-    public void nullIssueTitleShouldThrowConstraintViolationException() {
+    void nullIssueTitleShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setTitle(null);
 
@@ -110,7 +111,7 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void emptyIssueTitleShouldThrowConstraintViolationException() {
+    void emptyIssueTitleShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setTitle("");
 
@@ -120,13 +121,10 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void issueTitleLongerThanFortyCharsShouldThrowConstraintViolationException() {
+    void issueTitleLongerThanFortyCharsShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
-        String invalidTitleLength = "";
-        for(int i = 0; i < 41; i++){
-            invalidTitleLength += "a";
-        }
-        invalidIssueCreationDTO.setTitle(invalidTitleLength);
+
+        invalidIssueCreationDTO.setTitle("a".repeat(41));
 
         assertThrows(ConstraintViolationException.class, () -> {
            issueService.publishNewIssueToProject(validUsername, 1, invalidIssueCreationDTO);
@@ -134,7 +132,7 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void nullIssueDescriptionShouldThrowConstraintViolationException() {
+    void nullIssueDescriptionShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setDescription(null);
 
@@ -144,7 +142,7 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void emptyIssueDescriptionShouldThrowConstraintViolationException() {
+    void emptyIssueDescriptionShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setDescription("");
 
@@ -154,7 +152,7 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void nullIssueTipologyShouldThrowConstraintViolationException() {
+    void nullIssueTipologyShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setTipology(null);
 
@@ -164,7 +162,7 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void nullIssuePriorityShouldThrowConstraintViolationException() {
+    void nullIssuePriorityShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setPriority(null);
 
@@ -174,7 +172,7 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void nullIssueProjectShouldThrowConstraintViolationException() {
+    void nullIssueProjectShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setIdProject(null);
 
@@ -184,7 +182,7 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void issueProjectWithIdLessThanOrEqualToZeroShouldThrowConstraintViolationException() {
+    void issueProjectWithIdLessThanOrEqualToZeroShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setIdProject(-15);
 
@@ -194,7 +192,7 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void issueWithMoreThanThreeAssociatedImagesShouldThrowConstraintViolationException() {
+    void issueWithMoreThanThreeAssociatedImagesShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setImages(List.of(new byte[1], new byte[1], new byte[1], new byte[1]));
 
@@ -204,7 +202,7 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void issueAtLeastOneImageLargerThanFiveMegabytesShouldThrowConstraintViolationException() {
+    void issueAtLeastOneImageLargerThanFiveMegabytesShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setImages(List.of(new byte[6 * 1024 * 1024], new byte[1], new byte[1], new byte[1]));
 
@@ -214,7 +212,7 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void issueWithMoreThanThreeAssociatedLabelsShouldThrowConstraintViolationException() {
+    void issueWithMoreThanThreeAssociatedLabelsShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setIdLabels(List.of(1, 2, 34 ,55));
 
@@ -224,7 +222,7 @@ public class IssueServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void issueAssociatedLabelsWithIdLessThanOrEqualToZeroShouldThrowConstraintViolationException() {
+    void issueAssociatedLabelsWithIdLessThanOrEqualToZeroShouldThrowConstraintViolationException() {
         IssueCreationDTO invalidIssueCreationDTO = validIssueCreationDTO();
         invalidIssueCreationDTO.setIdLabels(List.of(1, 2, 34 , -5));
 

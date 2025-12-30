@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @ActiveProfiles("dev")
 @WithMockUser(username = "justantxnio", roles = {"USER"})
-public class LabelServiceJPAAnnotationsValidationTest {
+class LabelServiceJPAAnnotationsValidationTest {
     @Autowired
     private ILabelService labelServiceToTest;
 
@@ -40,43 +40,50 @@ public class LabelServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void whenUsernameIsNullShouldThrowConstraintViolationException() {
+    void whenUsernameIsNullShouldThrowConstraintViolationException() {
+        LabelModifyingDTO labelModifyingDTO = validLabelModifyingDTO();
 
         assertThrows(ConstraintViolationException.class,
-                () -> labelServiceToTest.modifyPersonalLabel(null, validIdLabel, validLabelModifyingDTO())
+                () -> labelServiceToTest.modifyPersonalLabel(null, validIdLabel, labelModifyingDTO)
         );
     }
 
     @Test
-    public void whenUsernameIsBlankShouldThrowConstraintViolationException() {
+    void whenUsernameIsBlankShouldThrowConstraintViolationException() {
+        LabelModifyingDTO labelModifyingDTO = validLabelModifyingDTO();
+
         assertThrows(ConstraintViolationException.class,
-                () -> labelServiceToTest.modifyPersonalLabel("    ", validIdLabel, validLabelModifyingDTO())
+                () -> labelServiceToTest.modifyPersonalLabel("    ", validIdLabel, labelModifyingDTO)
         );
     }
 
     @Test
-    public void whenIdLabelAsParameterIsNullShouldThrowConstraintViolationException() {
+    void whenIdLabelAsParameterIsNullShouldThrowConstraintViolationException() {
+        LabelModifyingDTO labelModifyingDTO = validLabelModifyingDTO();
+
         assertThrows(ConstraintViolationException.class,
-                () -> labelServiceToTest.modifyPersonalLabel(validUsernamePrincipal, null, validLabelModifyingDTO())
+                () -> labelServiceToTest.modifyPersonalLabel(validUsernamePrincipal, null, labelModifyingDTO)
         );
     }
 
     @Test
-    public void whenIdLabelAsParameterIsLessThanOneShouldThrowConstraintViolationException() {
+    void whenIdLabelAsParameterIsLessThanOneShouldThrowConstraintViolationException() {
+        LabelModifyingDTO labelModifyingDTO = validLabelModifyingDTO();
+
         assertThrows(ConstraintViolationException.class,
-                () -> labelServiceToTest.modifyPersonalLabel(validUsernamePrincipal, 0, validLabelModifyingDTO())
+                () -> labelServiceToTest.modifyPersonalLabel(validUsernamePrincipal, 0, labelModifyingDTO)
         );
     }
 
     @Test
-    public void whenLabelToModifyIsNullShouldThrowConstraintViolationException() {
+    void whenLabelToModifyIsNullShouldThrowConstraintViolationException() {
         assertThrows(ConstraintViolationException.class,
                 () -> labelServiceToTest.modifyPersonalLabel(validUsernamePrincipal, validIdLabel, null)
         );
     }
 
     @Test
-    public void whenIdLabelInLabelToModifyIsNullShouldThrowConstraintViolationException() {
+    void whenIdLabelInLabelToModifyIsNullShouldThrowConstraintViolationException() {
         LabelModifyingDTO invalidDTO = this.validLabelModifyingDTO();
         invalidDTO.setIdLabel(null);
 
@@ -86,7 +93,7 @@ public class LabelServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void whenIdLabelInLabelToModifyIsLessThenOneShouldThrowConstraintViolationException() {
+    void whenIdLabelInLabelToModifyIsLessThenOneShouldThrowConstraintViolationException() {
         LabelModifyingDTO invalidDTO = this.validLabelModifyingDTO();
         invalidDTO.setIdLabel(-5);
 
@@ -96,7 +103,7 @@ public class LabelServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void whenNameInLabelToModifyIsNullShouldThrowConstraintViolationException() {
+    void whenNameInLabelToModifyIsNullShouldThrowConstraintViolationException() {
         LabelModifyingDTO invalidDTO = this.validLabelModifyingDTO();
         invalidDTO.setName(null);
 
@@ -106,7 +113,7 @@ public class LabelServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void whenNameInLabelToModifyIsBlankShouldThrowConstraintViolationException() {
+    void whenNameInLabelToModifyIsBlankShouldThrowConstraintViolationException() {
         LabelModifyingDTO invalidDTO = this.validLabelModifyingDTO();
         invalidDTO.setName(" ");
 
@@ -116,10 +123,9 @@ public class LabelServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void whenNameInLabelToModifyHasMoreThan50CharsShouldThrowConstraintViolationException() {
+    void whenNameInLabelToModifyHasMoreThan50CharsShouldThrowConstraintViolationException() {
         LabelModifyingDTO invalidDTO = this.validLabelModifyingDTO();
-
-        invalidDTO.setName("012345678901234567890123456789012345678901234567890123456789");
+        invalidDTO.setName("a".repeat(60));
 
         assertThrows(ConstraintViolationException.class,
                 () -> labelServiceToTest.modifyPersonalLabel(validUsernamePrincipal, validIdLabel, invalidDTO)
@@ -127,22 +133,9 @@ public class LabelServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void whenDescriptionInLabelToModifyHasMoreThan200CharsShouldThrowConstraintViolationException() {
+    void whenDescriptionInLabelToModifyHasMoreThan200CharsShouldThrowConstraintViolationException() {
         LabelModifyingDTO invalidDTO = this.validLabelModifyingDTO();
-
-        invalidDTO.setDescription("012345678901234567890123456789" +
-                "012345678901234567890123456789" +
-                "012345678901234567890123456789" +
-                "012345678901234567890123456789" +
-                "012345678901234567890123456789" +
-                "012345678901234567890123456789" +
-                "012345678901234567890123456789" +
-                "012345678901234567890123456789" +
-                "012345678901234567890123456789" +
-                "012345678901234567890123456789" +
-                "012345678901234567890123456789" +
-                "012345678901234567890123456789" +
-                "012345678901234567890123456789");
+        invalidDTO.setDescription("a".repeat(250));
 
         assertThrows(ConstraintViolationException.class,
                 () -> labelServiceToTest.modifyPersonalLabel(validUsernamePrincipal, validIdLabel, invalidDTO)
@@ -150,7 +143,7 @@ public class LabelServiceJPAAnnotationsValidationTest {
     }
 
     @Test
-    public void whenColorInLabelToModifyDoesNotMatchWithHexadecimalPatternShouldThrowConstraintViolationException() {
+    void whenColorInLabelToModifyDoesNotMatchWithHexadecimalPatternShouldThrowConstraintViolationException() {
         LabelModifyingDTO invalidDTO = this.validLabelModifyingDTO();
         invalidDTO.setColor("#AABBFZ");
 

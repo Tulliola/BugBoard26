@@ -23,7 +23,6 @@ import org.springframework.security.access.AccessDeniedException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,7 +32,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class IssueServiceJPAUnitTest {
+class IssueServiceJPAUnitTest {
     @Mock
     private IIssueRepository issueRepository;
 
@@ -64,8 +63,38 @@ public class IssueServiceJPAUnitTest {
         );
     }
 
+    private Label createLabelMock(Integer labelId) {
+        Label mockLabel = new Label();
+        mockLabel.setIdLabel(labelId);
+
+        return mockLabel;
+    }
+
+    private Label createLabelMockWithCreator(Integer labelId, User mockCreator) {
+        Label mockLabel = new Label();
+        mockLabel.setIdLabel(labelId);
+
+        mockLabel.setCreator(mockCreator);
+
+        return mockLabel;
+    }
+
+    private Project createProjectMock(Integer projectId) {
+        Project projectMock = new Project();
+        projectMock.setIdProject(projectId);
+
+        return projectMock;
+    }
+
+    private User createUserMock(String usernamePrincipal) {
+        User userMock = new RegularUser();
+        userMock.setUsername(usernamePrincipal);
+
+        return userMock;
+    }
+
     @Test
-    public void publishIssueWithNoImagesAndThreeLabelsShouldReturnSuccess() {
+    void publishIssueWithNoImagesAndThreeLabelsShouldReturnSuccess() {
         IssueCreationDTO issueCreationDTO = validIssueCreationDTO();
         List<Integer> labelsIds = List.of(4, 5, 6);
         issueCreationDTO.setIdLabels(labelsIds);
@@ -111,7 +140,7 @@ public class IssueServiceJPAUnitTest {
     }
 
     @Test
-    public void publishIssueWithImagesAndNoLabelsShouldReturnSuccess() {
+    void publishIssueWithImagesAndNoLabelsShouldReturnSuccess() {
         IssueCreationDTO issueCreationDTO = validIssueCreationDTO();
         List<byte[]> mockedImages = List.of(new byte[500], new byte[500], new byte[500]);
         issueCreationDTO.setImages(mockedImages);
@@ -145,41 +174,8 @@ public class IssueServiceJPAUnitTest {
         verify(issueRepository).createANewIssueToProject(any(Issue.class));
     }
 
-    private Label createLabelMock(Integer labelId) {
-        Label mockLabel = new Label();
-
-        mockLabel.setIdLabel(labelId);
-
-        return mockLabel;
-    }
-
-    private Label createLabelMockWithCreator(Integer labelId, User mockCreator) {
-        Label mockLabel = new Label();
-        mockLabel.setIdLabel(labelId);
-
-        mockLabel.setCreator(mockCreator);
-
-        return mockLabel;
-    }
-
-    private Project createProjectMock(Integer projectId) {
-        Project projectMock = new Project();
-        projectMock.setIdProject(projectId);
-
-        return projectMock;
-    }
-
-    private User createUserMock(String usernamePrincipal) {
-        User userMock = new RegularUser();
-        userMock.setUsername(usernamePrincipal);
-
-        return userMock;
-    }
-
-    //Inizio testing white box
-
     @Test
-    public void nonConsistentProjectIdsShouldThrowBadRequestException() {
+    void nonConsistentProjectIdsShouldThrowBadRequestException() {
         IssueCreationDTO nonConsistentIssueCreationDTO = validIssueCreationDTO();
         final Integer differentIdProject = 2;
         nonConsistentIssueCreationDTO.setIdProject(differentIdProject);
@@ -188,7 +184,7 @@ public class IssueServiceJPAUnitTest {
     }
 
     @Test
-    public void nonConsistentLabelCreatorAndUsernamePrincipalShouldThrowAccessDeniedException() {
+    void nonConsistentLabelCreatorAndUsernamePrincipalShouldThrowAccessDeniedException() {
         IssueCreationDTO issueCreationDTO = validIssueCreationDTO();
         List<Integer> nonConsistentLabelIds = List.of(4, 5, 6);
         issueCreationDTO.setIdLabels(nonConsistentLabelIds);
@@ -210,7 +206,7 @@ public class IssueServiceJPAUnitTest {
     }
 
     @Test
-    public void nonNullAndConsistentCreatorShouldReturnSuccess() {
+    void nonNullAndConsistentCreatorShouldReturnSuccess() {
         IssueCreationDTO issueCreationDTO = validIssueCreationDTO();
         List<Integer> mockLabelsIds = List.of(4, 5, 6);
         issueCreationDTO.setIdLabels(mockLabelsIds);
@@ -256,7 +252,7 @@ public class IssueServiceJPAUnitTest {
     }
 
     @Test
-    public void nullRetrievedLabelShouldThrowResourceNotFoundException() {
+    void nullRetrievedLabelShouldThrowResourceNotFoundException() {
         IssueCreationDTO issueCreationDTO = validIssueCreationDTO();
         List<Integer> labelsMocks = List.of(4, 5, 6);
         issueCreationDTO.setIdLabels(labelsMocks);
@@ -277,7 +273,7 @@ public class IssueServiceJPAUnitTest {
     }
 
     @Test
-    public void nullRetrievedProjectShouldThrowResourceNotFoundException() {
+    void nullRetrievedProjectShouldThrowResourceNotFoundException() {
         IssueCreationDTO issueCreationDTO = validIssueCreationDTO();
         List<Integer> labelsMocks = List.of(4, 5);
         issueCreationDTO.setIdLabels(labelsMocks);

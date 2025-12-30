@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class LabelServiceJPAUnitTest {
+class LabelServiceJPAUnitTest {
     @Mock
     ILabelRepository mockLabelRepository;
 
@@ -50,151 +50,140 @@ public class LabelServiceJPAUnitTest {
         return validMockUser;
     }
 
-    @Test
-    public void modifyingALabelAddingNoDescriptionAndANewColorShouldReturnSuccess() {
-        /* Arrange */
-        final String usernamePrincipal = "justantxnio";
-        final Integer idLabel = 100;
+    final String validUsernamePrincipal = "justantxnio";
+    final Integer validIdLabel = 100;
 
-        User mockUser = this.createValidMockUserInDatabase(usernamePrincipal);
-        Label mockLabel = this.createValidMockLabelInDatabase(mockUser, idLabel);
+    @Test
+    void modifyingALabelAddingNoDescriptionAndANewColorShouldReturnSuccess() {
+        /* Arrange */
+        User mockUser = this.createValidMockUserInDatabase(validUsernamePrincipal);
+        Label mockLabel = this.createValidMockLabelInDatabase(mockUser, validIdLabel);
 
         LabelModifyingDTO labelToModify = new LabelModifyingDTO(
-                idLabel,
+                validIdLabel,
                 mockLabel.getName(),
                 null,
                 "#FFAA00"
         );
 
 
-        when(mockLabelRepository.getLabelById(idLabel)).thenReturn(mockLabel);
+        when(mockLabelRepository.getLabelById(validIdLabel)).thenReturn(mockLabel);
         when(mockLabelRepository.updateLabel(any(Label.class))).thenAnswer(
                 invocation -> invocation.getArgument(0)
         );
-        when(mockUserService.findUserByUsername(usernamePrincipal)).thenReturn(mockUser);
+        when(mockUserService.findUserByUsername(validUsernamePrincipal)).thenReturn(mockUser);
 
         /* Act */
-        LabelSummaryDTO result = serviceToTest.modifyPersonalLabel(usernamePrincipal, idLabel, labelToModify);
+        LabelSummaryDTO result = serviceToTest.modifyPersonalLabel(validUsernamePrincipal, validIdLabel, labelToModify);
 
         /* Assert */
         assertAll(
                 () -> assertEquals("#FFAA00", result.getColor()),
                 () -> assertNull(result.getDescription()),
-                () -> assertEquals(idLabel, result.getIdLabel()),
+                () -> assertEquals(validIdLabel, result.getIdLabel()),
                 () -> assertEquals(mockLabel.getName(), result.getName())
         );
     }
 
     @Test
-    public void modifyingALabelAddingValidDescriptionAndNoColorShouldReturnSuccess() {
+    void modifyingALabelAddingValidDescriptionAndNoColorShouldReturnSuccess() {
         /* Arrange */
-        final String usernamePrincipal = "justantxnio";
-        final Integer idLabel = 100;
-
-        User mockUser = this.createValidMockUserInDatabase(usernamePrincipal);
-        Label mockLabel = this.createValidMockLabelInDatabase(mockUser, idLabel);
+        User mockUser = this.createValidMockUserInDatabase(validUsernamePrincipal);
+        Label mockLabel = this.createValidMockLabelInDatabase(mockUser, validIdLabel);
 
         LabelModifyingDTO labelToModify = new LabelModifyingDTO(
-                idLabel,
+                validIdLabel,
                 mockLabel.getName(),
                 "Very short modified mock label description",
                 null
         );
 
 
-        when(mockLabelRepository.getLabelById(idLabel)).thenReturn(mockLabel);
+        when(mockLabelRepository.getLabelById(validIdLabel)).thenReturn(mockLabel);
         when(mockLabelRepository.updateLabel(any(Label.class))).thenAnswer(
                 invocation -> invocation.getArgument(0)
         );
-        when(mockUserService.findUserByUsername(usernamePrincipal)).thenReturn(mockUser);
+        when(mockUserService.findUserByUsername(validUsernamePrincipal)).thenReturn(mockUser);
 
         /* Act */
-        LabelSummaryDTO result = serviceToTest.modifyPersonalLabel(usernamePrincipal, idLabel, labelToModify);
+        LabelSummaryDTO result = serviceToTest.modifyPersonalLabel(validUsernamePrincipal, validIdLabel, labelToModify);
 
         /* Assert */
         assertAll(
                 () -> assertEquals("#FFFFFF", result.getColor()),
                 () -> assertEquals("Very short modified mock label description", result.getDescription()),
-                () -> assertEquals(idLabel, result.getIdLabel()),
+                () -> assertEquals(validIdLabel, result.getIdLabel()),
                 () -> assertEquals(mockLabel.getName(), result.getName())
         );
     }
 
     @Test
-    public void whenIdLabelAsParameterAndIdLabelInLabelToModifyDontMatchShouldThrowBadRequestException() {
+    void whenIdLabelAsParameterAndIdLabelInLabelToModifyDontMatchShouldThrowBadRequestException() {
         /* Arrange */
-        final String usernamePrincipal = "justantxnio";
-        final Integer idLabel = 100;
         LabelModifyingDTO labelModified = new LabelModifyingDTO();
         labelModified.setIdLabel(25);
 
         /* Act + assert */
-        assertThrows(BadRequestException.class, () -> serviceToTest.modifyPersonalLabel(usernamePrincipal, idLabel, labelModified));
+        assertThrows(BadRequestException.class, () -> serviceToTest.modifyPersonalLabel(validUsernamePrincipal, validIdLabel, labelModified));
 
         verify(mockLabelRepository, never()).updateLabel(any(Label.class));
     }
 
     @Test
-    public void whenIdLabelDoesntCorrespondToAnyLabelInDBShouldThrowResourceNotFoundException() {
+    void whenIdLabelDoesntCorrespondToAnyLabelInDBShouldThrowResourceNotFoundException() {
         /* Arrange */
-        final String usernamePrincipal = "justantxnio";
-        final Integer idLabel = 100;
         LabelModifyingDTO labelModified = new LabelModifyingDTO(
-                idLabel,
+                validIdLabel,
                 "Mock label name",
                 "Mock label description",
                 "#FFFFFF"
         );
 
-        when(mockLabelRepository.getLabelById(idLabel)).thenReturn(null);
+        when(mockLabelRepository.getLabelById(validIdLabel)).thenReturn(null);
 
         /* Act + assert */
-        assertThrows(ResourceNotFoundException.class, () -> serviceToTest.modifyPersonalLabel(usernamePrincipal, idLabel, labelModified));
+        assertThrows(ResourceNotFoundException.class, () -> serviceToTest.modifyPersonalLabel(validUsernamePrincipal, validIdLabel, labelModified));
 
         verify(mockLabelRepository, never()).updateLabel(any(Label.class));
     }
 
     @Test
-    public void whenUsernamePrincipalDoesntMatchWithLabelCreatorUsernameShouldThrowAccessDeniedException() {
+    void whenUsernamePrincipalDoesntMatchWithLabelCreatorUsernameShouldThrowAccessDeniedException() {
         /* Arrange */
-        final String usernamePrincipal = "justantxnio";
-        final Integer idLabel = 100;
         LabelModifyingDTO labelModified = new LabelModifyingDTO(
-                idLabel,
+                validIdLabel,
                 "Mock label name",
                 "Mock label description",
                 "#FFFFFF"
         );
         User mockUser = this.createValidMockUserInDatabase("Tulliola");
-        Label mockLabel = this.createValidMockLabelInDatabase(mockUser, idLabel);
+        Label mockLabel = this.createValidMockLabelInDatabase(mockUser, validIdLabel);
 
-        when(mockLabelRepository.getLabelById(idLabel)).thenReturn(mockLabel);
+        when(mockLabelRepository.getLabelById(validIdLabel)).thenReturn(mockLabel);
 
         /* Act + assert */
-        assertThrows(AccessDeniedException.class, () -> serviceToTest.modifyPersonalLabel(usernamePrincipal, idLabel, labelModified));
+        assertThrows(AccessDeniedException.class, () -> serviceToTest.modifyPersonalLabel(validUsernamePrincipal, validIdLabel, labelModified));
 
         verify(mockLabelRepository, never()).updateLabel(any(Label.class));
     }
 
     @Test
-    public void whenUsernamePrincipalDoesntCorrespondToAnyUserInDBShouldThrowResourceNotFoundException() {
+    void whenUsernamePrincipalDoesntCorrespondToAnyUserInDBShouldThrowResourceNotFoundException() {
         /* Arrange */
-        final String usernamePrincipal = "justantxnio";
-        final Integer idLabel = 100;
         LabelModifyingDTO labelModified = new LabelModifyingDTO(
-                idLabel,
+                validIdLabel,
                 "Mock label name",
                 "Mock label description",
                 "#FFFFFF"
         );
         User mockUser = this.createValidMockUserInDatabase("justantxnio");
-        Label mockLabel = this.createValidMockLabelInDatabase(mockUser, idLabel);
+        Label mockLabel = this.createValidMockLabelInDatabase(mockUser, validIdLabel);
 
-        when(mockLabelRepository.getLabelById(idLabel)).thenReturn(mockLabel);
-        when(mockUserService.findUserByUsername(usernamePrincipal)).thenReturn(null);
+        when(mockLabelRepository.getLabelById(validIdLabel)).thenReturn(mockLabel);
+        when(mockUserService.findUserByUsername(validUsernamePrincipal)).thenReturn(null);
 
         /* Act + assert */
-        assertThrows(ResourceNotFoundException.class, () -> serviceToTest.modifyPersonalLabel(usernamePrincipal, idLabel, labelModified));
+        assertThrows(ResourceNotFoundException.class, () -> serviceToTest.modifyPersonalLabel(validUsernamePrincipal, validIdLabel, labelModified));
 
         verify(mockLabelRepository, never()).updateLabel(any(Label.class));
     }

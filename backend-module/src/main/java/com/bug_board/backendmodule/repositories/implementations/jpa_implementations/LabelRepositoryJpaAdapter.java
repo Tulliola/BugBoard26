@@ -2,7 +2,6 @@ package com.bug_board.backendmodule.repositories.implementations.jpa_implementat
 
 import com.bug_board.backendmodule.entity.Label;
 import com.bug_board.backendmodule.repositories.interfaces.ILabelRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

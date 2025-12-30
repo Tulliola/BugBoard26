@@ -18,7 +18,7 @@ public class PropertiesManager {
                 properties.load(input);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            throw new PropertiesNotFoundException("The property file you want to refer to doesn't exist.");
         }
     }
 

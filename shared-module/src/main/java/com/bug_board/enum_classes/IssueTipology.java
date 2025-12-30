@@ -1,5 +1,6 @@
 package com.bug_board.enum_classes;
 
+import com.bug_board.enum_classes.exceptions.NoSuchImageException;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public enum IssueTipology {
         try {
             return IssueTipology.class.getResourceAsStream(this.imageURL).readAllBytes();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new NoSuchImageException("Cannot find the image you have specified.");
         }
     }
 

@@ -1,7 +1,6 @@
 package com.bug_board.backendmodule.rest_controllers;
 
 import com.bug_board.backendmodule.security.UserPrincipal;
-import com.bug_board.backendmodule.services.implementations.jpa_implementations.IssueServiceJPA;
 import com.bug_board.backendmodule.services.interfaces.IIssueService;
 import com.bug_board.dto.IssueCreationDTO;
 import com.bug_board.dto.IssueFiltersDTO;
@@ -10,7 +9,6 @@ import com.bug_board.dto.IssueSummaryDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
