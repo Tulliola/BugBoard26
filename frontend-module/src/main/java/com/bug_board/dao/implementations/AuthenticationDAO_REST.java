@@ -28,7 +28,7 @@ public class AuthenticationDAO_REST extends DAO_REST implements IAuthenticationD
 
         try {
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/auth"))
+                    .uri(URI.create(BASE_URL + "/auth"))
                     .headers("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(
                             objectMapper.writeValueAsString(authenticationDTO)

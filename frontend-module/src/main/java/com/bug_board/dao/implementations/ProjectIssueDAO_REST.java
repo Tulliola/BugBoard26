@@ -34,7 +34,7 @@ public class ProjectIssueDAO_REST extends DAO_REST implements IProjectIssueDAO {
         HttpRequest request;
         try {
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/projects/" + idProject + "/issues/search"))
+                    .uri(URI.create(BASE_URL + "/projects/" + idProject + "/issues/search"))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                     .POST(HttpRequest.BodyPublishers.ofString(
@@ -55,7 +55,7 @@ public class ProjectIssueDAO_REST extends DAO_REST implements IProjectIssueDAO {
         HttpRequest request;
         try{
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/projects/" + idProject + "/issues"))
+                    .uri(URI.create(BASE_URL + "/projects/" + idProject + "/issues"))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer "+SessionManager.getInstance().getJwtToken())
                     .POST(HttpRequest.BodyPublishers.ofString(
@@ -74,7 +74,7 @@ public class ProjectIssueDAO_REST extends DAO_REST implements IProjectIssueDAO {
         HttpRequest request;
 
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/projects/" + idProject + "/issues/" + idIssue + "/images"))
+                .uri(URI.create(BASE_URL + "/projects/" + idProject + "/issues/" + idIssue + "/images"))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer "+SessionManager.getInstance().getJwtToken())
                 .GET()

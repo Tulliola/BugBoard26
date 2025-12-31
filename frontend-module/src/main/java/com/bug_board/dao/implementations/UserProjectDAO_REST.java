@@ -29,11 +29,11 @@ public class UserProjectDAO_REST extends DAO_REST implements IUserProjectDAO {
         URI uri;
 
         if(projectNameToFilter == null || projectNameToFilter.equals(""))
-            uri = URI.create(baseUrl + "/me/projects/overviewed");
+            uri = URI.create(BASE_URL + "/me/projects/overviewed");
         else {
             try {
                 String encodedString = URLEncoder.encode(projectNameToFilter, StandardCharsets.UTF_8.toString());
-                uri = URI.create(baseUrl + "/me/projects/overviewed?projectName=" + encodedString);
+                uri = URI.create(BASE_URL + "/me/projects/overviewed?projectName=" + encodedString);
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
@@ -58,11 +58,11 @@ public class UserProjectDAO_REST extends DAO_REST implements IUserProjectDAO {
         HttpRequest request;
         URI uri;
         if(projectNameToFilter == null || projectNameToFilter.equals(""))
-            uri = URI.create(baseUrl + "/me/projects/working-on");
+            uri = URI.create(BASE_URL + "/me/projects/working-on");
         else {
             try {
                 String encodedString = URLEncoder.encode(projectNameToFilter, StandardCharsets.UTF_8.toString());
-                uri = URI.create(baseUrl + "/me/projects/working-on?projectName=" + encodedString);
+                uri = URI.create(BASE_URL + "/me/projects/working-on?projectName=" + encodedString);
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }

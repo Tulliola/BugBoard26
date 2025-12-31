@@ -28,7 +28,7 @@ public class UserDAO_REST extends DAO_REST implements IUserDAO {
         HttpRequest request;
         try{
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/users/" + "register"))
+                    .uri(URI.create(BASE_URL + "/users/" + "register"))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                     .POST(HttpRequest.BodyPublishers.ofString(

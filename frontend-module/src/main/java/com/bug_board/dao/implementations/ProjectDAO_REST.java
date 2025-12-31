@@ -31,7 +31,7 @@ public class ProjectDAO_REST extends DAO_REST implements IProjectDAO {
 
         try{
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/projects/" + idProject + "/users/collaborators"))
+                    .uri(URI.create(BASE_URL + "/projects/" + idProject + "/users/collaborators"))
                     .header("Authorization", "Bearer "+ SessionManager.getInstance().getJwtToken())
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(
@@ -49,7 +49,7 @@ public class ProjectDAO_REST extends DAO_REST implements IProjectDAO {
             throws HTTPSendException, BadConversionToDTOException, ErrorHTTPResponseException {
         HttpRequest request;
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/projects/" + idProject +"/addable-users"))
+                .uri(URI.create(BASE_URL + "/projects/" + idProject +"/addable-users"))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer "+SessionManager.getInstance().getJwtToken())
                 .GET()

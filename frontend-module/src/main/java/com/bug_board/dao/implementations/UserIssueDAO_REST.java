@@ -33,7 +33,7 @@ public class UserIssueDAO_REST extends DAO_REST implements IUserIssueDAO {
         HttpRequest request;
         try {
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/me/issues/search"))
+                    .uri(URI.create(BASE_URL + "/me/issues/search"))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                     .POST(HttpRequest.BodyPublishers.ofString(
@@ -55,7 +55,7 @@ public class UserIssueDAO_REST extends DAO_REST implements IUserIssueDAO {
         HttpRequest request;
 
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/me/issues/" + idIssue + "/images"))
+                .uri(URI.create(BASE_URL + "/me/issues/" + idIssue + "/images"))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer "+SessionManager.getInstance().getJwtToken())
                 .GET()

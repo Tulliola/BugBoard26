@@ -32,7 +32,7 @@ public class UserLabelDAO_REST extends DAO_REST implements IUserLabelDAO {
 
         try{
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/me/labels"))
+                    .uri(URI.create(BASE_URL + "/me/labels"))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                     .POST(HttpRequest.BodyPublishers.ofString(
@@ -52,7 +52,7 @@ public class UserLabelDAO_REST extends DAO_REST implements IUserLabelDAO {
         HttpRequest request;
 
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/me/labels/" + idLabel))
+                .uri(URI.create(BASE_URL + "/me/labels/" + idLabel))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                 .DELETE()
@@ -67,7 +67,7 @@ public class UserLabelDAO_REST extends DAO_REST implements IUserLabelDAO {
 
         try{
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/me/labels/" + labelToModify.getIdLabel()))
+                    .uri(URI.create(BASE_URL + "/me/labels/" + labelToModify.getIdLabel()))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                     .PUT(HttpRequest.BodyPublishers.ofString(
@@ -86,7 +86,7 @@ public class UserLabelDAO_REST extends DAO_REST implements IUserLabelDAO {
         HttpRequest request;
 
         request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/me/labels"))
+                .uri(URI.create(BASE_URL + "/me/labels"))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + SessionManager.getInstance().getJwtToken())
                 .GET()
