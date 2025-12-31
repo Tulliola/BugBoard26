@@ -1,1 +1,2 @@
-app.mock-email-addressee=MOCK_EMAIL
+mock.email.addressee=MOCK_EMAIL
+email.implementation.type=IMPLEMENTATION_TYPE
