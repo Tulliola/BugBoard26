@@ -5,6 +5,7 @@ import com.bug_board.dao.httphandler.MyHTTPClient;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public abstract class DAO_REST {
@@ -13,12 +14,12 @@ public abstract class DAO_REST {
 
     static {
         String urlTrovato = null;
-        File configFile = new File("server.properties");
+        InputStream configFile = DAO_REST.class.getResourceAsStream("/server.properties");
 
-        if (configFile.exists()) {
-            try (FileInputStream input = new FileInputStream(configFile)) {
+        if (configFile != null) {
+            try (configFile) {
                 Properties prop = new Properties();
-                prop.load(input);
+                prop.load(configFile);
                 urlTrovato = prop.getProperty("server.url");
             }
             catch (IOException ex) {

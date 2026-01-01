@@ -89,9 +89,9 @@ public class IssueSummaryCard extends HBox {
         bioPic.setFitWidth(50);
         bioPic.setPreserveRatio(true);
 
-        Label creatorLabel = new Label("Created by " + issueToShow.getCreatorName());
-        creatorLabel.setPadding(new Insets(10, 10, 10, 10));
-        creatorLabel.getStyleClass().add("issue-summary-card-label");
+        Label creatorAndProjectLabel = new Label("Created by " + issueToShow.getCreatorName() + " in project " + issueToShow.getProjectName());
+        creatorAndProjectLabel.setPadding(new Insets(10, 10, 10, 10));
+        creatorAndProjectLabel.getStyleClass().add("issue-summary-card-label");
 
         Circle stateCircle = new Circle();
         stateCircle.setRadius(15);
@@ -106,7 +106,7 @@ public class IssueSummaryCard extends HBox {
 
         creatorSummaryPane.getChildren().addAll(
                 bioPic,
-                creatorLabel,
+                creatorAndProjectLabel,
                 spacer,
                 stateCircle
         );

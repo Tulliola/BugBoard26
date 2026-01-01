@@ -33,6 +33,7 @@ public class IssueSummaryDTO {
     private List<LabelSummaryDTO> labels;
 
     private Integer idProject;
+    private String projectName;
 
     private String creatorName;
     private byte[] creatorBioPic;
