@@ -118,7 +118,7 @@ class IssueServiceJPAUnitTest {
         IssueSummaryDTO result = issueServiceJPA.publishNewIssueToProject(validUsernamePrincipal, validProjectId, issueCreationDTO);
 
         assertThat(result)
-                .usingRecursiveComparison().ignoringFields("idIssue", "creationDate", "resolutionDate", "labels", "creatorName", "creatorBioPic")
+                .usingRecursiveComparison().ignoringFields("idIssue", "creationDate", "resolutionDate", "labels", "creatorName", "creatorBioPic", "projectName")
                 .isEqualTo(issueCreationDTO);
 
         assertAll(
@@ -158,7 +158,7 @@ class IssueServiceJPAUnitTest {
         IssueSummaryDTO result = issueServiceJPA.publishNewIssueToProject(validUsernamePrincipal, validProjectId, issueCreationDTO);
 
         assertThat(result)
-                .usingRecursiveComparison().ignoringFields("idIssue", "creationDate", "resolutionDate", "labels", "creatorName", "creatorBioPic")
+                .usingRecursiveComparison().ignoringFields("idIssue", "creationDate", "resolutionDate", "labels", "creatorName", "creatorBioPic", "projectName")
                 .isEqualTo(issueCreationDTO);
 
         assertAll(
@@ -230,7 +230,7 @@ class IssueServiceJPAUnitTest {
         IssueSummaryDTO result = issueServiceJPA.publishNewIssueToProject(validUsernamePrincipal, validProjectId, issueCreationDTO);
 
         assertThat(result)
-                .usingRecursiveComparison().ignoringFields("idIssue", "creationDate", "resolutionDate", "labels", "creatorName", "creatorBioPic")
+                .usingRecursiveComparison().ignoringFields("idIssue", "creationDate", "resolutionDate", "labels", "creatorName", "creatorBioPic", "projectName")
                 .isEqualTo(issueCreationDTO);
 
         assertAll(
